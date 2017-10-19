@@ -1,4 +1,4 @@
-package com.springApp;
+package it.gdhi.common.controller;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
