@@ -1,11 +1,6 @@
 server:
     port: 8888
 
-flyway:
-  enabled: true
-  locations: classpath:db.migration
-  schemas: [gdhi]
-
 spring:
   jmx:
     enabled: false
