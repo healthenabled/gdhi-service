@@ -10,6 +10,13 @@ spring:
     port: 5432
     username: postgres
     password:
+  jpa:
+    showSql: true
+    formatSql: true
+    hibernate:
+      ddlAuto: true
+      namingStrategy : org.hibernate.cfg.ImprovedNamingStrategy
+      dialect: org.hibernate.dialect.PostgreSQL94Dialect
 
 db:
   url: jdbc:postgresql://localhost:5432/gdhi

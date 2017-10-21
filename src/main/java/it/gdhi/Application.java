@@ -14,17 +14,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Arrays;
+import java.util.Properties;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {
         ApplicationContextAwareSpringJdbcMigrationResolver.class, Application.class})
 public class Application {
 
-    @Autowired
-    public ApplicationContext context;
     @Value("${db.url}")
     String dbUrl;
     @Value("${db.username}")
@@ -33,6 +38,19 @@ public class Application {
     String dbPassword;
     @Value("${db.driverClassName}")
     String dbDriverClassName;
+    @Value("${spring.jpa.showSql}")
+    String showSql;
+    @Value("${spring.jpa.formatSql}")
+    String formatSql;
+    @Value("${spring.jpa.hibernate.ddlAuto}")
+    String ddlAuto;
+    @Value("${spring.jpa.hibernate.namingStrategy}")
+    String namingStrategy;
+    @Value("${spring.jpa.hibernate.dialect}")
+    String dialect;
+
+    @Autowired
+    public ApplicationContext context;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -66,6 +84,52 @@ public class Application {
         dataSource.setMaxActive(20);
         dataSource.setTestOnBorrow(true);
         return dataSource;
+    }
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory() {
+
+        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setDataSource(dataSource());
+        factoryBean.setJpaDialect(new HibernateJpaDialect());
+        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        factoryBean.setPersistenceUnitName("persistenceUnit");
+        factoryBean.setPackagesToScan("it.gdhi.common.model");
+        factoryBean.setJpaProperties(jpaProperties());
+        factoryBean.afterPropertiesSet();
+
+        return factoryBean.getObject();
+    }
+
+    @Bean
+    public Properties jpaProperties() {
+        Properties jpaProperties = new Properties();
+        jpaProperties.put("hibernate.dialect", dialect);
+        jpaProperties.put("hibernate.hbm2ddl.auto", ddlAuto);
+        jpaProperties.put("hibernate.ejb.naming_strategy", namingStrategy);
+        jpaProperties.put("hibernate.show_sql", showSql);
+        jpaProperties.put("hibernate.format_sql", formatSql);
+        return jpaProperties;
+    }
+
+//    @Bean
+//    LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
+//                                                                Environment env) {
+//        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+//        entityManagerFactoryBean.setDataSource(dataSource);
+//        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+//
+
+//
+//        return entityManagerFactoryBean;
+//    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory());
+        return txManager;
     }
 
     @Bean
