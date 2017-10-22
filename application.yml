@@ -25,3 +25,11 @@ db:
   username: postgres
   password:
   driverClassName: org.postgresql.Driver
+
+dbTest:
+  url: jdbc:postgresql://localhost:5432/gdhi_test
+  host: localhost
+  port: 5432
+  username: postgres
+  password:
+  driverClassName: org.postgresql.Driver

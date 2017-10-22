@@ -42,7 +42,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver implements Migra
 
         ArrayList<ResolvedMigration> resolvedMigrations = new ArrayList<>();
 
-        // resolve the db.migration and populate it with the db.migration info
+        // resolve the db.migration and populate java.it with the db.migration info
         for (SpringJdbcMigration springJdbcMigrationBean : springJdbcMigrationBeans.values()) {
             ResolvedMigrationImpl resolvedMigration = extractMigrationInfo(springJdbcMigrationBean);
             resolvedMigration.setPhysicalLocation(ClassUtils.getLocationOnDisk(springJdbcMigrationBean.getClass()));
@@ -75,7 +75,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver implements Migra
             String resolvedMigration1 = ClassUtils.getShortName(springJdbcMigration.getClass());
             if (!resolvedMigration1.startsWith("V") && !resolvedMigration1.startsWith("R")) {
                 throw new FlywayException("Invalid Jdbc db.migration class name: " + springJdbcMigration.getClass()
-                        .getName() + " => ensure it starts with V or R," + " " +
+                        .getName() + " => ensure java.it starts with V or R," + " " +
                         "or implement org.flywaydb.core.api.db.migration.MigrationInfoProvider for non-default naming");
             }
 
