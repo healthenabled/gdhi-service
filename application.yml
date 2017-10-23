@@ -25,3 +25,11 @@ db:
   username: gdhi
   password: password
   driverClassName: org.postgresql.Driver
+
+endpoints.info.id: ping
+endpoints.info.sensitive: false
+endpoints.info.enabled: true
+info.AppName: GDHI-Service
+info.Description: Application Health Checker
+info.body: pong
+info.status: 200
