@@ -94,7 +94,7 @@ public class Application {
         factoryBean.setJpaDialect(new HibernateJpaDialect());
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         factoryBean.setPersistenceUnitName("persistenceUnit");
-        factoryBean.setPackagesToScan("it.gdhi.common");
+        factoryBean.setPackagesToScan("it.gdhi.common.model");
         factoryBean.setJpaProperties(jpaProperties());
         factoryBean.afterPropertiesSet();
 
