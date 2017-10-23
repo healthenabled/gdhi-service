@@ -8,8 +8,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/gdhi
     host: localhost
     port: 5432
-    username: postgres
-    password:
+    username: gdhi
+    password: password
   jpa:
     showSql: true
     formatSql: true
@@ -22,6 +22,6 @@ db:
   url: jdbc:postgresql://localhost:5432/gdhi
   host: localhost
   port: 5432
-  username: postgres
-  password:
+  username: gdhi
+  password: password
   driverClassName: org.postgresql.Driver

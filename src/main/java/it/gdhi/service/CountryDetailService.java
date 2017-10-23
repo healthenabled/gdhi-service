@@ -11,15 +11,11 @@ import javax.transaction.Transactional;
 @Service
 public class CountryDetailService {
 
+    @Autowired
     private CountryDetailRepository repository;
 
-    @Autowired
-    CountryDetailService(CountryDetailRepository repository) {
-        this.repository = repository;
-    }
-
     @Transactional
-    public void create() {
+    public void insert() {
         CountryDetail created = new CountryDetail("India");
         repository.save(created);
     }

@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface CountryDetailRepository extends Repository<CountryDetail, Long> {
 
-    void delete(CountryDetail deleted);
+    void delete(CountryDetail countryDetail);
 
     List<CountryDetail> findAll();
 
     Optional<CountryDetail> findOne(Long id);
 
-    CountryDetail save(CountryDetail persisted);
+    CountryDetail save(CountryDetail countryDetail);
 }

@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class CountryController {
 
     @Autowired
     CountryDetailService countryDetailService;
 
-    @RequestMapping("/hello")
-    public String index() {
-        countryDetailService.create();
-        return "Greetings from Spring Boot!";
+    @RequestMapping("/countryList")
+    public String listCountries() {
+        countryDetailService.insert();
+        return "Coming Soon ......!";
     }
 }
