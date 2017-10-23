@@ -1,5 +1,6 @@
 package it.gdhi.controller;
 
+import it.gdhi.model.CountryDetail;
 import it.gdhi.service.CountryDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,7 @@ public class CountryController {
     CountryDetailService countryDetailService;
 
     @RequestMapping("/countryList")
-    public String listCountries() {
-        countryDetailService.insert();
-        return "Coming Soon ......!";
+    public CountryDetail listCountries() {
+        return countryDetailService.insert();
     }
 }

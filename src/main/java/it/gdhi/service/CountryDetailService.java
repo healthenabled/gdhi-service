@@ -15,9 +15,9 @@ public class CountryDetailService {
     private CountryDetailRepository repository;
 
     @Transactional
-    public void insert() {
+    public CountryDetail insert() {
         CountryDetail created = new CountryDetail("India");
-        repository.save(created);
+        return repository.save(created);
     }
 
 }
