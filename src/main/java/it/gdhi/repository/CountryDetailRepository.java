@@ -1,6 +1,6 @@
-package it.gdhi.common.repository;
+package it.gdhi.repository;
 
-import it.gdhi.common.model.CountryDetail;
+import it.gdhi.model.CountryDetail;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

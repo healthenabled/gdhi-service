@@ -1,7 +1,7 @@
-package it.gdhi.common.service;
+package it.gdhi.service;
 
-import it.gdhi.common.model.CountryDetail;
-import it.gdhi.common.repository.CountryDetailRepository;
+import it.gdhi.model.CountryDetail;
+import it.gdhi.repository.CountryDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
