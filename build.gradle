@@ -28,8 +28,13 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
+task setUpGitHooks(type: Exec){
+    commandLine './utils/set-up-git-hooks.sh'
+}
+
 test {
-    dependsOn checkstyleMain
+    dependsOn setUpGitHooks, checkstyleMain
     finalizedBy jacocoTestReport, check
 }
 
