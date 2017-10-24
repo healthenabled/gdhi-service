@@ -12,7 +12,7 @@ public class CountryController {
     @Autowired
     CountryDetailService countryDetailService;
 
-    @RequestMapping("/countryList")
+    @RequestMapping("countrylist")
     public CountryDetail listCountries() {
         return countryDetailService.insert();
     }

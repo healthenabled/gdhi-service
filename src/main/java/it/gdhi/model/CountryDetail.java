@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Table(name="country_details")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class CountryDetail {
 
     @Id
