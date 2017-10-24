@@ -12,3 +12,10 @@
 
 1. Run by executing
 `./gradlew clean bootRun`
+
+**INTEGRATION TESTS**
+1. Create Test user and database
+```
+    CREATE USER gdhi_test WITH PASSWORD 'testpassword';
+    CREATE DATABASE gdhi_test OWNER gdhi_test;
+```
