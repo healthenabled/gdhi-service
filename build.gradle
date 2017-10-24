@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
 
 jar {
@@ -29,7 +30,19 @@ targetCompatibility = 1.8
 
 test {
     dependsOn checkstyleMain
-    finalizedBy check
+    finalizedBy jacocoTestReport, check
+}
+
+jacocoTestReport {
+    group = "codeCoverage"
+    description = "Generate Jacoco coverage reports after running tests."
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['**/*Test*.*'])
+            fileTree(dir: it, exclude: ['**/db/*'])
+        })
+    }
 }
 
 task checkstyleHtml << {
