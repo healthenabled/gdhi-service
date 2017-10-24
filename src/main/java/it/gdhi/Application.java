@@ -26,8 +26,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = {
-        ApplicationContextAwareSpringJdbcMigrationResolver.class, Application.class})
+@ComponentScan(basePackageClasses = {ApplicationContextAwareSpringJdbcMigrationResolver.class, Application.class})
 public class Application {
 
     @Value("${db.url}")

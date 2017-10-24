@@ -11,13 +11,13 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'checkstyle'
 
 jar {
     baseName = 'gdhi'
-    version =  '1.0'
+    version = '1.0'
 }
 
 repositories {
@@ -26,6 +26,23 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+test {
+    dependsOn checkstyleMain
+    finalizedBy check
+}
+
+task checkstyleHtml << {
+    ant.xslt(in: checkstyleMain.reports.xml.destination,
+            style: file('config/checkstyle-noframes-sorted.xsl'),
+            out: new File(checkstyleMain.reports.xml.destination.parent, 'codeCopReport.html'))
+}
+
+checkstyleMain.finalizedBy checkstyleHtml
+
+checkstyle {
+    sourceSets = [project.sourceSets.main]
+}
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {

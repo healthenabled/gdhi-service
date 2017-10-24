@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <module name="TreeWalker">
+        <module name="FileContentsHolder"/>
+        <module name="ConstantName"/>
+        <module name="LocalVariableName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="EmptyBlock"/>
+        <module name="SuppressWarningsHolder"/>
+        <module name="UnusedImports"/>
+
+        <module name="LineLength">
+            <property name="id" value="checkstyle:linelength"/>
+            <property name="max" value="120"/>
+            <property name="tabWidth" value="4"/>
+        </module>
+
+        <module name="StrictDuplicateCode">
+            <property name="id" value="checkstyle:strictduplicatecode"/>
+            <property name="severity" value="ignore"/>
+            <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+        </module>
+
+        <module name="MemberName">
+            <property name="id" value="checkstyle:membername"/>
+            <property name="severity" value="ignore"/>
+            <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+        </module>
+
+        <module name="MethodLength">
+            <property name="id" value="checkstyle:methodlength"/>
+            <property name="severity" value="ignore"/>
+            <property name="max" value="20"/>
+            <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+        </module>
+    </module>
+
+    <module name="FileLength">
+        <property name="id" value="checkstyle:filelength"/>
+        <property name="max" value="400"/>
+    </module>
+
+    <module name="SuppressionFilter">
+        <property name="file" value="config/checkstyle/checkstyle-suppressions.xml"/>
+    </module>
+
+</module>
