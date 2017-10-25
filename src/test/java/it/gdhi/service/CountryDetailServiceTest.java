@@ -1,6 +1,6 @@
 package it.gdhi.service;
 
-import it.gdhi.repository.CountryDetailRepository;
+import it.gdhi.repository.CountryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,9 +14,9 @@ import static org.mockito.Mockito.verify;
 public class CountryDetailServiceTest {
 
     @InjectMocks
-    CountryDetailService countryDetailService;
+    CountryService countryDetailService;
     @Mock
-    CountryDetailRepository countryDetailRepository;
+    CountryRepository countryDetailRepository;
 
     @Test
     public void shouldInsertTestData() {

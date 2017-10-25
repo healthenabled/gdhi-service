@@ -1,7 +1,7 @@
 package it.gdhi.service;
 
-import it.gdhi.model.CountryDetail;
-import it.gdhi.repository.CountryDetailRepository;
+import it.gdhi.model.Country;
+import it.gdhi.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +9,14 @@ import javax.transaction.Transactional;
 
 
 @Service
-public class CountryDetailService {
+public class CountryService {
 
     @Autowired
-    private CountryDetailRepository repository;
+    private CountryRepository repository;
 
     @Transactional
-    public CountryDetail insert() {
-        CountryDetail created = new CountryDetail("India");
+    public Country insert() {
+        Country created = new Country("India", "in");
         return repository.save(created);
     }
 

@@ -1,7 +1,7 @@
 package it.gdhi.controller;
 
-import it.gdhi.model.CountryDetail;
-import it.gdhi.service.CountryDetailService;
+import it.gdhi.model.Country;
+import it.gdhi.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CountryController {
 
     @Autowired
-    CountryDetailService countryDetailService;
+    CountryService countryDetailService;
 
     @RequestMapping("countrylist")
-    public CountryDetail listCountries() {
+    public Country listCountries() {
         return countryDetailService.insert();
     }
 }

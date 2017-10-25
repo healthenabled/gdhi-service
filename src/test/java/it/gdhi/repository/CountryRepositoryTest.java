@@ -1,6 +1,6 @@
 package it.gdhi.repository;
 
-import it.gdhi.model.CountryDetail;
+import it.gdhi.model.Country;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,19 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ActiveProfiles("test")
-public class CountryDetailRepositoryTest {
+public class CountryRepositoryTest {
 
     @Autowired
-    private CountryDetailRepository countryDetailRepository;
+    private CountryRepository countryRepository;
 
     @Test
     public void testInsert() {
-        CountryDetail testCountry = new CountryDetail("testCountry");
-        countryDetailRepository.save(testCountry);
-        int size = countryDetailRepository.findAll().size();
+        Country testCountry = new Country("testCountry", "in");
+        countryRepository.save(testCountry);
+        int size = countryRepository.findAll().size();
         assertThat(size, is(1));
-        countryDetailRepository.delete(testCountry);
-        size = countryDetailRepository.findAll().size();
+        countryRepository.delete(testCountry);
+        size = countryRepository.findAll().size();
         assertThat(size, is(0));
     }
 }

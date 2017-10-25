@@ -1,6 +1,6 @@
 package it.gdhi.controller;
 
-import it.gdhi.service.CountryDetailService;
+import it.gdhi.service.CountryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,11 +16,11 @@ public class CountryControllerTest {
     private CountryController countryController;
 
     @Mock
-    private CountryDetailService countryDetailService;
+    private CountryService countryService;
 
     @Test
     public void shouldListCountries() {
         countryController.listCountries();
-        verify(countryDetailService).insert();
+        verify(countryService).insert();
     }
 }

@@ -7,13 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="country_details")
+@Table(name="master.countries")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CountryDetail {
+public class Country {
 
     @Id
+    private String code;
     private String name;
 
 }
