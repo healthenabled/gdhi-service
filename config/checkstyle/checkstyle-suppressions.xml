@@ -5,4 +5,5 @@
 
 <suppressions>
     <suppress files="Application.java" checks="[Filelength]"/>
+    <suppress files="V3_0__Insert_Master_Data.java" checks="[LineLength]"/>
 </suppressions>
