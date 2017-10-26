@@ -29,12 +29,6 @@ public class V3_0__Insert_Master_Data extends BaseMigration {
         put("Identity management of individuals for Digital Health", "");
     }};
 
-
-    private LinkedHashMap<String, String> indicator_scores = new LinkedHashMap<String, String>() {{
-//           put();
-
-    }};
-
     @Override
     public void doMigrate(JdbcTemplate jdbcTemplate) {
         int i =1;

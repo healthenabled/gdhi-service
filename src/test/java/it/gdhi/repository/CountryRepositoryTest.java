@@ -1,6 +1,5 @@
 package it.gdhi.repository;
 
-import it.gdhi.model.Country;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,7 @@ public class CountryRepositoryTest {
 
     @Test
     public void testInsert() {
-        Country testCountry = new Country("testCountry", "in");
-        countryRepository.save(testCountry);
         int size = countryRepository.findAll().size();
-        assertThat(size, is(1));
-        countryRepository.delete(testCountry);
-        size = countryRepository.findAll().size();
-        assertThat(size, is(0));
+        assertThat(size, is(264));
     }
 }

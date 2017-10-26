@@ -15,9 +15,8 @@ public class CountryService {
     private CountryRepository repository;
 
     @Transactional
-    public Country insert() {
-        Country created = new Country("India", "in");
-        return repository.save(created);
+    public Country fetchCountry() {
+        return repository.findAll().stream().findFirst().orElse(null);
     }
 
 }

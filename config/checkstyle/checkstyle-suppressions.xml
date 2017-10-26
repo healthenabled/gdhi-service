@@ -6,4 +6,9 @@
 <suppressions>
     <suppress files="Application.java" checks="[Filelength]"/>
     <suppress files="V3_0__Insert_Master_Data.java" checks="[LineLength]"/>
+    <suppress files="V4_0__Insert_Master_Data.java" checks="[LineLength]"/>
+    <suppress files="V5_0__Insert_Indicator_Scores.java" checks="[LineLength]"/>
+    <suppress files="V6_0__Create_Table_Development_Indicators.java" checks="[LineLength]"/>
+    <suppress files="V8_0__Insert_Validated_Development_Indicators_Data.java" checks="[LineLength]"/>
+    <suppress files="V7_0__Create_Table_Development_Indicators.java" checks="[LineLength]"/>
 </suppressions>

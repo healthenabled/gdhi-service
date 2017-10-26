@@ -14,6 +14,6 @@ public class CountryController {
 
     @RequestMapping("countrylist")
     public Country listCountries() {
-        return countryDetailService.insert();
+        return countryDetailService.fetchCountry();
     }
 }
