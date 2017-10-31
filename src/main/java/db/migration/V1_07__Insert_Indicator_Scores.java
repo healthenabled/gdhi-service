@@ -3,7 +3,7 @@ package db.migration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
-public class V5_0__Insert_Indicator_Scores extends BaseMigration {
+public class V1_07__Insert_Indicator_Scores extends BaseMigration {
 
     @Override
     public void doMigrate(JdbcTemplate jdbcTemplate) {

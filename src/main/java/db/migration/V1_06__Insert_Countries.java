@@ -2,10 +2,10 @@
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
- public class V6_0__Create_Table_countries extends BaseMigration {
+ public class V1_06__Insert_Countries extends BaseMigration {
      @Override
      public void doMigrate(JdbcTemplate jdbcTemplate) {
-         jdbcTemplate.execute("INSERT INTO master.countries (code, name) VALUES\n" +
+         jdbcTemplate.execute("INSERT INTO master.countries (id, name) VALUES\n" +
                  "('ARG', 'Argentina'),\n" +
                  "('AUS', 'Australia'),\n" +
                  "('BRA', 'Brazil'),\n" +

@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class V3_0__Insert_Master_Data extends BaseMigration {
+public class V1_05__Insert_Master_Health_Indicator_Data extends BaseMigration {
 
     private LinkedHashMap<String, String> indicators = new LinkedHashMap<String, String>() {{
         put("Digital health prioritized at the national level through dedicated bodies / mechanisms for governance", "Does the country have a separate department / agency / national working group for digital health?");
@@ -37,5 +37,4 @@ public class V3_0__Insert_Master_Data extends BaseMigration {
                     i++, stringStringEntry.getKey(), stringStringEntry.getValue());
         }
     }
-
 }

@@ -2,14 +2,13 @@ package db.migration;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class V8_0__Insert_Validated_Development_Indicators_Data extends BaseMigration {
+public class V1_09__Insert_Validated_Development_Indicators_Data extends BaseMigration {
     @Override
     public void doMigrate(JdbcTemplate jdbcTemplate) {
 
-        jdbcTemplate.execute("INSERT INTO validated_config.development_indicators (country_code, gni_per_capita,"+
-                " total_population, life_expectancy, health_expenditure, ncd_deaths_per_capita_total,"+
-                " under_5_mortality, doing_business_index, adult_literacy) "+
-                "VALUES" +
+        jdbcTemplate.execute("INSERT INTO validated_config.development_indicators (country_id, gni_per_capita," +
+                " total_population, life_expectancy, health_expenditure, ncd_deaths_per_capita_total," +
+                " under_5_mortality, doing_business_index, adult_literacy) VALUES" +
                 "('ARG',11960,43847430,76.29,4.79,80.5,11.1,116,98.09)," +
                 "('AUS',54420,24127159,82.45,9.42,89.5,3.7,15, null)," +
                 "('BRA',8840,207652865,75.20,8.32,73.3,15.1,123,91.73)," +
@@ -271,7 +270,7 @@ public class V8_0__Insert_Validated_Development_Indicators_Data extends BaseMigr
                 "('VIR',null,102951,79.87,null,null,null,null,null)," +
                 "('PSE',3230,4551566,73.30,null,null,19.4,140,96.93)," +
                 "('WLD',10298.64151,7442135578,71.89,9.92,69.97377035,40.8,null,85.31)," +
-                "('YEM',1040,27584213,64.73,5.64,60.6,55.3,179, null)," +  //Check
+                "('YEM',1040,27584213,64.73,5.64,60.6,55.3,179, null)," +
                 "('ZMB',1300,16591390,61.34,4.99,29.4,63.4,98,83.01)," +
                 "('ZWE',940,16150362,60.28,6.44,29.7,56.4,161,88.69);");
     }

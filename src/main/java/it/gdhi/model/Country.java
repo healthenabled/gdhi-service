@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Country {
 
     @Id
-    private String code;
+    private String id;
     private String name;
 
 }
