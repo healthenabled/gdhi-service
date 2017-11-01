@@ -53,10 +53,12 @@ jacocoTestReport {
     }
 }
 
-task checkstyleHtml << {
-    ant.xslt(in: checkstyleMain.reports.xml.destination,
-            style: file('config/checkstyle-noframes-sorted.xsl'),
-            out: new File(checkstyleMain.reports.xml.destination.parent, 'codeCopReport.html'))
+task checkstyleHtml {
+    doLast {
+        ant.xslt(in: checkstyleMain.reports.xml.destination,
+                style: file('config/checkstyle-noframes-sorted.xsl'),
+                out: new File(checkstyleMain.reports.xml.destination.parent, 'codeCopReport.html'))
+    }
 }
 
 checkstyleMain.finalizedBy checkstyleHtml
