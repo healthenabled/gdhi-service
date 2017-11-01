@@ -45,6 +45,8 @@ public class Application {
     String ddlAuto;
     @Value("${spring.jpa.hibernate.namingStrategy}")
     String namingStrategy;
+    @Value("${spring.jpa.hibernate.physicalNamingStrategy}")
+    String physicalNamingStrategy;
     @Value("${spring.jpa.hibernate.dialect}")
     String dialect;
 
@@ -105,7 +107,8 @@ public class Application {
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.dialect", dialect);
         jpaProperties.put("hibernate.hbm2ddl.auto", ddlAuto);
-        jpaProperties.put("hibernate.ejb.naming_strategy", namingStrategy);
+        jpaProperties.put("hibernate.implicit_naming_strategy", namingStrategy);
+        jpaProperties.put("hibernate.physical_naming_strategy", physicalNamingStrategy);
         jpaProperties.put("hibernate.show_sql", showSql);
         jpaProperties.put("hibernate.format_sql", formatSql);
         return jpaProperties;

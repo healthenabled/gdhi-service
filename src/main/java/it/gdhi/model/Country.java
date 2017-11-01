@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="master.countries")
+@Table(schema ="master", name="countries")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
