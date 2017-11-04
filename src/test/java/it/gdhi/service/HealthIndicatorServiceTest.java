@@ -20,10 +20,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HealthIndicatorsServiceTest {
+public class HealthIndicatorServiceTest {
 
     @InjectMocks
-    HealthIndicatorsService healthIndicatorsService;
+    HealthIndicatorService healthIndicatorService;
 
     @Mock
     IHealthIndicatorRepository iHealthIndicatorRepository;
@@ -63,7 +63,7 @@ public class HealthIndicatorsServiceTest {
         Integer indicatorId3 =3;
 
         dataSet(countryId, categoryId1, categoryId2, indicatorId1, indicatorId2, indicatorId3);
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         String countryName = "India";
         assertSet1(healthScoreForACountry, countryId, countryName);
     }
@@ -105,7 +105,7 @@ public class HealthIndicatorsServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet4(healthScoreForACountry, countryId, countryName);
     }
 
@@ -145,7 +145,7 @@ public class HealthIndicatorsServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet5(healthScoreForACountry, countryId, countryName);
     }
 
@@ -187,7 +187,7 @@ public class HealthIndicatorsServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet6(healthScoreForACountry, countryId, countryName);
     }
 
@@ -228,7 +228,7 @@ public class HealthIndicatorsServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet2(healthScoreForACountry, countryId, countryName);
     }
 
@@ -277,7 +277,7 @@ public class HealthIndicatorsServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorsService.fetchCountryHealthScore(countryId);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet3(healthScoreForACountry, countryId, countryName);
     }
 

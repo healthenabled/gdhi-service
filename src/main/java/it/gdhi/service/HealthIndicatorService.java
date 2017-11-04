@@ -21,7 +21,7 @@ import static java.math.RoundingMode.CEILING;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class HealthIndicatorsService {
+public class HealthIndicatorService {
 
     @Autowired
     private IHealthIndicatorRepository iHealthIndicatorRepository;

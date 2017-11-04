@@ -4,7 +4,7 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.repository.IDevelopmentIndicatorRepository;
 import it.gdhi.service.CountryService;
-import it.gdhi.service.HealthIndicatorsService;
+import it.gdhi.service.HealthIndicatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,7 +28,7 @@ public class CountryControllerTest {
     private IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
 
     @Mock
-    private HealthIndicatorsService healthIndicatorsService;
+    private HealthIndicatorService healthIndicatorService;
 
     @Test
     public void shouldListCountries() {
@@ -49,8 +49,8 @@ public class CountryControllerTest {
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
-        when(healthIndicatorsService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
+        when(healthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
         countryController.getHealthIndicatorForGivenCountryCode(countryId);
-        verify(healthIndicatorsService).fetchCountryHealthScore(countryId);
+        verify(healthIndicatorService).fetchCountryHealthScore(countryId);
     }
 }
