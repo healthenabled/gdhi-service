@@ -2,6 +2,7 @@ package it.gdhi.service;
 
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.*;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -291,6 +293,60 @@ public class HealthIndicatorServiceTest {
         assertThat(leadership.size(), is(1));
         assertThat(leadership.get(0).getPhase(), is(2));
 
+    }
+
+    @Test
+    public void shouldFetchGlobalHealthScores() {
+        String USA = "USA";
+        String India = "IND";
+        List<String> countryIds = asList(USA, India);
+
+        when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(countryIds);
+
+        HealthIndicator mock1 = mock(HealthIndicator.class);
+        when(mock1.getIndicatorScore()).thenReturn(1);
+        Country mockCountry1 = mock(Country.class);
+        when(mock1.getCountry()).thenReturn(mockCountry1);
+        when(mockCountry1.getId()).thenReturn("IND");
+        when(mockCountry1.getName()).thenReturn("India");
+        when(mock1.getCategory()).thenReturn(mock(Category.class));
+        when(mock1.getCategory().getId()).thenReturn(9);
+        when(mock1.getCategory().getName()).thenReturn("Category 1");
+
+        HealthIndicator mock2 = mock(HealthIndicator.class);
+        when(mock2.getIndicatorScore()).thenReturn(2);
+        Country mockCountry2 = mock(Country.class);
+        when(mock2.getCountry()).thenReturn(mockCountry2);
+        when(mockCountry2.getId()).thenReturn("USA");
+        when(mockCountry2.getName()).thenReturn("United States");
+        when(mock2.getCategory()).thenReturn(mock(Category.class));
+        when(mock2.getCategory().getId()).thenReturn(8);
+        when(mock2.getCategory().getName()).thenReturn("Category 2");
+
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor(India)).thenReturn(asList(mock1, mock2));
+        HealthIndicator mock3 = mock(HealthIndicator.class);
+        Country mockCountry3 = mock(Country.class);
+        when(mock3.getCountry()).thenReturn(mockCountry3);
+        when(mockCountry2.getId()).thenReturn("USA");
+        when(mockCountry2.getName()).thenReturn("United States");
+        when(mock3.getCategory()).thenReturn(mock(Category.class));
+        when(mock3.getCategory().getId()).thenReturn(7);
+        when(mock3.getCategory().getName()).thenReturn("Category 4");
+        when(mock3.getIndicatorScore()).thenReturn(3);
+
+        HealthIndicator mock4 = mock(HealthIndicator.class);
+        Country mockCountry4 = mock(Country.class);
+        when(mock4.getCountry()).thenReturn(mockCountry4);
+        when(mockCountry4.getId()).thenReturn("USA");
+        when(mockCountry4.getName()).thenReturn("United States");
+        when(mock4.getCategory()).thenReturn(mock(Category.class));
+        when(mock4.getCategory().getId()).thenReturn(6);
+        when(mock4.getCategory().getName()).thenReturn("Category 5");
+        when(mock4.getIndicatorScore()).thenReturn(4);
+
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor(USA)).thenReturn(asList(mock3, mock4));
+        GlobalHealthScoreDto globalHealthScoreDto = healthIndicatorService.fetchHealthScores();
+        assertThat(globalHealthScoreDto.getCountryHealthScores().size(), is(2));
     }
 
 }

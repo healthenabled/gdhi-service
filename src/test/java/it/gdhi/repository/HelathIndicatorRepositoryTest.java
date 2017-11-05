@@ -2,6 +2,7 @@ package it.gdhi.repository;
 
 import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.HealthIndicatorId;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,44 @@ public class HelathIndicatorRepositoryTest {
         assertThat(healthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
         assertThat(healthIndicator.get(0).getCountry().getName(), is("India"));
         assertThat(healthIndicator.get(0).getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
+    }
+
+    @Test
+    public void shouldFetchUniqueCountryIdsFromHealthIndicatorTable() {
+        String countryId1 = "IND";
+        Integer categoryId1 = 1;
+        Integer indicatorId1 = 1;
+        Integer indicatorScore1 = 1;
+
+        String countryId2 = "ARG";
+        Integer categoryId2 = 1;
+        Integer indicatorId2 = 2;
+        Integer indicatorScore2 = 3;
+
+        String countryId3 = "ARG";
+        Integer categoryId3 = 1;
+        Integer indicatorId3 = 1;
+        Integer indicatorScore3 = 4;
+
+        HealthIndicatorId healthIndicatorId1 = new HealthIndicatorId(countryId1,categoryId1,indicatorId1);
+        HealthIndicator healthIndicatorSetupData1 = new HealthIndicator(healthIndicatorId1, indicatorScore1);
+
+        HealthIndicatorId healthIndicatorId2 = new HealthIndicatorId(countryId2,categoryId2,indicatorId2);
+        HealthIndicator healthIndicatorSetupData2 = new HealthIndicator(healthIndicatorId2, indicatorScore2);
+
+        HealthIndicatorId healthIndicatorId3 = new HealthIndicatorId(countryId3,categoryId3,indicatorId3);
+        HealthIndicator healthIndicatorSetupData3 = new HealthIndicator(healthIndicatorId3, indicatorScore3);
+
+        entityManager.persist(healthIndicatorSetupData1);
+        entityManager.persist(healthIndicatorSetupData2);
+        entityManager.persist(healthIndicatorSetupData3);
+        entityManager.flush();
+        entityManager.clear();
+
+        List<String> countries = iHealthIndicatorRepository.findCountriesWithHealthScores();
+
+        assertThat(countries.size(), is(2));
+        assertThat(countries, is(Matchers.containsInAnyOrder("ARG", "IND")));
     }
 
 }

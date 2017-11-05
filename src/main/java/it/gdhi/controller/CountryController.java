@@ -2,6 +2,7 @@ package it.gdhi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.repository.IDevelopmentIndicatorRepository;
@@ -39,6 +40,11 @@ public class CountryController {
     @RequestMapping("/countries/{id}/health_indicators.json")
     public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
         return healthIndicatorService.fetchCountryHealthScore(countryId);
+    }
+
+    @RequestMapping("/global_health_indicators.json")
+    public GlobalHealthScoreDto getGlobalHealthIndicators() {
+        return healthIndicatorService.fetchHealthScores();
     }
 
 }

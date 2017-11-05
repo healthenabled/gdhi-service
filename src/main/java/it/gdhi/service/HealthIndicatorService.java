@@ -2,6 +2,7 @@ package it.gdhi.service;
 
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
@@ -14,9 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.ROUND_HALF_EVEN;
-import static java.math.BigDecimal.ZERO;
+import static java.math.BigDecimal.*;
 import static java.math.RoundingMode.CEILING;
 import static java.util.stream.Collectors.toList;
 
@@ -30,11 +29,23 @@ public class HealthIndicatorService {
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository
                 .findHealthIndicatorsFor(countryId));
-        CountryHealthScoreDto countryHealthScoreDto = transformToDto(countryId, healthIndicators);
+        CountryHealthScoreDto countryHealthScoreDto = transformToCountryHealthDto(countryId, healthIndicators);
         return countryHealthScoreDto;
     }
 
-    private CountryHealthScoreDto transformToDto(String countryId, HealthIndicators healthIndicators) {
+    @Transactional
+    public GlobalHealthScoreDto fetchHealthScores() {
+        List<String> countriesWithHealthScores = iHealthIndicatorRepository.findCountriesWithHealthScores();
+        List<CountryHealthScoreDto> globalHealthScores = countriesWithHealthScores.stream()
+                .map(countryId -> fetchCountryHealthScore(countryId)).collect(toList());
+        return transformToGlobalHealthDto(globalHealthScores);
+    }
+
+    private GlobalHealthScoreDto transformToGlobalHealthDto(List<CountryHealthScoreDto> globalHealthScores) {
+        return new GlobalHealthScoreDto(globalHealthScores);
+    }
+
+    private CountryHealthScoreDto transformToCountryHealthDto(String countryId, HealthIndicators healthIndicators) {
         Map<Category, Double> notNullHealthScores = healthIndicators.groupByCategoryWithNotNullScores();
         Map<Category, Double> nullHealthScores = healthIndicators.joinNullHealthScoresWith(notNullHealthScores);
         Double countryAverage = getCountryAverage(notNullHealthScores);
