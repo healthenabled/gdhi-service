@@ -6,7 +6,7 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface CountryRepository extends Repository<Country, Long> {
+public interface ICountryRepository extends Repository<Country, Long> {
 
     void delete(Country country);
 

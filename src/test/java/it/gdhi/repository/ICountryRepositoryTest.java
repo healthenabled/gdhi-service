@@ -16,14 +16,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ActiveProfiles("test")
-public class CountryRepositoryTest {
+public class ICountryRepositoryTest {
 
     @Autowired
-    private CountryRepository countryRepository;
+    private ICountryRepository ICountryRepository;
 
     @Test
     public void testInsert() {
-        int size = countryRepository.findAll().size();
+        int size = ICountryRepository.findAll().size();
         assertThat(size, is(264));
     }
 }

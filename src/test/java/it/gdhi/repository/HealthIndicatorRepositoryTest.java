@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ActiveProfiles("test")
-public class HelathIndicatorRepositoryTest {
+public class HealthIndicatorRepositoryTest {
 
     @Autowired
     private IHealthIndicatorRepository iHealthIndicatorRepository;
