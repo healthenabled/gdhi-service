@@ -31,18 +31,18 @@ public class CountryController {
         return countryDetailService.fetchCountry();
     }
 
-    @RequestMapping("/countries/{id}/development_indicators.json")
+    @RequestMapping("/countries/{id}/development_indicators")
     @JsonView(DevelopmentIndicatorView.class)
     public DevelopmentIndicator getDevelopmentIndicatorForGivenCountryCode(@PathVariable("id") String id) {
         return iDevelopmentIndicatorRepository.findByCountryId(id).orElse(null);
     }
 
-    @RequestMapping("/countries/{id}/health_indicators.json")
+    @RequestMapping("/countries/{id}/health_indicators")
     public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
         return healthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
-    @RequestMapping("/global_health_indicators.json")
+    @RequestMapping("/global_health_indicators")
     public GlobalHealthScoreDto getGlobalHealthIndicators() {
         return healthIndicatorService.fetchHealthScores();
     }
