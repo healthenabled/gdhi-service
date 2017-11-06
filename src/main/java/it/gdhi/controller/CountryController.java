@@ -26,7 +26,7 @@ public class CountryController {
     @Autowired
     IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
 
-    @RequestMapping("countrylist")
+    @RequestMapping("/countrylist")
     public Country listCountries() {
         return countryDetailService.fetchCountry();
     }
