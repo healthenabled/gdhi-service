@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class CountryController {
 
@@ -26,9 +28,9 @@ public class CountryController {
     @Autowired
     IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
 
-    @RequestMapping("/countrylist")
-    public Country listCountries() {
-        return countryDetailService.fetchCountry();
+    @RequestMapping("/countries")
+    public List<Country> getCountries() {
+        return countryDetailService.fetchCountries();
     }
 
     @RequestMapping("/countries/{id}/development_indicators")

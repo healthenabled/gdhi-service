@@ -36,8 +36,8 @@ public class CountryControllerTest {
 
     @Test
     public void shouldListCountries() {
-        countryController.listCountries();
-        verify(countryService).fetchCountry();
+        countryController.getCountries();
+        verify(countryService).fetchCountries();
     }
 
     @Test

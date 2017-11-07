@@ -19,7 +19,7 @@ public class CountryDetailServiceTest {
 
     @Test
     public void shouldInsertTestData() {
-        countryDetailService.fetchCountry();
+        countryDetailService.fetchCountries();
         verify(countryDetailRepository).findAll();
     }
 }

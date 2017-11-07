@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -15,8 +16,8 @@ public class CountryService {
     private ICountryRepository repository;
 
     @Transactional
-    public Country fetchCountry() {
-        return repository.findAll().stream().findFirst().orElse(null);
+    public List<Country> fetchCountries() {
+        return repository.findAll();
     }
 
 }
