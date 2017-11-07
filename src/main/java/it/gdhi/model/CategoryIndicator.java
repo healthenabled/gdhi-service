@@ -21,6 +21,10 @@ public class CategoryIndicator implements Serializable {
     @EmbeddedId
     private CategoryIndicatorId categoryIndicatorId;
 
+    public CategoryIndicator(CategoryIndicatorId categoryIndicatorId) {
+        this.categoryIndicatorId = categoryIndicatorId;
+    }
+
     @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
