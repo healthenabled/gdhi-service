@@ -288,7 +288,6 @@ public class HealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
         assertThat(healthScoreForACountry.getCountryPhase(), is(2));
-        assertThat(healthScoreForACountry.getColorCode(), is("#FF5735"));
         assertThat(healthScoreForACountry.getOverallScore(), is(1.6666666666666667));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));

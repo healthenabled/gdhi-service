@@ -19,18 +19,15 @@ public class CountryHealthScoreDto {
 
     private List<CategoryHealthScoreDto> categories;
 
-    private String colorCode;
-
     private Integer countryPhase;
 
     public CountryHealthScoreDto(String countryId, String name, Double countryAverage, Integer countryPhase,
-                                 List<CategoryHealthScoreDto> categories, String colorCode) {
+                                 List<CategoryHealthScoreDto> categories) {
         this.countryId = countryId;
         this.countryName  = name;
         this.overallScore  = countryAverage;
         this.countryPhase  = countryPhase;
         this.categories = categories;
-        this.colorCode = colorCode;
     }
 
 }

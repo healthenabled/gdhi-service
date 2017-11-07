@@ -5,7 +5,6 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
-import it.gdhi.model.HealthScoreToColor;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class HealthIndicatorService {
         Double countryAverage = getCountryAverage(notNullHealthScores);
         Integer countryPhase = convertScoreToPhase(countryAverage);
         return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), countryAverage, countryPhase,
-                transformCategoryMapToList(nullHealthScores), HealthScoreToColor.scoreToColor(countryPhase));
+                transformCategoryMapToList(nullHealthScores));
     }
 
     private Double getCountryAverage(Map<Category, Double> categoryScoreMap) {
