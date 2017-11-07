@@ -32,17 +32,12 @@ public class ICategoryIndicatorMappingRepositoryTest {
     @Test
     public void shouldFetchCountryCategoryIndicatorDetailsOnHealthIndicatorScoreFetchForCountry() {
 
-        CategoryIndicator categoryIndicator1 = new CategoryIndicator(new CategoryIndicatorId(1, 1));
-        CategoryIndicator categoryIndicator2 = new CategoryIndicator(new CategoryIndicatorId(2, 2));
-        entityManager.persist(categoryIndicator1);
-        entityManager.persist(categoryIndicator2);
-
         entityManager.flush();
         entityManager.clear();
 
         List<CategoryIndicator> categoryIndicators = iCategoryIndicatorMappingRepository.findAll();
 
-        assertThat(categoryIndicators.size(), is(2));
+        assertThat(categoryIndicators.size(), is(19));
         Optional<CategoryIndicator> firstCategory = categoryIndicators.stream().filter(c -> c.getCategoryId().equals(1))
                 .findFirst();
         assertThat(firstCategory.get().getCategoryName(), is("Leadership and Governance"));
@@ -52,14 +47,6 @@ public class ICategoryIndicatorMappingRepositoryTest {
         assertThat(firstCategory.get().getIndicatorDefinition(),
             is("Does the country have a separate department / agency / national " +
                     "working group for digital health?"));
-
-        Optional<CategoryIndicator> secondCategory = categoryIndicators.stream().filter(c -> c.getCategoryId()
-                .equals(2)).findFirst();
-        assertThat(secondCategory.get().getCategoryName(), is("Strategy and Investment"));
-        assertThat(secondCategory.get().getIndicatorName(), is("Digital Health prioritized at the national level " +
-                "through planning"));
-        assertThat(secondCategory.get().getIndicatorDefinition(), is("Is digital health included and budgeted for " +
-                "in national health or relevant national strategies and/or plan(s)?"));
     }
 
 }
