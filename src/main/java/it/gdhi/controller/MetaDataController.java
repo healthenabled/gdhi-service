@@ -1,9 +1,7 @@
 package it.gdhi.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import it.gdhi.model.CategoryIndicator;
-import it.gdhi.repository.ICategoryIndicatorMappingRepository;
-import it.gdhi.view.CategoryIndicatorView;
+import it.gdhi.dto.CategoryIndicatorDto;
+import it.gdhi.service.CategoryIndicatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +12,11 @@ import java.util.List;
 public class MetaDataController {
 
     @Autowired
-    ICategoryIndicatorMappingRepository iCategoryIndicatorMappingRepository;
+    CategoryIndicatorService categoryIndicatorService;
 
     @RequestMapping("/categorical_indicators")
-    @JsonView(CategoryIndicatorView.class)
-    public List<CategoryIndicator> getCategoryIndicatorMapping() {
-        return iCategoryIndicatorMappingRepository.findAll();
+    public List<CategoryIndicatorDto> getCategoryIndicatorMapping() {
+        return categoryIndicatorService.getCategoryIndicatorMapping();
     }
 
 }

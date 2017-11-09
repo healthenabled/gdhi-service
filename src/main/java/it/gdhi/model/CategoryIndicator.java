@@ -1,7 +1,5 @@
 package it.gdhi.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import it.gdhi.view.CategoryIndicatorView;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,28 +33,23 @@ public class CategoryIndicator implements Serializable {
     @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
     private Indicator indicator;
 
-    @JsonView(CategoryIndicatorView.class)
     public Integer getCategoryId() {
         return category.getId();
     }
 
-    @JsonView(CategoryIndicatorView.class)
     public Integer getIndicatorId() {
-        return indicator.getIndicatorId();
+        return indicator != null ? indicator.getIndicatorId() : null;
     }
 
-    @JsonView(CategoryIndicatorView.class)
     public String getCategoryName() {
         return category.getName();
     }
 
-    @JsonView(CategoryIndicatorView.class)
     public String getIndicatorName() {
-        return indicator.getName();
+        return indicator != null ? indicator.getName() : null;
     }
 
-    @JsonView(CategoryIndicatorView.class)
     public String getIndicatorDefinition() {
-        return indicator.getDefinition();
+        return indicator != null ? indicator.getDefinition() : null;
     }
 }
