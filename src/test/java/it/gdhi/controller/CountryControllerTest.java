@@ -3,8 +3,8 @@ package it.gdhi.controller;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.DevelopmentIndicator;
-import it.gdhi.repository.IDevelopmentIndicatorRepository;
 import it.gdhi.service.CountryService;
+import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Optional;
-
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +28,7 @@ public class CountryControllerTest {
     private CountryService countryService;
 
     @Mock
-    private IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
+    private DevelopmentIndicatorService developmentIndicatorService;
 
     @Mock
     private HealthIndicatorService healthIndicatorService;
@@ -38,15 +37,6 @@ public class CountryControllerTest {
     public void shouldListCountries() {
         countryController.getCountries();
         verify(countryService).fetchCountries();
-    }
-
-    @Test
-    public void shouldInvokeDevelopmentIndicatorRepoToFetchCountryContextInfo() {
-        DevelopmentIndicator value = new DevelopmentIndicator();
-        Optional<DevelopmentIndicator> developmentIndicatorOptional = Optional.of(value);
-        when(iDevelopmentIndicatorRepository.findByCountryId("ARG")).thenReturn(developmentIndicatorOptional);
-        countryController.getDevelopmentIndicatorForGivenCountryCode("ARG");
-        verify(iDevelopmentIndicatorRepository).findByCountryId("ARG");
     }
 
     @Test
@@ -73,4 +63,18 @@ public class CountryControllerTest {
         verify(healthIndicatorService).fetchHealthScores();
     }
 
+    @Test
+
+    public void shouldFetchTheDevelopmentIndicators() {
+        String countryId = "ARG";
+        DevelopmentIndicator developmentIndicator = new DevelopmentIndicator();
+
+        when(developmentIndicatorService.fetchCountryDevelopmentScores(countryId)).thenReturn(developmentIndicator);
+
+        DevelopmentIndicator actualDevelopmentIndicator = countryController.getDevelopmentIndicatorForGivenCountryCode(countryId);
+
+        verify(developmentIndicatorService).fetchCountryDevelopmentScores(countryId);
+
+        assertEquals(developmentIndicator.getCountryId(), actualDevelopmentIndicator.getCountryId());
+    }
 }

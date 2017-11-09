@@ -5,8 +5,8 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
-import it.gdhi.repository.IDevelopmentIndicatorRepository;
 import it.gdhi.service.CountryService;
+import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import java.util.List;
 public class CountryController {
 
     @Autowired
-    CountryService countryDetailService;
+    private CountryService countryDetailService;
 
     @Autowired
-    HealthIndicatorService healthIndicatorService;
+    private HealthIndicatorService healthIndicatorService;
 
     @Autowired
-    IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
+    private DevelopmentIndicatorService developmentIndicatorService;
 
     @RequestMapping("/countries")
     public List<Country> getCountries() {
@@ -35,8 +35,8 @@ public class CountryController {
 
     @RequestMapping("/countries/{id}/development_indicators")
     @JsonView(DevelopmentIndicatorView.class)
-    public DevelopmentIndicator getDevelopmentIndicatorForGivenCountryCode(@PathVariable("id") String id) {
-        return iDevelopmentIndicatorRepository.findByCountryId(id).orElse(null);
+    public DevelopmentIndicator getDevelopmentIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
+        return developmentIndicatorService.fetchCountryDevelopmentScores(countryId);
     }
 
     @RequestMapping("/countries/{id}/health_indicators")
