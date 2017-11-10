@@ -1,5 +1,6 @@
 package it.gdhi.controller;
 
+import it.gdhi.dto.AllCountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.DevelopmentIndicator;
@@ -14,8 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,12 +51,13 @@ public class CountryControllerTest {
 
     @Test
     public void shouldInvokeFetchHealthScoresOnGettingGlobalInfo() {
-        GlobalHealthScoreDto mock = mock(GlobalHealthScoreDto.class);
+        AllCountriesHealthScoreDto mockGlobalHealthScore = mock(AllCountriesHealthScoreDto.class);
+
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
-        when(mock.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(healthIndicatorService.fetchHealthScores()).thenReturn(mock);
-        GlobalHealthScoreDto globalHealthIndicators = countryController.getGlobalHealthIndicators();
+        when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
+        when(healthIndicatorService.fetchHealthScores()).thenReturn(mockGlobalHealthScore);
+        AllCountriesHealthScoreDto globalHealthIndicators = countryController.getAllCountriesHealthIndicatorScores();
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
@@ -64,7 +65,14 @@ public class CountryControllerTest {
     }
 
     @Test
+    public void shouldFetchTheGlobalHealthIndicatorScore() {
+        GlobalHealthScoreDto globalHealthIndicators = countryController.getGlobalHealthIndicator();
+        when(healthIndicatorService.getGlobalHealthIndicator()).thenReturn(globalHealthIndicators);
+        verify(healthIndicatorService).getGlobalHealthIndicator();
+        assertNull(globalHealthIndicators);
+    }
 
+    @Test
     public void shouldFetchTheDevelopmentIndicators() {
         String countryId = "ARG";
         DevelopmentIndicator developmentIndicator = new DevelopmentIndicator();

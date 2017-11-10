@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class GlobalHealthScoreDto {
-    Integer overAllScore;
-    List<CategoryHealthScoreDto> categories;
+public class AllCountriesHealthScoreDto {
+
+    List<CountryHealthScoreDto> countryHealthScores;
 }

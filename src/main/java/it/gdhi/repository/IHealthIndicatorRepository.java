@@ -14,7 +14,7 @@ public interface IHealthIndicatorRepository extends Repository<HealthIndicator, 
     //TODO tests for non existing id
     List<HealthIndicator> findHealthIndicatorsFor(String countryId);
 
-    @Query("SELECT distinct (h.healthIndicatorId.countryId) FROM HealthIndicator h")
+    @Query("SELECT distinct (healthIndicatorId.countryId) FROM HealthIndicator")
     List<String> findCountriesWithHealthScores();
 
 }

@@ -1,9 +1,8 @@
 package it.gdhi.service;
 
+import it.gdhi.dto.AllCountriesHealthScoreDto;
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.GlobalHealthScoreDto;
-import it.gdhi.dto.IndicatorScoreDto;
 import it.gdhi.model.*;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.model.id.IndicatorScoreId;
@@ -19,7 +18,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -30,6 +28,9 @@ public class HealthIndicatorServiceTest {
 
     @InjectMocks
     HealthIndicatorService healthIndicatorService;
+
+    @Mock
+    CountryHealthScoreDto countryHealthScoreDto;
 
     @Mock
     IHealthIndicatorRepository iHealthIndicatorRepository;
@@ -63,48 +64,6 @@ public class HealthIndicatorServiceTest {
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
-    }
-
-    @Test
-    public void shouldReturnCountryHealthScoreAtCategoryLevelAndIndicatorLevel() throws Exception {
-        String countryId = "IND";
-        Integer categoryId1 = 1;
-        Integer categoryId2 = 2;
-        Integer indicatorId1 = 1;
-        Integer indicatorId2 = 2;
-        Integer indicatorId3 =3;
-
-        dataSet(countryId, categoryId1, categoryId2, indicatorId1, indicatorId2, indicatorId3);
-        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
-
-        assertEquals(2, healthScoreForACountry.getCategories().size());
-        assertEquals(new Double(2.75), healthScoreForACountry.getOverallScore());
-        assertEquals(new Integer(3), healthScoreForACountry.getCountryPhase());
-
-        CategoryHealthScoreDto category1 = healthScoreForACountry.getCategories().get(0);
-        assertEquals(1, category1.getIndicators().size());
-        assertEquals(new Integer(3), category1.getPhase());
-        assertEquals(1, category1.getIndicators().size());
-
-        CategoryHealthScoreDto category2 = healthScoreForACountry.getCategories().get(1);
-        assertEquals(2, category2.getIndicators().size());
-        assertEquals(new Integer(3), category2.getPhase());
-        assertEquals(2, category2.getIndicators().size());
-
-        IndicatorScoreDto indicator1 = category1.getIndicators().get(0);
-        assertEquals(new Integer(3), indicator1.getScore());
-        assertEquals("Definition1", indicator1.getIndicatorDescription());
-        assertEquals("score 1", indicator1.getScoreDescription());
-
-        IndicatorScoreDto indicator2 = category2.getIndicators().get(0);
-        assertEquals(new Integer(4), indicator2.getScore());
-        assertEquals("Definition2", indicator2.getIndicatorDescription());
-        assertEquals("score 2", indicator2.getScoreDescription());
-
-        IndicatorScoreDto indicator3 = category2.getIndicators().get(1);
-        assertEquals(new Integer(1), indicator3.getScore());
-        assertEquals("Definition3", indicator3.getIndicatorDescription());
-        assertEquals("score 3", indicator3.getScoreDescription());
     }
 
     @Test
@@ -335,22 +294,6 @@ public class HealthIndicatorServiceTest {
         assertSet3(healthScoreForACountry, countryId, countryName);
     }
 
-    @Test
-    public void shouldHandleWhenIndicatorScoreIsNull() throws Exception {
-        String countryId = "IND";
-        String countryName = "India";
-        Integer categoryId1 = 1;
-        String categoryName = "Leadership and Governance";
-        Integer indicatorId1 = 1;
-        Category category1 = new Category(categoryId1, categoryName );
-        Country country1 = new Country(countryId, countryName);
-        HealthIndicatorId healthIndicatorId1 = new HealthIndicatorId(countryId,categoryId1,indicatorId1);
-        HealthIndicator healthIndicator1 = new HealthIndicator(healthIndicatorId1, country1, category1, null,  8 );
-
-        assertNull(healthIndicator1.getIndicatorDescription());
-        assertNull(healthIndicator1.getIndicatorName());
-        assertNull(healthIndicator1.getScoreDescription());
-    }
 
     private void assertSet3(CountryHealthScoreDto healthScoreForACountry, String countryId, String countryName){
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
@@ -414,8 +357,8 @@ public class HealthIndicatorServiceTest {
         when(mock4.getScore()).thenReturn(4);
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(USA)).thenReturn(asList(mock3, mock4));
-        GlobalHealthScoreDto globalHealthScoreDto = healthIndicatorService.fetchHealthScores();
-        assertThat(globalHealthScoreDto.getCountryHealthScores().size(), is(2));
+        AllCountriesHealthScoreDto allCountriesHealthScoreDto = healthIndicatorService.fetchHealthScores();
+        assertThat(allCountriesHealthScoreDto.getCountryHealthScores().size(), is(2));
     }
 
 }

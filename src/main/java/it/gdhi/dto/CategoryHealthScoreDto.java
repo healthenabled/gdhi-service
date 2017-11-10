@@ -28,6 +28,13 @@ public class CategoryHealthScoreDto {
         this.indicators = indicatorDtos;
     }
 
+    public CategoryHealthScoreDto(Integer id, String name, Integer phase) {
+        this.id = id;
+        this.name = name;
+        this.phase = phase;
+
+    }
+
     public Integer getPhase() {
         OptionalDouble optionalScore = this.overallScore();
         return optionalScore.isPresent() ? convertScoreToPhase(optionalScore.getAsDouble()) : null;

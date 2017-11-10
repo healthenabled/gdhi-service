@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import it.gdhi.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @NoArgsConstructor
@@ -40,5 +44,11 @@ public class CountryHealthScoreDto {
 
     public Integer getCountryPhase() {
         return convertScoreToPhase(this.getOverallScore());
+    }
+
+    public static Double getCountryAverage(Map<Category, Double> categoryScoreMap) {
+        OptionalDouble optionalDouble = categoryScoreMap.values().stream()
+                .mapToDouble(Double::doubleValue).average();
+        return optionalDouble.isPresent() ? optionalDouble.getAsDouble() : null;
     }
 }
