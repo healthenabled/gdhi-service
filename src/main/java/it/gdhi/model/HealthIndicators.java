@@ -19,9 +19,9 @@ public class HealthIndicators {
 
     public Map<Category, Double> groupByCategoryWithNotNullScores() {
         return healthIndicators.stream()
-                .filter(healthIndicator -> healthIndicator.getIndicatorScore() != null)
+                .filter(healthIndicator -> healthIndicator.getScore() != null)
                 .collect(groupingBy(HealthIndicator::getCategory,
-                averagingInt(HealthIndicator::getIndicatorScore)));
+                averagingInt(HealthIndicator::getScore)));
     }
 
     public Map<Category, Double> joinNullHealthScoresWith(Map<Category, Double> categoryScoreMap) {
@@ -37,7 +37,7 @@ public class HealthIndicators {
 
     private List<HealthIndicator> getHealthIndicatorsWithNullScores(List<Integer> allCategoryIds) {
         return healthIndicators.stream()
-               .filter(healthIndicator -> healthIndicator.getIndicatorScore() == null)
+               .filter(healthIndicator -> healthIndicator.getScore() == null)
                .filter(healthIndicator -> !allCategoryIds.contains(healthIndicator.getCategory().getId()))
                .collect(toList());
     }

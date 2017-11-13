@@ -1,7 +1,7 @@
 package it.gdhi.repository;
 
 import it.gdhi.model.HealthIndicator;
-import it.gdhi.model.HealthIndicatorId;
+import it.gdhi.model.id.HealthIndicatorId;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class HealthIndicatorRepositoryTest {
         assertThat(healthIndicator.size(), is(1));
         assertThat(healthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
         assertThat(healthIndicator.get(0).getCountry().getName(), is("India"));
-        assertThat(healthIndicator.get(0).getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
+        assertThat(healthIndicator.get(0).getIndicatorScore().getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
     }
 
     @Test

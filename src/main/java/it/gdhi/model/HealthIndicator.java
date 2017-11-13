@@ -1,5 +1,6 @@
 package it.gdhi.model;
 
+import it.gdhi.model.id.HealthIndicatorId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,16 +29,18 @@ public class HealthIndicator {
     @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
-    private Indicator indicator;
+    @JoinColumns({@JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false),
+            @JoinColumn(name = "indicator_score", referencedColumnName = "score", insertable = false, updatable = false)})
+    private IndicatorScore indicatorScore;
 
-    private Integer indicatorScore;
+    @Column(name="indicator_score")
+    private Integer score;
 
     public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore) {
         this.healthIndicatorId = healthIndicatorId;
-        this.indicatorScore = indicatorScore;
+        this.score = indicatorScore;
     }
 
 }

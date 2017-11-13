@@ -1,4 +1,4 @@
-package it.gdhi.model;
+package it.gdhi.model.id;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
