@@ -1,7 +1,11 @@
 package it.gdhi.repository;
 
+import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.Indicator;
+import it.gdhi.model.IndicatorScore;
 import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.IndicatorScoreId;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @SpringBootTest
@@ -50,6 +55,38 @@ public class HealthIndicatorRepositoryTest {
         assertThat(healthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
         assertThat(healthIndicator.get(0).getCountry().getName(), is("India"));
         assertThat(healthIndicator.get(0).getIndicatorScore().getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
+    }
+
+    @Test
+    public void shouldFetchHealthIndicatorWithAssociatedProperties() throws Exception {
+        String countryId = "IND";
+        Integer categoryId = 10;
+        Integer indicatorId = 20;
+        Integer score = 3;
+
+        HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId,categoryId,indicatorId);
+        HealthIndicator healthIndicatorSetupData = new HealthIndicator(healthIndicatorId, score);
+        Category category = new Category(categoryId, "category name");
+        entityManager.persist(category);
+        Indicator indicator = new Indicator(indicatorId, "an indicator", "definition");
+        entityManager.persist(indicator);
+        IndicatorScore indicatorScore = new IndicatorScore(IndicatorScoreId.builder().indicatorId(indicatorId).score(score).build(), indicator, "score definition");
+        entityManager.persist(indicatorScore);
+        entityManager.persist(healthIndicatorSetupData);
+        entityManager.flush();
+        entityManager.clear();
+
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor("IND");
+
+        assertEquals(1, healthIndicators.size());
+        HealthIndicator healthIndicator = healthIndicators.get(0);
+        assertEquals(category.getId(), healthIndicator.getCategory().getId());
+        assertEquals(category.getName(), healthIndicator.getCategory().getName());
+        assertEquals(indicator.getIndicatorId(), healthIndicator.getIndicatorScore().getIndicator().getIndicatorId());
+        assertEquals(indicator.getName(), healthIndicator.getIndicatorScore().getIndicator().getName());
+        assertEquals(indicator.getDefinition(), healthIndicator.getIndicatorScore().getIndicator().getDefinition());
+        assertEquals(indicatorScore.getDefinition(), healthIndicator.getIndicatorScore().getDefinition());
+        assertEquals(indicatorScore.getId().getScore(), healthIndicator.getIndicatorScore().getId().getScore());
     }
 
     @Test

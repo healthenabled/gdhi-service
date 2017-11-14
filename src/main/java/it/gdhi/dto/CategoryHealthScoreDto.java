@@ -13,4 +13,10 @@ public class CategoryHealthScoreDto {
 
     private Integer phase;
 
+    private IndicatorScoreDto indicators;
+
+    public CategoryHealthScoreDto(String name, Integer phase) {
+        this.name = name;
+        this.phase = phase;
+    }
 }

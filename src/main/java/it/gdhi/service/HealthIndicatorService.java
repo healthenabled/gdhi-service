@@ -29,8 +29,7 @@ public class HealthIndicatorService {
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository
                 .findHealthIndicatorsFor(countryId));
-        CountryHealthScoreDto countryHealthScoreDto = transformToCountryHealthDto(countryId, healthIndicators);
-        return countryHealthScoreDto;
+        return transformToCountryHealthDto(countryId, healthIndicators);
     }
 
     @Transactional
