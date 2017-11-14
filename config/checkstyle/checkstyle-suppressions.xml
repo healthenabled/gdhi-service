@@ -5,6 +5,5 @@
 
 <suppressions>
     <suppress files="Application.java" checks="[Filelength]"/>
-    <suppress files="HealthIndicator.java" checks="[Filelength]"/>
     <suppress files="[\\/]migration[\\/]" checks="[Filelength]"/>
 </suppressions>

@@ -1,8 +1,6 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CategoryHealthScoreDto;
-import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.GlobalHealthScoreDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
@@ -14,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.*;
 import static java.math.RoundingMode.CEILING;
@@ -29,7 +28,7 @@ public class HealthIndicatorService {
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository
                 .findHealthIndicatorsFor(countryId));
-        return transformToCountryHealthDto(countryId, healthIndicators);
+        return transformToCountryHealthDto1(countryId, healthIndicators);
     }
 
     @Transactional
@@ -44,13 +43,19 @@ public class HealthIndicatorService {
         return new GlobalHealthScoreDto(globalHealthScores);
     }
 
-    private CountryHealthScoreDto transformToCountryHealthDto(String countryId, HealthIndicators healthIndicators) {
-        Map<Category, Double> notNullHealthScores = healthIndicators.groupByCategoryWithNotNullScores();
-        Map<Category, Double> nullHealthScores = healthIndicators.joinNullHealthScoresWith(notNullHealthScores);
-        Double countryAverage = getCountryAverage(notNullHealthScores);
-        Integer countryPhase = convertScoreToPhase(countryAverage);
-        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), countryAverage, countryPhase,
-                transformCategoryMapToList(nullHealthScores));
+    private CountryHealthScoreDto transformToCountryHealthDto1(String countryId, HealthIndicators healthIndicators) {
+        List<CategoryHealthScoreDto> categoryDtos = healthIndicators.groupByCategory()
+                .entrySet()
+                .stream()
+                .map(entry -> {
+            String categoryName = entry.getKey().getName();
+            List<IndicatorScoreDto> indicatorDtos = entry.getValue().stream()
+                    .map(healthIndicator -> new IndicatorScoreDto(healthIndicator.getIndicatorName(),
+                            healthIndicator.getIndicatorDescription(), healthIndicator.getScore(),
+                            healthIndicator.getScoreDescription())).collect(Collectors.toList());
+            return new CategoryHealthScoreDto(categoryName, indicatorDtos);
+        }).collect(Collectors.toList());
+        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), categoryDtos);
     }
 
     private Double getCountryAverage(Map<Category, Double> categoryScoreMap) {

@@ -3,8 +3,10 @@ package it.gdhi.service;
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
+import it.gdhi.dto.IndicatorScoreDto;
 import it.gdhi.model.*;
 import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.IndicatorScoreId;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -32,28 +35,76 @@ public class HealthIndicatorServiceTest {
     IHealthIndicatorRepository iHealthIndicatorRepository;
 
     private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
-        Integer indicatorScore1 = 3;
-        Integer indicatorScore2 = 4;
-        Integer indicatorScore3 = 1;
+        Integer score1 = 3;
+        Integer score2 = 4;
+        Integer score3 = 1;
 
         HealthIndicatorId healthIndicatorId1 = new HealthIndicatorId(countryId1,categoryId1,indicatorId1);
         Country country1 = new Country("IND", "India");
         Category category1 = new Category(categoryId1, "Leadership and Governance");
-        Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        HealthIndicator healthIndicator1 = new HealthIndicator(healthIndicatorId1, country1, category1, IndicatorScore.builder().indicator(indicator1).build(), indicatorScore1);
+        Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition1");
+        IndicatorScoreId indicatorScoreId1 = IndicatorScoreId.builder().score(score2).indicatorId(indicatorId2).build();
+        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(indicatorScoreId1).indicator(indicator1).definition("score 1").build();
+        HealthIndicator healthIndicator1 = new HealthIndicator(healthIndicatorId1, country1, category1, indicatorScore1, score1);
 
         HealthIndicatorId healthIndicatorId2 = new HealthIndicatorId(countryId1,categoryId2,indicatorId2);
         Category category2 = new Category(categoryId2, "Category2");
-        Indicator indicator2 = new Indicator(indicatorId2, "Indicator 2", "Definition");
-        Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition");
+        Indicator indicator2 = new Indicator(indicatorId2, "Indicator 2", "Definition2");
+        Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition3");
 
-        HealthIndicator healthIndicator2 = new HealthIndicator(healthIndicatorId2, country1, category2, IndicatorScore.builder().indicator(indicator2).build(),  indicatorScore2 );
-        HealthIndicator healthIndicator3 = new HealthIndicator(healthIndicatorId2, country1, category2, IndicatorScore.builder().indicator(indicator3).build(),  indicatorScore3 );
+        IndicatorScoreId indicatorScoreId2 = IndicatorScoreId.builder().score(score2).indicatorId(indicatorId2).build();
+        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(indicatorScoreId2).indicator(indicator2).definition("score 2").build();
+        HealthIndicator healthIndicator2 = new HealthIndicator(healthIndicatorId2, country1, category2, indicatorScore2,  score2 );
+        IndicatorScoreId indicatorScoreId3 = IndicatorScoreId.builder().score(score3).indicatorId(indicatorId3).build();
+        IndicatorScore indicatorScore3 = IndicatorScore.builder().id(indicatorScoreId3).indicator(indicator3).definition("score 3").build();
+        HealthIndicator healthIndicator3 = new HealthIndicator(healthIndicatorId2, country1, category2, indicatorScore3,  score3 );
 
         List<HealthIndicator> healthIndicatorsForCountry = asList(healthIndicator1, healthIndicator2, healthIndicator3);
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
+    }
+
+    @Test
+    public void shouldReturnCountryHealthScoreAtCategoryLevelAndIndicatorLevel() throws Exception {
+        String countryId = "IND";
+        Integer categoryId1 = 1;
+        Integer categoryId2 = 2;
+        Integer indicatorId1 = 1;
+        Integer indicatorId2 = 2;
+        Integer indicatorId3 =3;
+
+        dataSet(countryId, categoryId1, categoryId2, indicatorId1, indicatorId2, indicatorId3);
+        CountryHealthScoreDto healthScoreForACountry = healthIndicatorService.fetchCountryHealthScore(countryId);
+
+        assertEquals(2, healthScoreForACountry.getCategories().size());
+        assertEquals(new Double(2.75), healthScoreForACountry.getOverallScore());
+        assertEquals(new Integer(3), healthScoreForACountry.getPhase());
+
+        CategoryHealthScoreDto category1 = healthScoreForACountry.getCategories().stream().filter(category -> category.getName().equals("Leadership and Governance")).findFirst().get();
+        assertEquals(1, category1.getIndicators().size());
+        assertEquals(new Integer(3), category1.getPhase());
+        assertEquals(1, category1.getIndicators().size());
+
+        CategoryHealthScoreDto category2 = healthScoreForACountry.getCategories().stream().filter(category -> category.getName().equals("Category2")).findFirst().get();
+        assertEquals(2, category2.getIndicators().size());
+        assertEquals(new Integer(3), category2.getPhase());
+        assertEquals(2, category2.getIndicators().size());
+
+        IndicatorScoreDto indicator1 = category1.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 1")).findFirst().get();
+        assertEquals(new Integer(3), indicator1.getScore());
+        assertEquals("Definition1", indicator1.getIndicatorDescription());
+        assertEquals("score 1", indicator1.getScoreDescription());
+
+        IndicatorScoreDto indicator2 = category2.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 2")).findFirst().get();
+        assertEquals(new Integer(4), indicator2.getScore());
+        assertEquals("Definition2", indicator2.getIndicatorDescription());
+        assertEquals("score 2", indicator2.getScoreDescription());
+
+        IndicatorScoreDto indicator3 = category2.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 3")).findFirst().get();
+        assertEquals(new Integer(1), indicator3.getScore());
+        assertEquals("Definition3", indicator3.getIndicatorDescription());
+        assertEquals("score 3", indicator3.getScoreDescription());
     }
 
     @Test
@@ -239,7 +290,7 @@ public class HealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
-        assertThat(healthScoreForACountry.getCountryPhase(), is(4));
+        assertThat(healthScoreForACountry.getPhase(), is(4));
         assertThat(healthScoreForACountry.getOverallScore(), is(3.5));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));
@@ -288,7 +339,7 @@ public class HealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
-        assertThat(healthScoreForACountry.getCountryPhase(), is(2));
+        assertThat(healthScoreForACountry.getPhase(), is(2));
         assertThat(healthScoreForACountry.getOverallScore(), is(1.6666666666666667));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));

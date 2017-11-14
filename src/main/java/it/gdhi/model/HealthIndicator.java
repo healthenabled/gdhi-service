@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+//TODO add not null and foreign key constraints for cat_id, ind_id. score -  foreign key
 public class HealthIndicator {
 
     @EmbeddedId
@@ -31,10 +32,13 @@ public class HealthIndicator {
 
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumns({@JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false),
-            @JoinColumn(name = "indicator_score", referencedColumnName = "score", insertable = false, updatable = false)})
+    @JoinColumns({
+            @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id",
+                    insertable = false, updatable = false),
+            @JoinColumn(name = "indicator_score", referencedColumnName = "score",
+                    insertable = false, updatable = false)})
     private IndicatorScore indicatorScore;
-
+    //TODO test null score
     @Column(name="indicator_score")
     private Integer score;
 
@@ -43,4 +47,15 @@ public class HealthIndicator {
         this.score = indicatorScore;
     }
 
+    public String getIndicatorName() {
+        return indicatorScore.getIndicator().getName();
+    }
+
+    public String getIndicatorDescription() {
+        return indicatorScore.getIndicator().getDefinition();
+    }
+
+    public String getScoreDescription() {
+        return indicatorScore.getDefinition();
+    }
 }
