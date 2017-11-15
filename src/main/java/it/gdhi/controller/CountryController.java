@@ -3,6 +3,7 @@ package it.gdhi.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import it.gdhi.dto.AllCountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
@@ -55,4 +56,8 @@ public class CountryController {
         return healthIndicatorService.getGlobalHealthIndicator();
     }
 
+    @RequestMapping("/countries/{id}/country_summary")
+    public CountrySummaryDto fetchCountrySummary(@PathVariable("id") String countryId) {
+        return countryDetailService.fetchCountrySummary(countryId);
+    }
 }
