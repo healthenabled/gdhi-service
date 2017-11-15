@@ -14,18 +14,16 @@ import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 @NoArgsConstructor
 public class CategoryHealthScoreDto {
 
+    private Integer id;
+
     private String name;
 
     private Integer phase;
 
     private List<IndicatorScoreDto> indicators;
 
-    public CategoryHealthScoreDto(String name, Integer phase) {
-        this.name = name;
-        this.phase = phase;
-    }
-
-    public CategoryHealthScoreDto(String categoryName, List<IndicatorScoreDto> indicatorDtos) {
+    public CategoryHealthScoreDto(Integer id, String categoryName, List<IndicatorScoreDto> indicatorDtos) {
+        this.id = id;
         this.name = categoryName;
         this.indicators = indicatorDtos;
     }

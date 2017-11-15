@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndicatorScoreDto {
+    private Integer id;
     private String name;
     private String indicatorDescription;
     private Integer score;

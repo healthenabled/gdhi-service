@@ -55,6 +55,13 @@ public class HealthIndicator {
                 .orElse(null);
     }
 
+    public Integer getIndicatorId() {
+        return Optional.ofNullable(indicatorScore)
+                .map(IndicatorScore::getIndicator)
+                .map(Indicator::getIndicatorId)
+                .orElse(null);
+    }
+
     public String getIndicatorDescription() {
         return Optional.ofNullable(indicatorScore)
                 .map(IndicatorScore::getIndicator)

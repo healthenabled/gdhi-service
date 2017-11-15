@@ -59,7 +59,7 @@ public class HealthIndicatorServiceTest {
         IndicatorScore indicatorScore3 = IndicatorScore.builder().id(indicatorScoreId3).indicator(indicator3).definition("score 3").build();
         HealthIndicator healthIndicator3 = new HealthIndicator(healthIndicatorId2, country1, category2, indicatorScore3,  score3 );
 
-        List<HealthIndicator> healthIndicatorsForCountry = asList(healthIndicator1, healthIndicator2, healthIndicator3);
+        List<HealthIndicator> healthIndicatorsForCountry = asList(healthIndicator3, healthIndicator2, healthIndicator1);
 
         when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(healthIndicatorsForCountry);
 
@@ -81,27 +81,27 @@ public class HealthIndicatorServiceTest {
         assertEquals(new Double(2.75), healthScoreForACountry.getOverallScore());
         assertEquals(new Integer(3), healthScoreForACountry.getCountryPhase());
 
-        CategoryHealthScoreDto category1 = healthScoreForACountry.getCategories().stream().filter(category -> category.getName().equals("Leadership and Governance")).findFirst().get();
+        CategoryHealthScoreDto category1 = healthScoreForACountry.getCategories().get(0);
         assertEquals(1, category1.getIndicators().size());
         assertEquals(new Integer(3), category1.getPhase());
         assertEquals(1, category1.getIndicators().size());
 
-        CategoryHealthScoreDto category2 = healthScoreForACountry.getCategories().stream().filter(category -> category.getName().equals("Category2")).findFirst().get();
+        CategoryHealthScoreDto category2 = healthScoreForACountry.getCategories().get(1);
         assertEquals(2, category2.getIndicators().size());
         assertEquals(new Integer(3), category2.getPhase());
         assertEquals(2, category2.getIndicators().size());
 
-        IndicatorScoreDto indicator1 = category1.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 1")).findFirst().get();
+        IndicatorScoreDto indicator1 = category1.getIndicators().get(0);
         assertEquals(new Integer(3), indicator1.getScore());
         assertEquals("Definition1", indicator1.getIndicatorDescription());
         assertEquals("score 1", indicator1.getScoreDescription());
 
-        IndicatorScoreDto indicator2 = category2.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 2")).findFirst().get();
+        IndicatorScoreDto indicator2 = category2.getIndicators().get(0);
         assertEquals(new Integer(4), indicator2.getScore());
         assertEquals("Definition2", indicator2.getIndicatorDescription());
         assertEquals("score 2", indicator2.getScoreDescription());
 
-        IndicatorScoreDto indicator3 = category2.getIndicators().stream().filter(indicator -> indicator.getName().equals("Indicator 3")).findFirst().get();
+        IndicatorScoreDto indicator3 = category2.getIndicators().get(1);
         assertEquals(new Integer(1), indicator3.getScore());
         assertEquals("Definition3", indicator3.getIndicatorDescription());
         assertEquals("score 3", indicator3.getScoreDescription());
