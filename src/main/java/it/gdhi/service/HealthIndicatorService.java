@@ -28,7 +28,7 @@ public class HealthIndicatorService {
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository
                 .findHealthIndicatorsFor(countryId));
-        return transformToCountryHealthDto1(countryId, healthIndicators);
+        return transformToCountryHealthDto(countryId, healthIndicators);
     }
 
     @Transactional
@@ -43,7 +43,7 @@ public class HealthIndicatorService {
         return new GlobalHealthScoreDto(globalHealthScores);
     }
 
-    private CountryHealthScoreDto transformToCountryHealthDto1(String countryId, HealthIndicators healthIndicators) {
+    private CountryHealthScoreDto transformToCountryHealthDto(String countryId, HealthIndicators healthIndicators) {
         List<CategoryHealthScoreDto> categoryDtos = healthIndicators.groupByCategory()
                 .entrySet()
                 .stream()

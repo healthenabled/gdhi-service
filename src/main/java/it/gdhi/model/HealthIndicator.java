@@ -8,6 +8,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(schema = "validated_config", name="health_indicators")
@@ -48,14 +49,22 @@ public class HealthIndicator {
     }
 
     public String getIndicatorName() {
-        return indicatorScore.getIndicator().getName();
+        return Optional.ofNullable(indicatorScore)
+                .map(IndicatorScore::getIndicator)
+                .map(Indicator::getName)
+                .orElse(null);
     }
 
     public String getIndicatorDescription() {
-        return indicatorScore.getIndicator().getDefinition();
+        return Optional.ofNullable(indicatorScore)
+                .map(IndicatorScore::getIndicator)
+                .map(Indicator::getDefinition)
+                .orElse(null);
     }
 
     public String getScoreDescription() {
-        return indicatorScore.getDefinition();
+        return Optional.ofNullable(indicatorScore)
+                .map(IndicatorScore::getDefinition)
+                .orElse(null);
     }
 }

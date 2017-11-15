@@ -335,6 +335,23 @@ public class HealthIndicatorServiceTest {
         assertSet3(healthScoreForACountry, countryId, countryName);
     }
 
+    @Test
+    public void shouldHandleWhenIndicatorScoreIsNull() throws Exception {
+        String countryId = "IND";
+        String countryName = "India";
+        Integer categoryId1 = 1;
+        String categoryName = "Leadership and Governance";
+        Integer indicatorId1 = 1;
+        Category category1 = new Category(categoryId1, categoryName );
+        Country country1 = new Country(countryId, countryName);
+        HealthIndicatorId healthIndicatorId1 = new HealthIndicatorId(countryId,categoryId1,indicatorId1);
+        HealthIndicator healthIndicator1 = new HealthIndicator(healthIndicatorId1, country1, category1, null,  8 );
+
+        assertNull(healthIndicator1.getIndicatorDescription());
+        assertNull(healthIndicator1.getIndicatorName());
+        assertNull(healthIndicator1.getScoreDescription());
+    }
+
     private void assertSet3(CountryHealthScoreDto healthScoreForACountry, String countryId, String countryName){
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
