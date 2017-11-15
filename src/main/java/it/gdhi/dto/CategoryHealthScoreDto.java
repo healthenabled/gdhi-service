@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalDouble;
 
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
@@ -36,8 +37,11 @@ public class CategoryHealthScoreDto {
     }
 
     public Integer getPhase() {
-        OptionalDouble optionalScore = this.overallScore();
-        return optionalScore.isPresent() ? convertScoreToPhase(optionalScore.getAsDouble()) : null;
+        return Optional.ofNullable(this.phase)
+                .orElseGet(() -> {
+                    OptionalDouble optionalScore = this.overallScore();
+                    return optionalScore.isPresent() ? convertScoreToPhase(optionalScore.getAsDouble()) : null;
+                });
     }
 
     public OptionalDouble overallScore() {
