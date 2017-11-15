@@ -6,12 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 @Getter
 @NoArgsConstructor

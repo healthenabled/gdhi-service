@@ -1,11 +1,7 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.AllCountriesHealthScoreDto;
-import it.gdhi.dto.CategoryHealthScoreDto;
-import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.GlobalHealthScoreDto;
-import it.gdhi.model.Category;
 import it.gdhi.dto.*;
+import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static it.gdhi.dto.CountryHealthScoreDto.getCountryAverage;
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -50,20 +44,22 @@ public class HealthIndicatorService {
         List<CategoryHealthScoreDto> categories = new ArrayList<>();
         Map<Category, Double> categoryDoubleMap = healthIndicators.groupByCategoryWithNotNullScores();
 
-        double overAllCountryScore = 0.0;
         for (Map.Entry<Category, Double> categoryDoubleEntry : categoryDoubleMap.entrySet()) {
-            HashMap<Category, Double> categoryScoreMap = new HashMap<Category, Double>() {{
-                put(categoryDoubleEntry.getKey(), categoryDoubleEntry.getValue());
-            }};
-
-            overAllCountryScore += getCountryAverage(categoryScoreMap);
             CategoryHealthScoreDto categoryHealthScoreDto =
                     new CategoryHealthScoreDto(categoryDoubleEntry.getKey().getId(),
                             categoryDoubleEntry.getKey().getName(),
                             convertScoreToPhase(categoryDoubleEntry.getValue()));
             categories.add(categoryHealthScoreDto);
         }
-        return new GlobalHealthScoreDto(convertScoreToPhase(overAllCountryScore / categoryDoubleMap.size()), categories);
+
+        AllCountriesHealthScoreDto allCountriesData = fetchHealthScores();
+        double score = 0.0;
+        for (CountryHealthScoreDto countryHealthScore : allCountriesData.getCountryHealthScores()) {
+            score+= countryHealthScore.getOverallScore();
+        }
+
+        int size = allCountriesData.getCountryHealthScores().size();
+        return new GlobalHealthScoreDto((convertScoreToPhase(score / size)), categories);
     }
 
     private AllCountriesHealthScoreDto transformToGlobalHealthDto(List<CountryHealthScoreDto> globalHealthScores) {

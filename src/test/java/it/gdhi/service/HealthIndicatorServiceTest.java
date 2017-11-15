@@ -3,6 +3,7 @@ package it.gdhi.service;
 import it.gdhi.dto.AllCountriesHealthScoreDto;
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.*;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.model.id.IndicatorScoreId;
@@ -13,11 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -361,4 +365,41 @@ public class HealthIndicatorServiceTest {
         assertThat(allCountriesHealthScoreDto.getCountryHealthScores().size(), is(2));
     }
 
+    @Test
+    public void shouldFetchOverAllCategoriesWithScore() {
+        HealthIndicator mock1 = mock(HealthIndicator.class);
+        when(mock1.getScore()).thenReturn(5);
+        Country mockCountry1 = mock(Country.class);
+        Category mock = mock(Category.class);
+
+        when(mock1.getCountry()).thenReturn(mockCountry1);
+        when(mockCountry1.getId()).thenReturn("IND");
+        when(mock1.getCategory()).thenReturn(mock);
+        when(mock1.getCategory().getId()).thenReturn(9);
+        when(mock1.getCategory().getName()).thenReturn("Category 1");
+
+        HealthIndicator mock2 = mock(HealthIndicator.class);
+        when(mock2.getScore()).thenReturn(2);
+        Country mockCountry2 = mock(Country.class);
+
+        when(mock2.getCountry()).thenReturn(mockCountry2);
+        when(mockCountry2.getId()).thenReturn("USA");
+        when(mock2.getCategory()).thenReturn(mock);
+        when(mock2.getCategory().getId()).thenReturn(9);
+        when(mock2.getCategory().getName()).thenReturn("Category 1");
+
+
+        List<HealthIndicator> healthIndicators = new ArrayList<>();
+        healthIndicators.add(mock1);
+        healthIndicators.add(mock2);
+
+        when(iHealthIndicatorRepository.findAll()).thenReturn(healthIndicators);
+        when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList("IND", "USA"));
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor("IND")).thenReturn(asList(mock1));
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor("USA")).thenReturn(asList(mock2));
+        GlobalHealthScoreDto globalHealthIndicator = healthIndicatorService.getGlobalHealthIndicator();
+
+        assertEquals(1,globalHealthIndicator.getCategories().size());
+        assertThat(globalHealthIndicator.getOverAllScore(), is(4));
+    }
 }

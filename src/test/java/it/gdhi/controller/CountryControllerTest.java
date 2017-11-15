@@ -15,7 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -65,11 +66,13 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldFetchTheGlobalHealthIndicatorScore() {
-        GlobalHealthScoreDto globalHealthIndicators = countryController.getGlobalHealthIndicator();
-        when(healthIndicatorService.getGlobalHealthIndicator()).thenReturn(globalHealthIndicators);
+    public void shouldInvokeGetGlobalHealthIndicator() {
+        GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
+
+        when(healthIndicatorService.getGlobalHealthIndicator()).thenReturn(expected);
+        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator();
+        assertThat(expected, is(actual));
         verify(healthIndicatorService).getGlobalHealthIndicator();
-        assertNull(globalHealthIndicators);
     }
 
     @Test

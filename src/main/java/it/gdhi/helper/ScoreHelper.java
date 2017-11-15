@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.ROUND_HALF_EVEN;
-import static java.math.BigDecimal.ZERO;
+import static java.math.BigDecimal.*;
 import static java.math.RoundingMode.CEILING;
 
 @Component

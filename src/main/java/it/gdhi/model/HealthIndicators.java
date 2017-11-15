@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.averagingInt;
+import static java.util.stream.Collectors.groupingBy;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class HealthIndicators {
 
     public Map<Category, Double> groupByCategoryWithNotNullScores() {
         return healthIndicators.stream()
-                .filter(healthIndicator -> healthIndicator.getIndicatorScore() != null)
+                .filter(healthIndicator -> healthIndicator.getScore() != null)
                 .collect(groupingBy(HealthIndicator::getCategory,
                         averagingInt(HealthIndicator::getScore)));
     }
