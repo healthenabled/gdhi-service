@@ -79,7 +79,7 @@ public class HealthIndicatorServiceTest {
 
         assertEquals(2, healthScoreForACountry.getCategories().size());
         assertEquals(new Double(2.75), healthScoreForACountry.getOverallScore());
-        assertEquals(new Integer(3), healthScoreForACountry.getPhase());
+        assertEquals(new Integer(3), healthScoreForACountry.getCountryPhase());
 
         CategoryHealthScoreDto category1 = healthScoreForACountry.getCategories().stream().filter(category -> category.getName().equals("Leadership and Governance")).findFirst().get();
         assertEquals(1, category1.getIndicators().size());
@@ -290,7 +290,7 @@ public class HealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
-        assertThat(healthScoreForACountry.getPhase(), is(4));
+        assertThat(healthScoreForACountry.getCountryPhase(), is(4));
         assertThat(healthScoreForACountry.getOverallScore(), is(3.5));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));
@@ -356,7 +356,7 @@ public class HealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
-        assertThat(healthScoreForACountry.getPhase(), is(2));
+        assertThat(healthScoreForACountry.getCountryPhase(), is(2));
         assertThat(healthScoreForACountry.getOverallScore(), is(1.6666666666666667));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));

@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.List;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
@@ -21,7 +19,7 @@ public class CountryHealthScoreDtoTest {
         CountryHealthScoreDto country = new CountryHealthScoreDto("IND", "India", asList(category, category1));
 
         assertEquals(new Double(3.5), country.getOverallScore());
-        assertEquals(new Integer(4), country.getPhase());
+        assertEquals(new Integer(4), country.getCountryPhase());
     }
 
     @Test
@@ -36,7 +34,7 @@ public class CountryHealthScoreDtoTest {
         CountryHealthScoreDto country = new CountryHealthScoreDto("IND", "India", asList(category, category1, category2));
 
         assertEquals(new Double(2.5), country.getOverallScore());
-        assertEquals(new Integer(3), country.getPhase());
+        assertEquals(new Integer(3), country.getCountryPhase());
     }
 
     @Test
@@ -48,7 +46,7 @@ public class CountryHealthScoreDtoTest {
 
         CountryHealthScoreDto country = new CountryHealthScoreDto("IND", "India", asList(category, category1));
         assertNull(country.getOverallScore());
-        assertNull(country.getPhase());
+        assertNull(country.getCountryPhase());
     }
 
 }

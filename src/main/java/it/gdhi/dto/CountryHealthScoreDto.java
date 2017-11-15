@@ -22,16 +22,7 @@ public class CountryHealthScoreDto {
 
     private List<CategoryHealthScoreDto> categories;
 
-    private Integer phase;
-
-    public CountryHealthScoreDto(String countryId, String name, Double countryAverage, Integer countryPhase,
-                                 List<CategoryHealthScoreDto> categories) {
-        this.countryId = countryId;
-        this.countryName  = name;
-        this.overallScore  = countryAverage;
-        this.phase = countryPhase;
-        this.categories = categories;
-    }
+    private Integer countryPhase;
 
     public CountryHealthScoreDto(String countryId, String countryName, List<CategoryHealthScoreDto> categories) {
         this.countryId = countryId;
@@ -47,7 +38,7 @@ public class CountryHealthScoreDto {
         return optionalScore.isPresent() ? optionalScore.getAsDouble() : null;
     }
 
-    public Integer getPhase() {
+    public Integer getCountryPhase() {
         return convertScoreToPhase(this.getOverallScore());
     }
 }
