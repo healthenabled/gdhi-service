@@ -33,6 +33,11 @@ public class HealthIndicator {
 
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
+    private Indicator indicator;
+
+    @OneToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumns({
             @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id",
                     insertable = false, updatable = false),
@@ -49,24 +54,15 @@ public class HealthIndicator {
     }
 
     public String getIndicatorName() {
-        return Optional.ofNullable(indicatorScore)
-                .map(IndicatorScore::getIndicator)
-                .map(Indicator::getName)
-                .orElse(null);
+        return this.indicator.getName();
     }
 
     public Integer getIndicatorId() {
-        return Optional.ofNullable(indicatorScore)
-                .map(IndicatorScore::getIndicator)
-                .map(Indicator::getIndicatorId)
-                .orElse(null);
+        return this.indicator.getIndicatorId();
     }
 
     public String getIndicatorDescription() {
-        return Optional.ofNullable(indicatorScore)
-                .map(IndicatorScore::getIndicator)
-                .map(Indicator::getDefinition)
-                .orElse(null);
+        return this.indicator.getDefinition();
     }
 
     public String getScoreDescription() {

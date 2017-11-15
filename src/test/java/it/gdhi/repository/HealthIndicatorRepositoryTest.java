@@ -54,7 +54,7 @@ public class HealthIndicatorRepositoryTest {
         assertThat(healthIndicator.size(), is(1));
         assertThat(healthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
         assertThat(healthIndicator.get(0).getCountry().getName(), is("India"));
-        assertThat(healthIndicator.get(0).getIndicatorScore().getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
+        assertThat(healthIndicator.get(0).getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class HealthIndicatorRepositoryTest {
         entityManager.persist(category);
         Indicator indicator = new Indicator(indicatorId, "an indicator", "definition");
         entityManager.persist(indicator);
-        IndicatorScore indicatorScore = new IndicatorScore(IndicatorScoreId.builder().indicatorId(indicatorId).score(score).build(), indicator, "score definition");
+        IndicatorScore indicatorScore = new IndicatorScore(IndicatorScoreId.builder().indicatorId(indicatorId).score(score).build(), "score definition");
         entityManager.persist(indicatorScore);
         entityManager.persist(healthIndicatorSetupData);
         entityManager.flush();
@@ -82,9 +82,9 @@ public class HealthIndicatorRepositoryTest {
         HealthIndicator healthIndicator = healthIndicators.get(0);
         assertEquals(category.getId(), healthIndicator.getCategory().getId());
         assertEquals(category.getName(), healthIndicator.getCategory().getName());
-        assertEquals(indicator.getIndicatorId(), healthIndicator.getIndicatorScore().getIndicator().getIndicatorId());
-        assertEquals(indicator.getName(), healthIndicator.getIndicatorScore().getIndicator().getName());
-        assertEquals(indicator.getDefinition(), healthIndicator.getIndicatorScore().getIndicator().getDefinition());
+        assertEquals(indicator.getIndicatorId(), healthIndicator.getIndicator().getIndicatorId());
+        assertEquals(indicator.getName(), healthIndicator.getIndicator().getName());
+        assertEquals(indicator.getDefinition(), healthIndicator.getIndicator().getDefinition());
         assertEquals(indicatorScore.getDefinition(), healthIndicator.getIndicatorScore().getDefinition());
         assertEquals(indicatorScore.getId().getScore(), healthIndicator.getIndicatorScore().getId().getScore());
     }
