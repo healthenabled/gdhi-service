@@ -17,7 +17,6 @@ import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-//TODO add not null and foreign key constraints for cat_id, ind_id. score -  foreign key
 public class HealthIndicator {
 
     @EmbeddedId
@@ -46,7 +45,7 @@ public class HealthIndicator {
             @JoinColumn(name = "indicator_score", referencedColumnName = "score",
                     insertable = false, updatable = false)})
     private IndicatorScore indicatorScore;
-    //TODO test null score
+
     @Column(name="indicator_score")
     private Integer score;
 
