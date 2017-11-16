@@ -1,11 +1,7 @@
 package it.gdhi.repository;
 
-import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicator;
-import it.gdhi.model.Indicator;
-import it.gdhi.model.IndicatorScore;
 import it.gdhi.model.id.HealthIndicatorId;
-import it.gdhi.model.id.IndicatorScoreId;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,18 +56,12 @@ public class IHealthIndicatorRepositoryTest {
     @Test
     public void shouldFetchHealthIndicatorWithAssociatedProperties() throws Exception {
         String countryId = "IND";
-        Integer categoryId = 10;
-        Integer indicatorId = 20;
+        Integer categoryId = 7;
+        Integer indicatorId = 13;
         Integer score = 3;
 
         HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId,categoryId,indicatorId);
         HealthIndicator healthIndicatorSetupData = new HealthIndicator(healthIndicatorId, score);
-        Category category = new Category(categoryId, "category name");
-        entityManager.persist(category);
-        Indicator indicator = new Indicator(indicatorId, "an indicator", "definition");
-        entityManager.persist(indicator);
-        IndicatorScore indicatorScore = new IndicatorScore(IndicatorScoreId.builder().indicatorId(indicatorId).score(score).build(), "score definition");
-        entityManager.persist(indicatorScore);
         entityManager.persist(healthIndicatorSetupData);
         entityManager.flush();
         entityManager.clear();
@@ -80,13 +70,14 @@ public class IHealthIndicatorRepositoryTest {
 
         assertEquals(1, healthIndicators.size());
         HealthIndicator healthIndicator = healthIndicators.get(0);
-        assertEquals(category.getId(), healthIndicator.getCategory().getId());
-        assertEquals(category.getName(), healthIndicator.getCategory().getName());
-        assertEquals(indicator.getIndicatorId(), healthIndicator.getIndicator().getIndicatorId());
-        assertEquals(indicator.getName(), healthIndicator.getIndicator().getName());
-        assertEquals(indicator.getDefinition(), healthIndicator.getIndicator().getDefinition());
-        assertEquals(indicatorScore.getDefinition(), healthIndicator.getIndicatorScore().getDefinition());
-        assertEquals(indicatorScore.getId().getScore(), healthIndicator.getIndicatorScore().getId().getScore());
+        assertThat(healthIndicator.getCategory().getId(), is(categoryId));
+        assertThat(healthIndicator.getCategory().getName(), is("Services and Applications"));
+        assertThat(healthIndicator.getIndicator().getIndicatorId(), is(indicatorId));
+        assertThat(healthIndicator.getIndicator().getName(), is("National digital health architecture and/or health information exchange"));
+        assertThat(healthIndicator.getIndicator().getDefinition(), is("Is there a national digital health (eHealth) architectural framework established?"));
+        assertThat(healthIndicator.getIndicatorScore().getDefinition(), is("The HIE is operable and provides core functions, such as authentication, translation, storage and warehousing function, " +
+                "guide to what data is available and how to access it, and data interpretation."));
+        assertThat(healthIndicator.getIndicatorScore().getScore(), is(score));
     }
 
     @Test

@@ -31,7 +31,7 @@ public class HealthIndicator {
     @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Category category;
 
-    @OneToOne
+    @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
     private Indicator indicator;

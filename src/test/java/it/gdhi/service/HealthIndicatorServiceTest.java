@@ -48,8 +48,7 @@ public class HealthIndicatorServiceTest {
         Country country1 = new Country("IND", "India");
         Category category1 = new Category(categoryId1, "Leadership and Governance");
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition1");
-        IndicatorScoreId indicatorScoreId1 = IndicatorScoreId.builder().score(score2).indicatorId(indicatorId2).build();
-        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(indicatorScoreId1).definition("score 1").build();
+        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(1l).indicatorId(indicatorId2).score(score2).definition("score 1").build();
         HealthIndicator healthIndicator1 = new HealthIndicator(healthIndicatorId1, country1, category1, indicator1, indicatorScore1, score1);
 
         HealthIndicatorId healthIndicatorId2 = new HealthIndicatorId(countryId1,categoryId2,indicatorId2);
@@ -58,10 +57,10 @@ public class HealthIndicatorServiceTest {
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition3");
 
         IndicatorScoreId indicatorScoreId2 = IndicatorScoreId.builder().score(score2).indicatorId(indicatorId2).build();
-        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(indicatorScoreId2).definition("score 2").build();
+        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(1l).indicatorId(indicatorId2).score(score2).definition("score 2").build();
         HealthIndicator healthIndicator2 = new HealthIndicator(healthIndicatorId2, country1, category2, indicator2, indicatorScore2,  score2 );
         IndicatorScoreId indicatorScoreId3 = IndicatorScoreId.builder().score(score3).indicatorId(indicatorId3).build();
-        IndicatorScore indicatorScore3 = IndicatorScore.builder().id(indicatorScoreId3).definition("score 3").build();
+        IndicatorScore indicatorScore3 = IndicatorScore.builder().id(2l).indicatorId(indicatorId3).score(score3).definition("score 3").build();
         HealthIndicator healthIndicator3 = new HealthIndicator(healthIndicatorId2, country1, category2, indicator3, indicatorScore3,  score3 );
 
         List<HealthIndicator> healthIndicatorsForCountry = asList(healthIndicator3, healthIndicator2, healthIndicator1);
