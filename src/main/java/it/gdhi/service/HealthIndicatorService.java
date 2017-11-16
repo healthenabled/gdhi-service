@@ -59,7 +59,9 @@ public class HealthIndicatorService {
         }
 
         int size = allCountriesData.getCountryHealthScores().size();
-        return new GlobalHealthScoreDto((convertScoreToPhase(score / size)), categories);
+        List<CategoryHealthScoreDto> sortedCategories = categories.stream()
+                .sorted(comparing(CategoryHealthScoreDto::getId)).collect(toList());
+        return new GlobalHealthScoreDto((convertScoreToPhase(score / size)), sortedCategories);
     }
 
     private AllCountriesHealthScoreDto transformToGlobalHealthDto(List<CountryHealthScoreDto> globalHealthScores) {
