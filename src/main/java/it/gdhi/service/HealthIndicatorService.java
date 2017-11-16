@@ -67,12 +67,14 @@ public class HealthIndicatorService {
     }
 
     private CountryHealthScoreDto transformToCountryHealthDto(String countryId, HealthIndicators healthIndicators) {
+        Map<Integer, Double> nonNullCategoryScore = healthIndicators.groupByCategoryIdWithNotNullScores();
         List<CategoryHealthScoreDto> categoryDtos = healthIndicators.groupByCategory()
                 .entrySet()
                 .stream()
                 .map(entry -> {
                     String categoryName = entry.getKey().getName();
                     Integer categoryId = entry.getKey().getId();
+                    Double categoryScore = nonNullCategoryScore.get(categoryId);
                     List<IndicatorScoreDto> indicatorDtos = entry.getValue()
                             .stream()
                             .map(healthIndicator -> new IndicatorScoreDto(healthIndicator.getIndicatorId(),
@@ -82,10 +84,13 @@ public class HealthIndicatorService {
                                     healthIndicator.getScoreDescription()))
                             .sorted(comparing(IndicatorScoreDto::getId))
                             .collect(Collectors.toList());
-                    return new CategoryHealthScoreDto(categoryId, categoryName, indicatorDtos);
+                    return new CategoryHealthScoreDto(categoryId, categoryName, categoryScore,
+                            convertScoreToPhase(categoryScore), indicatorDtos);
                 })
                 .sorted(comparing(CategoryHealthScoreDto::getId))
                 .collect(Collectors.toList());
-        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), categoryDtos);
+        Double overallScore = healthIndicators.getOverallScore();
+        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), overallScore, categoryDtos,
+                convertScoreToPhase(overallScore));
     }
 }
