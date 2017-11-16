@@ -10,6 +10,8 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import java.util.Optional;
 
+import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
+
 @Entity
 @Table(schema = "validated_config", name="health_indicators")
 @AllArgsConstructor
@@ -68,6 +70,6 @@ public class HealthIndicator {
     public String getScoreDescription() {
         return Optional.ofNullable(indicatorScore)
                 .map(IndicatorScore::getDefinition)
-                .orElse(null);
+                .orElse(SCORE_DESCRIPTION_NOT_AVAILABLE);
     }
 }

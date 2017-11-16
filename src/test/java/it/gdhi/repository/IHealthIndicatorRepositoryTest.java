@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 @SpringBootTest
@@ -78,6 +79,32 @@ public class IHealthIndicatorRepositoryTest {
         assertThat(healthIndicator.getIndicatorScore().getDefinition(), is("The HIE is operable and provides core functions, such as authentication, translation, storage and warehousing function, " +
                 "guide to what data is available and how to access it, and data interpretation."));
         assertThat(healthIndicator.getIndicatorScore().getScore(), is(score));
+    }
+
+    @Test
+    public void shouldFetchHealthIndicatorWithNullIndicatorScore() throws Exception {
+        String countryId = "IND";
+        Integer categoryId = 7;
+        Integer indicatorId = 13;
+        Integer score = null;
+
+        HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId,categoryId,indicatorId);
+        HealthIndicator healthIndicatorSetupData = new HealthIndicator(healthIndicatorId, score);
+        entityManager.persist(healthIndicatorSetupData);
+        entityManager.flush();
+        entityManager.clear();
+
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor("IND");
+
+        assertEquals(1, healthIndicators.size());
+        HealthIndicator healthIndicator = healthIndicators.get(0);
+        assertThat(healthIndicator.getCategory().getId(), is(categoryId));
+        assertThat(healthIndicator.getCategory().getName(), is("Services and Applications"));
+        assertThat(healthIndicator.getIndicator().getIndicatorId(), is(indicatorId));
+        assertThat(healthIndicator.getIndicator().getName(), is("National digital health architecture and/or health information exchange"));
+        assertThat(healthIndicator.getIndicator().getDefinition(), is("Is there a national digital health (eHealth) architectural framework established?"));
+        assertThat(healthIndicator.getScoreDescription(), is("Missing or Not Available"));
+        assertNull(healthIndicator.getScore());
     }
 
     @Test
