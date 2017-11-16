@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NotFound;
@@ -14,14 +15,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class CategoryIndicator implements Serializable {
 
     @EmbeddedId
     private CategoryIndicatorId categoryIndicatorId;
-
-    public CategoryIndicator(CategoryIndicatorId categoryIndicatorId) {
-        this.categoryIndicatorId = categoryIndicatorId;
-    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)

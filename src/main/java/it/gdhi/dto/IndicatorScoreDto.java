@@ -13,8 +13,4 @@ public class IndicatorScoreDto {
     private String indicatorDescription;
     private Integer score;
     private String scoreDescription;
-
-    public boolean hasScore() {
-        return this.score != null;
-    }
 }

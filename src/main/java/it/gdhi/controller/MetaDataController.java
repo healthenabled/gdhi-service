@@ -19,4 +19,9 @@ public class MetaDataController {
         return categoryIndicatorService.getCategoryIndicatorMapping();
     }
 
+    @RequestMapping("/health_indicator_options")
+    public List<CategoryIndicatorDto> getHealthIndicatorOptions() {
+        return categoryIndicatorService.getHealthIndicatorOptions();
+    }
+
 }

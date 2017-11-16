@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class CategoryIndicatorId implements Serializable {
 
     @Column(name = "category_id")

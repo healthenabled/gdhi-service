@@ -34,4 +34,14 @@ public class MetadataControllerTest {
         assertThat(categoryIndicators.get(0), is(categoryIndicatorDto));
     }
 
+    @Test
+    public void shouldInvokeCategoryRepoToFetchHealthIndicatorOptionsInfo() {
+        CategoryIndicatorDto categoryIndicatorDto = new CategoryIndicatorDto();
+        when(categoryIndicatorService.getHealthIndicatorOptions())
+                .thenReturn(singletonList(categoryIndicatorDto));
+        List<CategoryIndicatorDto> categoryIndicators = metaDataController.getHealthIndicatorOptions();
+        assertThat(categoryIndicators.size(), is(1));
+        assertThat(categoryIndicators.get(0), is(categoryIndicatorDto));
+    }
+
 }

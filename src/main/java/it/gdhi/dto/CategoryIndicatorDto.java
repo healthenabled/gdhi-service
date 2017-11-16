@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import it.gdhi.model.Category;
 import it.gdhi.model.CategoryIndicator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,17 @@ public class CategoryIndicatorDto {
         this.categoryId = categoryId;
         this.categoryName = getCategoryName(categoryIndicators);
         this.indicators = transformToIndicators(categoryIndicators);
+    }
+
+    public CategoryIndicatorDto(Category category) {
+        this.categoryId = category.getId();
+        this.categoryName = category.getName();
+        this.indicators = transformToIndicatorDto(category);
+    }
+
+    private List<IndicatorDto> transformToIndicatorDto(Category category) {
+        return category.getIndicators().stream().map(indicator -> new IndicatorDto(indicator))
+                .collect(toList());
     }
 
     private List<IndicatorDto> transformToIndicators(List<CategoryIndicator> value) {
