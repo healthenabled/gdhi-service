@@ -50,9 +50,22 @@ public class HealthIndicator {
     @Column(name="indicator_score")
     private Integer score;
 
+    @Column(name = "supporting_text")
+    private String supportingText;
+
     public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore) {
         this.healthIndicatorId = healthIndicatorId;
         this.score = indicatorScore;
+    }
+
+    public HealthIndicator(HealthIndicatorId id, Country country, Category category,
+                           Indicator indicator, IndicatorScore indicatorScore, Integer score) {
+        this.healthIndicatorId = id;
+        this.country = country;
+        this.category = category;
+        this.indicator = indicator;
+        this.indicatorScore = indicatorScore;
+        this.score = score;
     }
 
     public String getIndicatorName() {
