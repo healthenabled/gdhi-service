@@ -1,18 +1,26 @@
 package it.gdhi.service;
 
+import it.gdhi.dto.CountrySummaryDetailDto;
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.GdhiQuestionnaire;
+import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountryResourceLinkId;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.model.HealthIndicator;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.repository.IHealthIndicatorRepository;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -30,6 +38,8 @@ public class CountryServiceTest {
     ICountrySummaryRepository iCountrySummaryRepository;
     @Mock
     ICountryResourceLinkRepository iCountryResourceLinkRepository;
+    @Mock
+    IHealthIndicatorRepository iHealthIndicatorRepository;
 
     @Test
     public void shouldInsertTestData() {
@@ -66,4 +76,27 @@ public class CountryServiceTest {
         assertThat(countrySummaryDto.getSummary(), is(summary));
         assertThat(countrySummaryDto.getResources(), Matchers.containsInAnyOrder(link1, link2));
     }
+
+    @Test
+    public void shouldSaveDetailsForACountry() throws Exception {
+        List<String> resourceLinks = asList("Res 1");
+        CountrySummaryDetailDto countrySummaryDetailDto = CountrySummaryDetailDto.builder().summary("Summary 1")
+                .resourceLinks(resourceLinks).build();
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
+        GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId("ARG")
+                .countrySummaryDetailDto(countrySummaryDetailDto)
+                .healthIndicatorDto(healthIndicatorDtos).build();
+        countryService.save(gdhiQuestionnaire);
+        ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
+        ArgumentCaptor<HealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(HealthIndicator.class);
+
+        verify(iCountrySummaryRepository).save(summaryCaptor.capture());
+        verify(iHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
+        CountrySummary summaryCaptorValue = summaryCaptor.getValue();
+        assertThat(summaryCaptorValue.getCountryId(), is("ARG"));
+        assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));
+        assertThat(summaryCaptorValue.getCountryResourceLinks().get(0).getLink(), is("Res 1"));
+        assertThat(healthIndicatorsCaptorList.getValue().getHealthIndicatorId().getCategoryId(), is(1));
+    }
+
 }

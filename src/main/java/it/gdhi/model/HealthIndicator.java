@@ -57,6 +57,12 @@ public class HealthIndicator {
         this.score = indicatorScore;
     }
 
+    public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore, String supportingText) {
+        this.healthIndicatorId = healthIndicatorId;
+        this.score = indicatorScore;
+        this.supportingText = supportingText;
+    }
+
     public HealthIndicator(HealthIndicatorId id, Country country, Category category,
                            Indicator indicator, IndicatorScore indicatorScore, Integer score) {
         this.healthIndicatorId = id;

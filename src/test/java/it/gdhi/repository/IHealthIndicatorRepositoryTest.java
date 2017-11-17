@@ -12,12 +12,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,6 +43,29 @@ public class IHealthIndicatorRepositoryTest {
         HealthIndicator healthIndicatorSetupData = new HealthIndicator(healthIndicatorId, indicatorScore);
 
         entityManager.persist(healthIndicatorSetupData);
+        entityManager.flush();
+        entityManager.clear();
+
+        List<HealthIndicator> healthIndicator = iHealthIndicatorRepository.findHealthIndicatorsFor("IND");
+
+        assertThat(healthIndicator.size(), is(1));
+        assertThat(healthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
+        assertThat(healthIndicator.get(0).getCountry().getName(), is("India"));
+        assertThat(healthIndicator.get(0).getIndicator().getName(), is("Digital Health prioritized at the national level through planning"));
+    }
+
+    @Test
+    public void shouldSaveCountryHealthIndicatorScoreForCountry() {
+
+        String countryId = "IND";
+        Integer categoryId = 1;
+        Integer indicatorId = 2;
+        Integer indicatorScore = 3;
+
+        HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId,categoryId,indicatorId);
+        HealthIndicator healthIndicatorSetupData = new HealthIndicator(healthIndicatorId, indicatorScore);
+
+        iHealthIndicatorRepository.save(healthIndicatorSetupData);
         entityManager.flush();
         entityManager.clear();
 
