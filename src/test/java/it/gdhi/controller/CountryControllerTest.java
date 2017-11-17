@@ -2,6 +2,7 @@ package it.gdhi.controller;
 
 import it.gdhi.dto.AllCountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
@@ -73,6 +74,14 @@ public class CountryControllerTest {
         GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator();
         assertThat(expected, is(actual));
         verify(healthIndicatorService).getGlobalHealthIndicator();
+    }
+
+    @Test
+    public void shouldSaveHealthIndicators() {
+        GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
+        doNothing().when(countryService).save(mock);
+        countryController.saveHealthIndicatorsFor(mock);
+        verify(countryService).save(mock);
     }
 
     @Test

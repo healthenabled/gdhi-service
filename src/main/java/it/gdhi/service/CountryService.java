@@ -1,6 +1,9 @@
 package it.gdhi.service;
 
+import it.gdhi.dto.CountrySummaryDetailDto;
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.GdhiQuestionnaire;
+import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
@@ -38,5 +41,19 @@ public class CountryService {
         return new CountrySummaryDto(countrySummary, countryResourceLinks);
     }
 
+    @Transactional
+    public void save(GdhiQuestionnaire gdhiQuestionnaire) {
+         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummaryDetailDto());
+         saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicatorDto());
+    }
+
+    private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
+
+    }
+
+    private void saveCountryContactInfo(String countryId, CountrySummaryDetailDto countrySummaryDetailDto) {
+        CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
+        iCountrySummaryRepository.save(countrySummary);
+    }
 
 }

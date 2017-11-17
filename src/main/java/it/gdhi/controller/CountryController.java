@@ -1,10 +1,7 @@
 package it.gdhi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import it.gdhi.dto.AllCountriesHealthScoreDto;
-import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.CountrySummaryDto;
-import it.gdhi.dto.GlobalHealthScoreDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
@@ -12,9 +9,7 @@ import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -59,5 +54,10 @@ public class CountryController {
     @RequestMapping("/countries/{id}/country_summary")
     public CountrySummaryDto fetchCountrySummary(@PathVariable("id") String countryId) {
         return countryDetailService.fetchCountrySummary(countryId);
+    }
+
+    @RequestMapping(value = "/countries", method = RequestMethod.POST)
+    public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        countryDetailService.save(gdhiQuestionnaire);
     }
 }
