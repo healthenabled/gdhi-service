@@ -51,8 +51,8 @@ public class CountryService {
 
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire) {
-         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummaryDetailDto());
-         saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicatorDto());
+         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
+         saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
     }
 
     private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {

@@ -4,6 +4,7 @@ import it.gdhi.dto.CountrySummaryDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -57,7 +58,8 @@ public class CountrySummary {
 
     private List<CountryResourceLink> transformToResourceLinks(String countryId,
                                                                CountrySummaryDetailDto countrySummaryDetailDto) {
-        return countrySummaryDetailDto.getResourceLinks().stream().map(link ->
+        List<String> resourceLinks = countrySummaryDetailDto.getResourceLinks();
+        return ObjectUtils.isEmpty(resourceLinks) ? null : resourceLinks.stream().map(link ->
                 new CountryResourceLink(new CountryResourceLinkId(countryId, link))).collect(toList());
     }
 

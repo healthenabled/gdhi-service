@@ -15,8 +15,8 @@ public class GdhiQuestionnaire {
 
     private String countryId;
 
-    private CountrySummaryDetailDto countrySummaryDetailDto;
+    private CountrySummaryDetailDto countrySummary;
 
-    private List<HealthIndicatorDto> healthIndicatorDto;
+    private List<HealthIndicatorDto> healthIndicators;
 
 }

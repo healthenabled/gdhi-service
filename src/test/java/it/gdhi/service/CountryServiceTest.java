@@ -84,8 +84,8 @@ public class CountryServiceTest {
                 .resourceLinks(resourceLinks).build();
         List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId("ARG")
-                .countrySummaryDetailDto(countrySummaryDetailDto)
-                .healthIndicatorDto(healthIndicatorDtos).build();
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDtos).build();
         countryService.save(gdhiQuestionnaire);
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<HealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(HealthIndicator.class);
