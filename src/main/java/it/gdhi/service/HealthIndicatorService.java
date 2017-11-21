@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -35,7 +37,9 @@ public class HealthIndicatorService {
         List<String> countriesWithHealthScores = iHealthIndicatorRepository.findCountriesWithHealthScores();
         List<CountryHealthScoreDto> globalHealthScores = countriesWithHealthScores.stream()
                 .map(countryId -> fetchCountryHealthScore(countryId))
-                .sorted(comparing(CountryHealthScoreDto::getCountryName)).collect(toList());
+                .sorted(comparing(CountryHealthScoreDto::getCountryName,
+                        nullsLast(Comparator.naturalOrder())))
+                .collect(toList());
         return transformToGlobalHealthDto(globalHealthScores);
     }
 
