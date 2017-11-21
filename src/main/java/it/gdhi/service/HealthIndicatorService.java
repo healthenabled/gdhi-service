@@ -34,7 +34,8 @@ public class HealthIndicatorService {
     public AllCountriesHealthScoreDto fetchHealthScores() {
         List<String> countriesWithHealthScores = iHealthIndicatorRepository.findCountriesWithHealthScores();
         List<CountryHealthScoreDto> globalHealthScores = countriesWithHealthScores.stream()
-                .map(countryId -> fetchCountryHealthScore(countryId)).collect(toList());
+                .map(countryId -> fetchCountryHealthScore(countryId))
+                .sorted(comparing(CountryHealthScoreDto::getCountryName)).collect(toList());
         return transformToGlobalHealthDto(globalHealthScores);
     }
 
