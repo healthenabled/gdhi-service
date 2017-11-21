@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class CountrySummaryDetailDto {
     private String dataCollectorName;
     private String dataCollectorRole;
     private String dataCollectorEmail;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date collectedDate;
     private List<String> resourceLinks;
 }
