@@ -63,16 +63,6 @@ public class HealthIndicator {
         this.supportingText = supportingText;
     }
 
-    public HealthIndicator(HealthIndicatorId id, Country country, Category category,
-                           Indicator indicator, IndicatorScore indicatorScore, Integer score) {
-        this.healthIndicatorId = id;
-        this.country = country;
-        this.category = category;
-        this.indicator = indicator;
-        this.indicatorScore = indicatorScore;
-        this.score = score;
-    }
-
     public String getIndicatorName() {
         return this.indicator.getName();
     }

@@ -88,6 +88,7 @@ public class HealthIndicatorService {
                                     healthIndicator.getIndicatorName(),
                                     healthIndicator.getIndicatorDescription(),
                                     healthIndicator.getScore(),
+                                    healthIndicator.getSupportingText(),
                                     healthIndicator.getScoreDescription()))
                             .sorted(comparing(IndicatorScoreDto::getId))
                             .collect(Collectors.toList());

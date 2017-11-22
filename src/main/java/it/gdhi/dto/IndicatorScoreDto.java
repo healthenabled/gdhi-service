@@ -12,5 +12,6 @@ public class IndicatorScoreDto {
     private String name;
     private String indicatorDescription;
     private Integer score;
+    private String supportingText;
     private String scoreDescription;
 }
