@@ -18,6 +18,17 @@ spring:
       namingStrategy : org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
       physicalNamingStrategy : it.CustomPhysicalNamingStrategyImpl
       dialect: org.hibernate.dialect.PostgreSQL94Dialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test@test.com
+    password: mailPassword
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 db:
   url: jdbc:postgresql://localhost:5432/gdhi
@@ -34,3 +45,10 @@ info.AppName: GDHI-Service
 info.Description: Application Health Checker
 info.body: pong
 info.status: 200
+
+frontEndURL: http://localhost:8080
+
+mailer:
+  address:
+    Name1: test@test.com
+    Name2: test1@test.com

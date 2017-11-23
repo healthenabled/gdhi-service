@@ -90,6 +90,8 @@ dependencies {
 
     compile 'org.flywaydb:flyway-core:4.2.0'
 
+    compile 'org.springframework.boot:spring-boot-starter-mail'
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.1.RELEASE'
