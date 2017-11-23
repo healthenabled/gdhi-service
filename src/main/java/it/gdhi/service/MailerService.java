@@ -29,7 +29,7 @@ public class MailerService {
             "Test Body for %s with %s\n";
 
     public void send(Country country) {
-        for (Map.Entry<String, String> stringStringEntry : mailAddresses.getAddress().entrySet()) {
+        for (Map.Entry<String, String> stringStringEntry : mailAddresses.getAddressMap().entrySet()) {
             String messageBody = format(body,
                     stringStringEntry.getKey(),
                     country.getName(), frontEndURL + "/edit/" + country.getId());

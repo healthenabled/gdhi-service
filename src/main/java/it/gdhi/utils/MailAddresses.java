@@ -12,5 +12,5 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties("mailer")
 public class MailAddresses {
-    private Map<String, String> address;
+    private Map<String, String> addressMap;
 }
