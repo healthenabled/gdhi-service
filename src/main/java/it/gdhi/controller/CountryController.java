@@ -64,9 +64,4 @@ public class CountryController {
     public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
         countryDetailService.save(gdhiQuestionnaire);
     }
-
-    @RequestMapping("/send_mail")
-    public void sendMail() {
-        mailerService.send(new Country("countryId","countryName"));
-    }
 }

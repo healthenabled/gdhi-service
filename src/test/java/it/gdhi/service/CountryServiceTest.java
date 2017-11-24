@@ -4,10 +4,7 @@ import it.gdhi.dto.CountrySummaryDetailDto;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.model.CountryResourceLink;
-import it.gdhi.model.CountryResourceLinkId;
-import it.gdhi.model.CountrySummary;
-import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.*;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
@@ -40,6 +37,8 @@ public class CountryServiceTest {
     ICountryResourceLinkRepository iCountryResourceLinkRepository;
     @Mock
     IHealthIndicatorRepository iHealthIndicatorRepository;
+    @Mock
+    MailerService mailerService;
 
     @Test
     public void shouldInsertTestData() {
@@ -99,4 +98,24 @@ public class CountryServiceTest {
         assertThat(healthIndicatorsCaptorList.getValue().getHealthIndicatorId().getCategoryId(), is(1));
     }
 
+    @Test
+    public void shouldSendEmailOnSuccessfulSaveOfCountryDetailsAndIndicators() throws Exception {
+        String countryId = "ARG";
+        Country country = new Country(countryId, "Argentina");
+        List<String> resourceLinks = asList("Res 1");
+        CountrySummaryDetailDto countrySummaryDetailDto = CountrySummaryDetailDto.builder().summary("Summary 1")
+                .resourceLinks(resourceLinks).build();
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
+        GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDtos).build();
+
+        when(iCountrySummaryRepository.save(any(CountrySummary.class))).thenReturn(CountrySummary.builder().build());
+        when(iHealthIndicatorRepository.save(any(HealthIndicator.class))).thenReturn(HealthIndicator.builder().build());
+        when(countryDetailRepository.find(countryId)).thenReturn(country);
+
+        countryService.save(gdhiQuestionnaire);
+
+        verify(mailerService).send(country);
+    }
 }

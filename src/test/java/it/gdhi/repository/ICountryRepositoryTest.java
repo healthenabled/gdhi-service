@@ -1,5 +1,6 @@
 package it.gdhi.repository;
 
+import it.gdhi.model.Country;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @SpringBootTest
@@ -19,11 +22,26 @@ import static org.junit.Assert.assertThat;
 public class ICountryRepositoryTest {
 
     @Autowired
-    private ICountryRepository ICountryRepository;
+    private ICountryRepository countryRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     public void testInsert() {
-        int size = ICountryRepository.findAll().size();
+        int size = countryRepository.findAll().size();
         assertThat(size, is(264));
+    }
+
+    @Test
+    public void shouldGetCountryGivenId() throws Exception {
+        Country country = new Country("ABC", "Republic of ABC");
+        entityManager.persist(country);
+        entityManager.flush();
+        entityManager.clear();
+
+        Country actualCountry = countryRepository.find(country.getId());
+
+        assertEquals(country.getId(), actualCountry.getId());
+        assertEquals(country.getName(), actualCountry.getName());
     }
 }

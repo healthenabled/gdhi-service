@@ -37,6 +37,11 @@ public class CountryService {
     @Autowired
     private IHealthIndicatorRepository iHealthIndicatorRepository;
 
+    @Autowired
+    private  MailerService mailerService;
+
+
+
     @Transactional
     public List<Country> fetchCountries() {
         return iCountryRepository.findAll();
@@ -53,6 +58,8 @@ public class CountryService {
     public void save(GdhiQuestionnaire gdhiQuestionnaire) {
          saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
          saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
+         Country country = iCountryRepository.find(gdhiQuestionnaire.getCountryId());
+         mailerService.send(country);
     }
 
     private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {

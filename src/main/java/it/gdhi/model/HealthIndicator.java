@@ -2,6 +2,7 @@ package it.gdhi.model;
 
 import it.gdhi.model.id.HealthIndicatorId;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NotFound;
@@ -17,6 +18,7 @@ import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class HealthIndicator {
 
     @EmbeddedId

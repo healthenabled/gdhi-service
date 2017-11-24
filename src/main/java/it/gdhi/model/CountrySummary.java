@@ -2,6 +2,7 @@ package it.gdhi.model;
 
 import it.gdhi.dto.CountrySummaryDetailDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class CountrySummary {
 
     @Id
