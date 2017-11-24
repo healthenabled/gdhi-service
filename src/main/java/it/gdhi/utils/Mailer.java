@@ -1,5 +1,6 @@
 package it.gdhi.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -10,15 +11,11 @@ import javax.mail.internet.MimeMessage;
 
 @Component
 public class Mailer {
-
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String sourceEmailAddress;
-
-    public Mailer(JavaMailSender sender) {
-        this.javaMailSender = sender;
-    }
 
     public void send(String destinationAddress, String subject, String body) {
         this.javaMailSender.send((MimeMessage newMessage) -> {
