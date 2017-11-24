@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Date;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -53,25 +54,43 @@ public class CountryServiceTest {
         String contactName = "Contact Name";
         String contactDesignation = "Contact Designation";
         String contactOrganization = "Contact Organization";
-        CountrySummary countrySummary = mock(CountrySummary.class);
-        when(countrySummary.getCountryId()).thenReturn(countryId);
-        when(countrySummary.getSummary()).thenReturn(summary);
-        when(countrySummary.getContactName()).thenReturn(contactName);
-        when(countrySummary.getContactDesignation()).thenReturn(contactDesignation);
-        when(countrySummary.getContactOrganization()).thenReturn(contactOrganization);
-
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
         String link1 = "Link 1";
         String link2 = "Link 2";
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1));
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2));
-        when(iCountryResourceLinkRepository.findAllBy(countryId))
-                .thenReturn(asList(countryResourceLink1, countryResourceLink2));
+        List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countryId(countryId)
+                .summary(summary)
+                .contactName(contactName)
+                .contactDesignation(contactDesignation)
+                .contactOrganization(contactOrganization)
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                .collectedDate(new Date())
+                .countryResourceLinks(countryResourceLinks)
+                .build();
+        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
+
         CountrySummaryDto countrySummaryDto = countryService.fetchCountrySummary(countryId);
+
         assertThat(countrySummaryDto.getCountryId(), is(countryId));
         assertThat(countrySummaryDto.getContactName(), is(contactName));
         assertThat(countrySummaryDto.getContactDesignation(), is(contactDesignation));
         assertThat(countrySummaryDto.getContactOrganization(), is(contactOrganization));
+        assertThat(countrySummaryDto.getContactEmail(), is(countrySummary.getContactEmail()));
+        assertThat(countrySummaryDto.getDataFeederName(), is(countrySummary.getDataFeederName()));
+        assertThat(countrySummaryDto.getDataFeederRole(), is(countrySummary.getDataFeederRole()));
+        assertThat(countrySummaryDto.getDataFeederEmail(), is(countrySummary.getDataFeederEmail()));
+        assertThat(countrySummaryDto.getDataCollectorName(), is(countrySummary.getDataCollectorName()));
+        assertThat(countrySummaryDto.getDataCollectorRole(), is(countrySummary.getDataCollectorRole()));
+        assertThat(countrySummaryDto.getDataCollectorEmail(), is(countrySummary.getDataCollectorEmail()));
+        assertThat(countrySummaryDto.getCollectedDate(), is(countrySummary.getCollectedDate()));
         assertThat(countrySummaryDto.getSummary(), is(summary));
         assertThat(countrySummaryDto.getResources(), Matchers.containsInAnyOrder(link1, link2));
     }

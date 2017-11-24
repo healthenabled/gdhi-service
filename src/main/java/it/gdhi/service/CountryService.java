@@ -5,7 +5,6 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
-import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.id.HealthIndicatorId;
@@ -50,8 +49,7 @@ public class CountryService {
     @Transactional
     public CountrySummaryDto fetchCountrySummary(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
-        List<CountryResourceLink> countryResourceLinks = iCountryResourceLinkRepository.findAllBy(countryId);
-        return new CountrySummaryDto(countrySummary, countryResourceLinks);
+        return new CountrySummaryDto(countrySummary);
     }
 
     @Transactional
