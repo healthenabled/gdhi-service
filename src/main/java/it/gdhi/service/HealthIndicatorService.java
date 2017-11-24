@@ -35,6 +35,7 @@ public class HealthIndicatorService {
     @Transactional
     public AllCountriesHealthScoreDto fetchHealthScores() {
         List<String> countriesWithHealthScores = iHealthIndicatorRepository.findCountriesWithHealthScores();
+
         List<CountryHealthScoreDto> globalHealthScores = countriesWithHealthScores.stream()
                 .map(countryId -> fetchCountryHealthScore(countryId))
                 .sorted(comparing(CountryHealthScoreDto::getCountryName,
@@ -59,11 +60,15 @@ public class HealthIndicatorService {
 
         AllCountriesHealthScoreDto allCountriesData = fetchHealthScores();
         double score = 0.0;
-        for (CountryHealthScoreDto countryHealthScore : allCountriesData.getCountryHealthScores()) {
+        List<CountryHealthScoreDto> globalHealthScoresWitOutNullScore = allCountriesData.getCountryHealthScores()
+                .stream()
+                .filter(country -> country.getOverallScore() != null)
+                .collect(Collectors.toList());
+        for (CountryHealthScoreDto countryHealthScore : globalHealthScoresWitOutNullScore) {
             score+= countryHealthScore.getOverallScore();
         }
 
-        int size = allCountriesData.getCountryHealthScores().size();
+        int size = globalHealthScoresWitOutNullScore.size();
         List<CategoryHealthScoreDto> sortedCategories = categories.stream()
                 .sorted(comparing(CategoryHealthScoreDto::getId)).collect(toList());
         return new GlobalHealthScoreDto((convertScoreToPhase(score / size)), sortedCategories);

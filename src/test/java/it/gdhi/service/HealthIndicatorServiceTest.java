@@ -410,4 +410,53 @@ public class HealthIndicatorServiceTest {
         assertEquals(1,globalHealthIndicator.getCategories().size());
         assertThat(globalHealthIndicator.getOverAllScore(), is(4));
     }
+
+    @Test
+    public void fetchGlobalHealthScoresShouldIgnoreCountryWithAllIndicatorsMissing() {
+        HealthIndicator mock1 = mock(HealthIndicator.class);
+        when(mock1.getScore()).thenReturn(5);
+        Country mockCountry1 = mock(Country.class);
+        Category mock = mock(Category.class);
+
+        when(mock1.getCountry()).thenReturn(mockCountry1);
+        when(mockCountry1.getId()).thenReturn("IND");
+        when(mock1.getCategory()).thenReturn(mock);
+        when(mock1.getCategory().getId()).thenReturn(9);
+        when(mock1.getCategory().getName()).thenReturn("Category 1");
+
+        HealthIndicator mock2 = mock(HealthIndicator.class);
+        when(mock2.getScore()).thenReturn(null);
+        Country mockCountry2 = mock(Country.class);
+
+        when(mock2.getCountry()).thenReturn(mockCountry2);
+        when(mockCountry2.getId()).thenReturn("USA");
+        when(mock2.getCategory()).thenReturn(mock);
+        when(mock2.getCategory().getId()).thenReturn(9);
+        when(mock2.getCategory().getName()).thenReturn("Category 1");
+
+        HealthIndicator mock3 = mock(HealthIndicator.class);
+        when(mock3.getScore()).thenReturn(null);
+
+        when(mock3.getCountry()).thenReturn(mockCountry2);
+        when(mockCountry2.getId()).thenReturn("USA");
+        when(mock3.getCategory()).thenReturn(mock);
+        when(mock3.getCategory().getId()).thenReturn(8);
+        when(mock3.getCategory().getName()).thenReturn("Category 2");
+
+
+        List<HealthIndicator> healthIndicators = new ArrayList<>();
+        healthIndicators.add(mock1);
+        healthIndicators.add(mock2);
+
+        when(iHealthIndicatorRepository.findAll()).thenReturn(healthIndicators);
+        when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList("IND", "USA"));
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor("IND")).thenReturn(asList(mock1));
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor("USA")).thenReturn(asList(mock2, mock3));
+        GlobalHealthScoreDto globalHealthIndicator = healthIndicatorService.getGlobalHealthIndicator();
+
+        assertEquals(1,globalHealthIndicator.getCategories().size());
+        assertThat(globalHealthIndicator.getOverAllScore(), is(5));
+    }
+
+
 }
