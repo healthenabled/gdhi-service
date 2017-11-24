@@ -95,6 +95,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.3.1.RELEASE'
-
+    testCompile 'io.rest-assured:rest-assured:3.0.2'
+    testCompile 'io.rest-assured:json-schema-validator:3.0.2'
+    testCompile 'io.rest-assured:spring-mock-mvc:3.0.2'
     testCompile 'org.mockito:mockito-core:1.9.5'
 }
