@@ -1,10 +1,10 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CountrySummaryDetailDto;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.*;
+import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
@@ -19,9 +19,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -98,8 +100,8 @@ public class CountryServiceTest {
     @Test
     public void shouldSaveDetailsForACountry() throws Exception {
         List<String> resourceLinks = asList("Res 1");
-        CountrySummaryDetailDto countrySummaryDetailDto = CountrySummaryDetailDto.builder().summary("Summary 1")
-                .resourceLinks(resourceLinks).build();
+        CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
+                .resources(resourceLinks).build();
         List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId("ARG")
                 .countrySummary(countrySummaryDetailDto)
@@ -122,8 +124,8 @@ public class CountryServiceTest {
         String countryId = "ARG";
         Country country = new Country(countryId, "Argentina");
         List<String> resourceLinks = asList("Res 1");
-        CountrySummaryDetailDto countrySummaryDetailDto = CountrySummaryDetailDto.builder().summary("Summary 1")
-                .resourceLinks(resourceLinks).build();
+        CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
+                .resources(resourceLinks).build();
         List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
@@ -136,5 +138,72 @@ public class CountryServiceTest {
         countryService.save(gdhiQuestionnaire);
 
         verify(mailerService).send(country);
+    }
+
+    @Test
+    public void shouldGetGlobalHealthScoreDto() throws Exception {
+        String countryId = "IND";
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countryId(countryId)
+                .summary("summary")
+                .contactName("contactName")
+                .contactDesignation("contact designation")
+                .contactOrganization("contact org")
+                .contactEmail("contact email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("feeder email")
+                .dataCollectorName("collector name")
+                .dataCollectorRole("collector role")
+                .dataCollectorEmail("collector email")
+                .collectedDate(new Date())
+                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link"))))
+                .build();
+
+        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
+        HealthIndicator indicator1 = HealthIndicator.builder()
+                .healthIndicatorId(new HealthIndicatorId(countryId, 1, 2))
+                .score(5)
+                .build();
+        HealthIndicator indicator2 = HealthIndicator.builder()
+                .healthIndicatorId(new HealthIndicatorId(countryId, 2, 3))
+                .score(4)
+                .build();
+        List<HealthIndicator> healthIndicators = asList(indicator1, indicator2);
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(healthIndicators);
+
+        GdhiQuestionnaire details = countryService.getDetails(countryId);
+
+        assertSummary(countrySummary, details.getCountrySummary());
+        assertIndicators(healthIndicators, details.getHealthIndicators());
+    }
+
+    private void assertIndicators(List<HealthIndicator> expectedHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
+        assertEquals(expectedHealthIndicators.size(), actualHealthIndicators.size());
+        expectedHealthIndicators.forEach(expected -> {
+            HealthIndicatorDto actualIndicator = actualHealthIndicators.stream()
+                    .filter(actual -> actual.getCategoryId().equals(expected.getHealthIndicatorId().getCategoryId())
+                            && actual.getIndicatorId().equals(expected.getHealthIndicatorId().getIndicatorId()))
+                    .findFirst()
+                    .get();
+            assertEquals(expected.getScore(), actualIndicator.getScore());
+            assertEquals(expected.getSupportingText(), actualIndicator.getSupportingText());
+        });
+    }
+
+    private void assertSummary(CountrySummary expectedCountrySummary, CountrySummaryDto actualCountrySummary) {
+        assertEquals(expectedCountrySummary.getContactName(), actualCountrySummary.getContactName());
+        assertEquals(expectedCountrySummary.getSummary(), actualCountrySummary.getSummary());
+        assertEquals(expectedCountrySummary.getContactDesignation(), actualCountrySummary.getContactDesignation());
+        assertEquals(expectedCountrySummary.getContactOrganization(), actualCountrySummary.getContactOrganization());
+        assertEquals(expectedCountrySummary.getContactEmail(), actualCountrySummary.getContactEmail());
+        assertEquals(expectedCountrySummary.getDataFeederName(), actualCountrySummary.getDataFeederName());
+        assertEquals(expectedCountrySummary.getDataFeederRole(), actualCountrySummary.getDataFeederRole());
+        assertEquals(expectedCountrySummary.getDataFeederEmail(), actualCountrySummary.getDataFeederEmail());
+        assertEquals(expectedCountrySummary.getDataCollectorName(), actualCountrySummary.getDataCollectorName());
+        assertEquals(expectedCountrySummary.getDataCollectorEmail(), actualCountrySummary.getDataCollectorEmail());
+        assertEquals(expectedCountrySummary.getCollectedDate(), actualCountrySummary.getCollectedDate());
+        assertEquals(expectedCountrySummary.getCountryResourceLinks().stream().map(CountryResourceLink::getLink).collect(Collectors.toList()),
+                actualCountrySummary.getResources());
     }
 }

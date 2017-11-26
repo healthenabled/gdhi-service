@@ -97,4 +97,13 @@ public class CountryControllerTest {
 
         assertEquals(developmentIndicator.getCountryId(), actualDevelopmentIndicator.getCountryId());
     }
+
+    @Test
+    public void shouldGetCountryDetails() throws Exception {
+        String countryId = "IND";
+
+        countryController.getCountryDetails(countryId);
+
+        verify(countryService).getDetails(countryId);
+    }
 }

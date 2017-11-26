@@ -1,9 +1,6 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CountrySummaryDetailDto;
-import it.gdhi.dto.CountrySummaryDto;
-import it.gdhi.dto.GdhiQuestionnaire;
-import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.HealthIndicator;
@@ -60,6 +57,16 @@ public class CountryService {
          mailerService.send(country);
     }
 
+    public GdhiQuestionnaire getDetails(String countryId) {
+        CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
+        CountrySummaryDto countrySummaryDto = new CountrySummaryDto(countrySummary);
+        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
+                .map(HealthIndicatorDto::new)
+                .collect(toList());
+        return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
+    }
+
     private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
         List<HealthIndicator> healthIndicators = transformToHealthIndicator(countryId, healthIndicatorDto);
         if(healthIndicators != null) {
@@ -78,9 +85,8 @@ public class CountryService {
         }).collect(toList());
     }
 
-    private void saveCountryContactInfo(String countryId, CountrySummaryDetailDto countrySummaryDetailDto) {
+    private void saveCountryContactInfo(String countryId, CountrySummaryDto countrySummaryDetailDto) {
         CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
         iCountrySummaryRepository.save(countrySummary);
     }
-
 }

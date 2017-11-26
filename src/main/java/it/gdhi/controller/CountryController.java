@@ -18,7 +18,7 @@ import java.util.List;
 public class CountryController {
 
     @Autowired
-    private CountryService countryDetailService;
+    private CountryService countryService;
 
     @Autowired
     private HealthIndicatorService healthIndicatorService;
@@ -31,7 +31,7 @@ public class CountryController {
 
     @RequestMapping("/countries")
     public List<Country> getCountries() {
-        return countryDetailService.fetchCountries();
+        return countryService.fetchCountries();
     }
 
     @RequestMapping("/countries/{id}/development_indicators")
@@ -57,11 +57,16 @@ public class CountryController {
 
     @RequestMapping("/countries/{id}/country_summary")
     public CountrySummaryDto fetchCountrySummary(@PathVariable("id") String countryId) {
-        return countryDetailService.fetchCountrySummary(countryId);
+        return countryService.fetchCountrySummary(countryId);
     }
 
     @RequestMapping(value = "/countries", method = RequestMethod.POST)
     public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryDetailService.save(gdhiQuestionnaire);
+        countryService.save(gdhiQuestionnaire);
+    }
+
+    @RequestMapping(value = "/countries/{id}", method = RequestMethod.GET)
+    public GdhiQuestionnaire getCountryDetails(@PathVariable("id") String countryId) {
+        return countryService.getDetails(countryId);
     }
 }

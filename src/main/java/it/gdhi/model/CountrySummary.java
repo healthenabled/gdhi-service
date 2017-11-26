@@ -1,6 +1,6 @@
 package it.gdhi.model;
 
-import it.gdhi.dto.CountrySummaryDetailDto;
+import it.gdhi.dto.CountrySummaryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class CountrySummary {
     @JoinColumn(name = "country_id", referencedColumnName = "country_id")
     private List<CountryResourceLink> countryResourceLinks;
 
-    public CountrySummary(String countryId, CountrySummaryDetailDto countrySummaryDetailDto) {
+    public CountrySummary(String countryId, CountrySummaryDto countrySummaryDetailDto) {
         this.countryId = countryId;
         this.summary = countrySummaryDetailDto.getSummary();
         this.contactName = countrySummaryDetailDto.getContactName();
@@ -59,8 +59,8 @@ public class CountrySummary {
     }
 
     private List<CountryResourceLink> transformToResourceLinks(String countryId,
-                                                               CountrySummaryDetailDto countrySummaryDetailDto) {
-        List<String> resourceLinks = countrySummaryDetailDto.getResourceLinks();
+                                                               CountrySummaryDto countrySummaryDetailDto) {
+        List<String> resourceLinks = countrySummaryDetailDto.getResources();
         return ObjectUtils.isEmpty(resourceLinks) ? null : resourceLinks.stream().map(link ->
                 new CountryResourceLink(new CountryResourceLinkId(countryId, link))).collect(toList());
     }
