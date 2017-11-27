@@ -41,18 +41,21 @@ public class MailerServiceTest {
         String name1 = "test1";
         String name2 = "test2";
         Country country = new Country("Ind", "India");
+        String feeder = "feeder";
+        String feederRole = "feeder role";
+        String contactEmail = "contact@test.com";
+
         Map<String, String> address =  new HashMap<String, String>();
         address.put(email1, name1);
         address.put(email2, name2);
         when(mailAddresses.getAddressMap()).thenReturn(address);
+        mailerService.send(country, feeder, feederRole, contactEmail);
 
-        mailerService.send(country);
-
-        verify(mailer).send(email2, format(Mail.SUBJECT, country.getName()), constructBody(name2, country, "http://test"));
-        verify(mailer).send(email1, format(Mail.SUBJECT, country.getName()), constructBody(name1, country, "http://test"));
+        verify(mailer).send(email2, format(Mail.SUBJECT, country.getName()), constructBody(name2, country, feeder, feederRole, contactEmail, "http://test"));
+        verify(mailer).send(email1, format(Mail.SUBJECT, country.getName()), constructBody(name1, country, feeder, feederRole, contactEmail, "http://test"));
     }
-    private String constructBody(String name, Country country, String path) {
-        return format(Mail.BODY, name, country.getName(), format(Mail.HEALTH_INDICATOR_PATH, path, country.getId()));
+    private String constructBody(String name, Country country, String feeder, String feederRole, String contactEmail, String path) {
+        return format(Mail.BODY, name,feeder, feederRole,  country.getName(), contactEmail, format(Mail.HEALTH_INDICATOR_PATH, path, country.getId()));
     }
 
 }

@@ -125,8 +125,15 @@ public class CountryServiceTest {
         String countryId = "ARG";
         Country country = new Country(countryId, "Argentina");
         List<String> resourceLinks = asList("Res 1");
+        String feeder = "feeder";
+        String feederRole = "feeder role";
+        String contactEmail = "contact@test.com";
         CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
+                .dataFeederName(feeder)
+                .dataFeederRole(feederRole)
+                .contactEmail(contactEmail)
                 .resources(resourceLinks).build();
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
@@ -138,7 +145,7 @@ public class CountryServiceTest {
 
         countryService.save(gdhiQuestionnaire);
 
-        verify(mailerService).send(country);
+        verify(mailerService).send(country, feeder, feederRole, contactEmail);
     }
 
     @Test

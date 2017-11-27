@@ -53,8 +53,11 @@ public class CountryService {
     public void save(GdhiQuestionnaire gdhiQuestionnaire) {
          saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
          saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
+         String feederName = gdhiQuestionnaire.getCountrySummary().getDataFeederName();
+         String feederRole = gdhiQuestionnaire.getCountrySummary().getDataFeederRole();
+         String contactEmail = gdhiQuestionnaire.getCountrySummary().getContactEmail();
          Country country = iCountryRepository.find(gdhiQuestionnaire.getCountryId());
-         mailerService.send(country);
+         mailerService.send(country, feederName, feederRole, contactEmail);
     }
 
     public GdhiQuestionnaire getDetails(String countryId) {
