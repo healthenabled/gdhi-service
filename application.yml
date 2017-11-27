@@ -20,16 +20,16 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQL94Dialect
   mail:
     host: smtp.gmail.com
-    port: 587
-    username: test@test.com
-    password: mailPassword
+    port: 465
+    protocol: smtps
+    username: twgdhitest@gmail.com
+    password: xxxxxxxxx
     properties:
       mail:
         smtp:
-          auth: true
-          starttls:
+          ssl:
             enable: true
-
+          auth: true
 db:
   url: jdbc:postgresql://localhost:5432/gdhi
   host: localhost
