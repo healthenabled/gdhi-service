@@ -13,6 +13,6 @@ public class DevelopmentIndicatorService {
     private IDevelopmentIndicatorRepository iDevelopmentIndicatorRepository;
 
     public DevelopmentIndicator fetchCountryDevelopmentScores(String countryId) {
-        return iDevelopmentIndicatorRepository.findByCountryId(countryId).orElse(null);
+        return iDevelopmentIndicatorRepository.findByCountryId(countryId).orElse(new DevelopmentIndicator());
     }
 }

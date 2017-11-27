@@ -10,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,5 +30,15 @@ public class DevelopmentIndicatorServiceTest {
         when(iDevelopmentIndicatorRepository.findByCountryId(countryId)).thenReturn(Optional.of(new DevelopmentIndicator()));
         developmentIndicatorService.fetchCountryDevelopmentScores(countryId);
         verify(iDevelopmentIndicatorRepository).findByCountryId(countryId);
+    }
+
+    @Test
+    public void shouldReturnEmptyIfNoContextAvailable() {
+        String countryId = "ARG";
+        when(iDevelopmentIndicatorRepository.findByCountryId(countryId)).thenReturn(Optional.empty());
+
+        DevelopmentIndicator developmentIndicator = developmentIndicatorService.fetchCountryDevelopmentScores(countryId);
+
+        assertNotNull(developmentIndicator);
     }
 }
