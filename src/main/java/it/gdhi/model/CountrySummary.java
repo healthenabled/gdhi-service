@@ -24,6 +24,9 @@ public class CountrySummary {
     @Id
     @Column(name="country_id")
     private String countryId;
+    @OneToOne
+    @JoinColumn(name="country_id", referencedColumnName = "id")
+    private Country country;
     private String summary;
     private String contactName;
     private String contactDesignation;

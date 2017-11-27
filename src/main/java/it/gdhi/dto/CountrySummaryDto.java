@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 public class CountrySummaryDto {
 
     private String countryId;
+    private String countryName;
     private String summary;
     private String contactName;
     private String contactDesignation;
@@ -39,6 +40,7 @@ public class CountrySummaryDto {
 
     public CountrySummaryDto(CountrySummary countrySummary) {
         this.countryId = countrySummary.getCountryId();
+        this.countryName = countrySummary.getCountry().getName();
         this.summary = countrySummary.getSummary();
         this.contactName = countrySummary.getContactName();
         this.contactDesignation = countrySummary.getContactDesignation();

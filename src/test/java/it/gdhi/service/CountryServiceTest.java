@@ -64,6 +64,7 @@ public class CountryServiceTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .summary(summary)
+                .country(new Country(countryId, "Argentina"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -145,6 +146,7 @@ public class CountryServiceTest {
         String countryId = "IND";
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
+                .country(new Country("IND", "India"))
                 .summary("summary")
                 .contactName("contactName")
                 .contactDesignation("contact designation")
@@ -193,6 +195,7 @@ public class CountryServiceTest {
 
     private void assertSummary(CountrySummary expectedCountrySummary, CountrySummaryDto actualCountrySummary) {
         assertEquals(expectedCountrySummary.getContactName(), actualCountrySummary.getContactName());
+        assertEquals(expectedCountrySummary.getCountry().getName(), actualCountrySummary.getCountryName());
         assertEquals(expectedCountrySummary.getSummary(), actualCountrySummary.getSummary());
         assertEquals(expectedCountrySummary.getContactDesignation(), actualCountrySummary.getContactDesignation());
         assertEquals(expectedCountrySummary.getContactOrganization(), actualCountrySummary.getContactOrganization());

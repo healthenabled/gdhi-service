@@ -1,5 +1,6 @@
 package it.gdhi.repository;
 
+import it.gdhi.model.Country;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountryResourceLinkId;
 import it.gdhi.model.CountrySummary;
@@ -31,7 +32,7 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldFetchPopulationGivenCountryCode() {
-        CountrySummary expected = new CountrySummary("NZL", "NZL summary", "Contact Name",
+        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL"), "NZL summary", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, null);
@@ -43,11 +44,12 @@ public class ICountrySummaryRepositoryTest {
         assertThat(actual.getSummary(), is("NZL summary"));
         assertThat(actual.getContactName(), is("Contact Name"));
         assertThat(actual.getContactDesignation(), is("Contact Designation"));
+        assertThat(actual.getCountry().getName(), is("New Zealand"));
     }
 
     @Test
     public void shouldSaveCountrySummaryAlongWithResourceLinks() {
-        CountrySummary countrySummary1 = new CountrySummary("NZL", "NZL summary 1", "Contact Name",
+        CountrySummary countrySummary1 = new CountrySummary("NZL", new Country("NZL", "NZL"), "NZL summary 1", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com"))));
@@ -61,7 +63,7 @@ public class ICountrySummaryRepositoryTest {
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getCountryId(), is("NZL"));
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getLink(), is("www.google.com"));
 
-        CountrySummary countrySummary2 = new CountrySummary("NZL", "NZL summary 2", "Contact Name",
+        CountrySummary countrySummary2 = new CountrySummary("NZL", new Country("NZL", "NZL"), "NZL summary 2", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com"))));
