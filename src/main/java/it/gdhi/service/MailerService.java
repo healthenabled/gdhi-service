@@ -5,6 +5,7 @@ import it.gdhi.utils.MailAddresses;
 import it.gdhi.utils.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import static it.gdhi.utils.Constants.Mail.*;
@@ -22,6 +23,7 @@ public class MailerService {
     @Value("${frontEndURL}")
     private String frontEndURL;
 
+    @Async
     public void send(Country country) {
         mailAddresses.getAddressMap().entrySet().forEach((entry) -> {
             String email = entry.getKey();

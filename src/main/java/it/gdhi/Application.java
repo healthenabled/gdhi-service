@@ -18,6 +18,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.persistence.EntityManagerFactory;
@@ -27,6 +28,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {ApplicationContextAwareSpringJdbcMigrationResolver.class, Application.class})
+@EnableAsync
 public class Application {
 
     @Value("${db.url}")
