@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -96,6 +97,14 @@ public class CountryServiceTest {
         assertThat(countrySummaryDto.getCollectedDate(), is(countrySummary.getCollectedDate()));
         assertThat(countrySummaryDto.getSummary(), is(summary));
         assertThat(countrySummaryDto.getResources(), Matchers.containsInAnyOrder(link1, link2));
+    }
+
+    @Test
+    public void shouldReturnEmptyCountrySummaryObjectWhenNoCountrySummaryPresent() {
+        String countryId = "ARG";
+        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
+        CountrySummaryDto countrySummaryDto = countryService.fetchCountrySummary(countryId);
+        assertNull(countrySummaryDto.getCountryId());
     }
 
     @Test

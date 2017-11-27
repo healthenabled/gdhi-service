@@ -46,7 +46,7 @@ public class CountryService {
     @Transactional
     public CountrySummaryDto fetchCountrySummary(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
-        return new CountrySummaryDto(countrySummary);
+        return countrySummary != null ? new CountrySummaryDto(countrySummary) : new CountrySummaryDto();
     }
 
     @Transactional
