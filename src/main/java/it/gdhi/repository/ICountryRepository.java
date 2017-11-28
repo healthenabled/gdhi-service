@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface ICountryRepository extends Repository<Country, Long> {
 
-    void delete(Country country);
-
     List<Country> findAll();
 
     @Query("SELECT  c FROM Country c WHERE c.id = ?1")

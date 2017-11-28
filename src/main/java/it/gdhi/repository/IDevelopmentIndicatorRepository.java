@@ -9,8 +9,6 @@ import java.util.Optional;
 
 public interface IDevelopmentIndicatorRepository extends Repository<DevelopmentIndicator, Long> {
 
-    void delete(DevelopmentIndicator developmentIndicator);
-
     List<DevelopmentIndicator> findAll();
 
     DevelopmentIndicator save(DevelopmentIndicator developmentIndicator);
