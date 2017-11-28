@@ -104,7 +104,13 @@ public class HealthIndicatorService {
                 convertScoreToPhase(overallScore));
     }
 
-    public void test() {
+    public void exportGlobalData() {
         new Excel().convertJavaToExcel(fetchHealthScores().getCountryHealthScores());
+    }
+    public void  exportCountryData(String countryId){
+        fetchCountryHealthScore(countryId);
+        List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
+        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
+        new Excel().convertJavaToExcel(countryHealthScoreDtoAsList);
     }
 }
