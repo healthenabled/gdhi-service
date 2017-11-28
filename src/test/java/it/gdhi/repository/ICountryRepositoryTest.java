@@ -27,9 +27,9 @@ public class ICountryRepositoryTest {
     private EntityManager entityManager;
 
     @Test
-    public void testInsert() {
+    public void shouldGetAllCountries() {
         int size = countryRepository.findAll().size();
-        assertThat(size, is(264));
+        assertThat(size, is(194));
     }
 
     @Test
