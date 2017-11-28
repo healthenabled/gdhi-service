@@ -66,9 +66,13 @@ public class CountryController {
         return countryService.getDetails(countryId);
     }
 
-    @RequestMapping("/test")
-    public void get() {
-        healthIndicatorService.test();
+    @RequestMapping("/export_global_data")
+    public void exportGlobalDetails() {
+        healthIndicatorService.exportGlobalData();
     }
 
+    @RequestMapping("/export_countrty_data/{id}")
+    public void exportCountryDetails(@PathVariable("id") String countryId) {
+        healthIndicatorService.exportCountryData(countryId);
+    }
 }
