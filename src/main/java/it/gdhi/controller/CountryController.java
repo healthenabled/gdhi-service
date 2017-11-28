@@ -65,4 +65,10 @@ public class CountryController {
     public GdhiQuestionnaire getCountryDetails(@PathVariable("id") String countryId) {
         return countryService.getDetails(countryId);
     }
+
+    @RequestMapping("/test")
+    public void get() {
+        healthIndicatorService.test();
+    }
+
 }

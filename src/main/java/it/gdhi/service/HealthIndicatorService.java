@@ -4,6 +4,7 @@ import it.gdhi.dto.*;
 import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
+import it.gdhi.utils.Excel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +67,7 @@ public class HealthIndicatorService {
                 .filter(country -> country.getOverallScore() != null)
                 .collect(Collectors.toList());
         for (CountryHealthScoreDto countryHealthScore : globalHealthScoresWitOutNullScore) {
-            score+= countryHealthScore.getOverallScore();
+            score += countryHealthScore.getOverallScore();
         }
 
         int size = globalHealthScoresWitOutNullScore.size();
@@ -101,5 +102,9 @@ public class HealthIndicatorService {
         Double overallScore = healthIndicators.getOverallScore();
         return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), overallScore, categoryDtos,
                 convertScoreToPhase(overallScore));
+    }
+
+    public void test() {
+        new Excel().convertJavaToExcel(fetchHealthScores().getCountryHealthScores());
     }
 }
