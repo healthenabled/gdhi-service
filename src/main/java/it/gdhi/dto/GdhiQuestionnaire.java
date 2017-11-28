@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +19,20 @@ public class GdhiQuestionnaire {
     private CountrySummaryDto countrySummary;
 
     private List<HealthIndicatorDto> healthIndicators;
+
+    @JsonIgnore
+    public String getDataFeederName() {
+        return countrySummary.getDataFeederName();
+    }
+
+    @JsonIgnore
+    public String getDataFeederRole() {
+        return countrySummary.getDataFeederRole();
+    }
+
+    @JsonIgnore
+    public String getContactEmail() {
+        return countrySummary.getContactEmail();
+    }
 
 }
