@@ -25,16 +25,6 @@ public class MetadataControllerTest {
     private CategoryIndicatorService categoryIndicatorService;
 
     @Test
-    public void shouldInvokeDevelopmentIndicatorRepoToFetchCountryContextInfo() {
-        CategoryIndicatorDto categoryIndicatorDto = new CategoryIndicatorDto();
-        when(categoryIndicatorService.getCategoryIndicatorMapping())
-                .thenReturn(singletonList(categoryIndicatorDto));
-        List<CategoryIndicatorDto> categoryIndicators = metaDataController.getCategoryIndicatorMapping();
-        assertThat(categoryIndicators.size(), is(1));
-        assertThat(categoryIndicators.get(0), is(categoryIndicatorDto));
-    }
-
-    @Test
     public void shouldInvokeCategoryRepoToFetchHealthIndicatorOptionsInfo() {
         CategoryIndicatorDto categoryIndicatorDto = new CategoryIndicatorDto();
         when(categoryIndicatorService.getHealthIndicatorOptions())

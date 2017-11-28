@@ -14,11 +14,6 @@ public class MetaDataController {
     @Autowired
     CategoryIndicatorService categoryIndicatorService;
 
-    @RequestMapping("/categorical_indicators")
-    public List<CategoryIndicatorDto> getCategoryIndicatorMapping() {
-        return categoryIndicatorService.getCategoryIndicatorMapping();
-    }
-
     @RequestMapping("/health_indicator_options")
     public List<CategoryIndicatorDto> getHealthIndicatorOptions() {
         return categoryIndicatorService.getHealthIndicatorOptions();

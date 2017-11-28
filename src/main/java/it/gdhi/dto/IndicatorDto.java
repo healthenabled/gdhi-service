@@ -2,12 +2,14 @@ package it.gdhi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.gdhi.model.Indicator;
+import it.gdhi.model.IndicatorScore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @AllArgsConstructor
@@ -33,6 +35,12 @@ public class IndicatorDto {
         this.indicatorId = indicator.getIndicatorId();
         this.indicatorName = indicator.getName();
         this.indicatorDefinition = indicator.getDefinition();
-        this.scores = indicator.getOptions().stream().map(option -> new ScoreDto(option)).collect(Collectors.toList());
+        this.scores = getScores(indicator);
+    }
+
+    private List<ScoreDto> getScores(Indicator indicator) {
+        List<IndicatorScore> options = indicator.getOptions();
+        return options != null ? options.stream().map(option -> new ScoreDto(option))
+                                   .collect(toList()) : null;
     }
 }

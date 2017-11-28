@@ -1,14 +1,13 @@
 package it.gdhi.dto;
 
 import it.gdhi.model.Category;
-import it.gdhi.model.CategoryIndicator;
+import it.gdhi.model.Indicator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-import static java.util.Collections.singleton;
-import static java.util.Comparator.comparing;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Getter
@@ -21,12 +20,6 @@ public class CategoryIndicatorDto {
 
     private List<IndicatorDto> indicators;
 
-    public CategoryIndicatorDto(Integer categoryId, List<CategoryIndicator> categoryIndicators) {
-        this.categoryId = categoryId;
-        this.categoryName = getCategoryName(categoryIndicators);
-        this.indicators = transformToIndicators(categoryIndicators);
-    }
-
     public CategoryIndicatorDto(Category category) {
         this.categoryId = category.getId();
         this.categoryName = category.getName();
@@ -34,25 +27,9 @@ public class CategoryIndicatorDto {
     }
 
     private List<IndicatorDto> transformToIndicatorDto(Category category) {
-        return category.getIndicators().stream().map(indicator -> new IndicatorDto(indicator))
-                .collect(toList());
-    }
-
-    private List<IndicatorDto> transformToIndicators(List<CategoryIndicator> value) {
-        List<IndicatorDto> indicators = value.stream().map(each -> each.getIndicator() != null ?
-        new IndicatorDto(each.getIndicatorId(), each.getIndicatorName(), each.getIndicatorDefinition()) : null)
-                .collect(toList());
-        indicators.removeAll(singleton(null));
-        return indicators.stream().sorted(comparing(IndicatorDto::getIndicatorId)).collect(toList());
-    }
-
-    private String getCategoryName(List<CategoryIndicator> categoryIndicators) {
-        return isCategoryIndicatorsPresent(categoryIndicators) ? categoryIndicators.get(0).getCategoryName()
-                                                               : null;
-    }
-
-    private boolean isCategoryIndicatorsPresent(List<CategoryIndicator> categoryIndicators) {
-        return categoryIndicators != null && categoryIndicators.size() != 0;
+        List<Indicator> indicators = category.getIndicators();
+        return indicators != null  ? indicators.stream().map(indicator -> new IndicatorDto(indicator))
+                .collect(toList()) : emptyList();
     }
 
 }

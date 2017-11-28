@@ -1,8 +1,9 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.CategoryIndicatorDto;
-import it.gdhi.model.*;
-import it.gdhi.repository.ICategoryIndicatorMappingRepository;
+import it.gdhi.model.Category;
+import it.gdhi.model.Indicator;
+import it.gdhi.model.IndicatorScore;
 import it.gdhi.repository.ICategoryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,27 +27,21 @@ public class CategoryIndicatorServiceTest {
     @InjectMocks
     private CategoryIndicatorService categoryIndicatorService;
     @Mock
-    private ICategoryIndicatorMappingRepository iCategoryIndicatorMappingRepository;
-    @Mock
     private ICategoryRepository iCategoryRepository;
 
     @Test
     public void shouldGetTransformedCategoryDtoInSortedByCategoryIdList() {
 
-        List<CategoryIndicator> categoryIndicators;
-        CategoryIndicatorId categoryIndicatorId1 = new CategoryIndicatorId(1, 1);
-        Category category1 = new Category(1, "Cat 1");
         Indicator indicator1 = new Indicator(1, "Ind 1", "Ind Def 1");
-        CategoryIndicator categoryIndicator1 = new CategoryIndicator(categoryIndicatorId1, category1, indicator1);
+        Category category1 = Category.builder().id(1).name("Cat 1").indicators(asList(indicator1)).build();
 
-        CategoryIndicatorId categoryIndicatorId2 = new CategoryIndicatorId(4, 1);
-        Category category2 = new Category(4, "Cat 4");
         Indicator indicator2 = new Indicator(1, "Ind 2", "Ind Def 2");
-        CategoryIndicator categoryIndicator2 = new CategoryIndicator(categoryIndicatorId2, category2, indicator2);
-        categoryIndicators = asList(categoryIndicator2, categoryIndicator1);
-        when(iCategoryIndicatorMappingRepository.findAll()).thenReturn(categoryIndicators);
+        Category category2 = Category.builder().id(4).name("Cat 4").indicators(asList(indicator2)).build();
 
-        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getCategoryIndicatorMapping();
+        List<Category> categories= asList(category1, category2);
+        when(iCategoryRepository.findAll()).thenReturn(categories);
+
+        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions();
         assertThat(categoryIndicatorMapping.size(), is(2));
         assertThat(categoryIndicatorMapping.get(0).getCategoryId(), is(1));
         assertThat(categoryIndicatorMapping.get(0).getCategoryName(), is("Cat 1"));
@@ -60,7 +55,6 @@ public class CategoryIndicatorServiceTest {
         assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getIndicatorDefinition(), is("Ind Def 2"));
 
     }
-
 
     @Test
     public void shouldGetTransformedCategoryDto() {
@@ -103,24 +97,21 @@ public class CategoryIndicatorServiceTest {
     @Test
     public void shouldGetTransformedCategoryDtoInSortedByIndicatorIdListForEachCategory() {
 
-        List<CategoryIndicator> categoryIndicators;
-        CategoryIndicatorId categoryIndicatorId1 = new CategoryIndicatorId(1, 1);
-        Category category1 = new Category(1, "Cat 1");
-        Indicator indicator2 = new Indicator(5, "Ind 5", "Ind Def 5");
         Indicator indicator1 = new Indicator(1, "Ind 1", "Ind Def 1");
-        CategoryIndicator categoryIndicator1 = new CategoryIndicator(categoryIndicatorId1, category1, indicator1);
-        CategoryIndicator categoryIndicator2 = new CategoryIndicator(categoryIndicatorId1, category1, indicator2);
+        Indicator indicator2 = new Indicator(5, "Ind 5", "Ind Def 5");
+        Category category1 = Category.builder().id(1).name("Cat 1").indicators(asList(indicator1, indicator2)).build();
 
-        CategoryIndicatorId categoryIndicatorId2 = new CategoryIndicatorId(4, 1);
-        Category category2 = new Category(4, "Cat 4");
         Indicator indicator4 = new Indicator(8, "Ind 8", "Ind Def 8");
         Indicator indicator3 = new Indicator(2, "Ind 2", "Ind Def 2");
-        CategoryIndicator categoryIndicator3 = new CategoryIndicator(categoryIndicatorId2, category2, indicator3);
-        CategoryIndicator categoryIndicator4 = new CategoryIndicator(categoryIndicatorId2, category2, indicator4);
-        categoryIndicators = asList(categoryIndicator4, categoryIndicator3, categoryIndicator2, categoryIndicator1);
-        when(iCategoryIndicatorMappingRepository.findAll()).thenReturn(categoryIndicators);
+        Category category2 = Category.builder().id(4).name("Cat 4").indicators(asList(indicator3, indicator4)).build();
 
-        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getCategoryIndicatorMapping();
+        List<Category> categories = asList(category1, category2);
+        when(iCategoryRepository.findAll()).thenReturn(categories);
+
+
+        when(iCategoryRepository.findAll()).thenReturn(categories);
+
+        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions();
         assertThat(categoryIndicatorMapping.size(), is(2));
         assertThat(categoryIndicatorMapping.get(0).getCategoryId(), is(1));
         assertThat(categoryIndicatorMapping.get(0).getCategoryName(), is("Cat 1"));
@@ -147,14 +138,10 @@ public class CategoryIndicatorServiceTest {
     @Test
     public void shouldHandleNullIndicatorsForACategory() {
 
-        List<CategoryIndicator> categoryIndicators;
-        CategoryIndicatorId categoryIndicatorId1 = new CategoryIndicatorId(1, 1);
-        Category category1 = new Category(1, "Cat 1");
-        CategoryIndicator categoryIndicator1 = new CategoryIndicator(categoryIndicatorId1, category1, null);
-        categoryIndicators = asList(categoryIndicator1);
-        when(iCategoryIndicatorMappingRepository.findAll()).thenReturn(categoryIndicators);
+        Category category1 = Category.builder().id(1).name("Cat 1").indicators(null).build();
+        when(iCategoryRepository.findAll()).thenReturn(asList(category1));
 
-        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getCategoryIndicatorMapping();
+        List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions();
         assertThat(categoryIndicatorMapping.size(), is(1));
         assertThat(categoryIndicatorMapping.get(0).getCategoryId(), is(1));
         assertThat(categoryIndicatorMapping.get(0).getCategoryName(), is("Cat 1"));
