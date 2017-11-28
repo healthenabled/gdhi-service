@@ -2,6 +2,8 @@ package it.gdhi.utils;
 
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.IndicatorScoreDto;
+import it.gdhi.model.Category;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -96,19 +98,24 @@ public class Excel {
             }
 
             headerDef.put("Country Name", "Country Name");
-            headerDef.put("Indicator 1", "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance");
+            headerDef.put("Indicator 1", "Digital health prioritized at the national level through dedicated bodies "+
+                    "/ mechanisms for governance");
             headerDef.put("Indicator 2", "Digital Health prioritized at the national level through planning");
             headerDef.put("Category 1", "Leadership and Governance");
             headerDef.put("Indicator 3", "National eHealth/ Digital Health Strategy or Framework");
             headerDef.put("Indicator 4", "Public funding for digital health");
             headerDef.put("Category 2", "Strategy & Investment");
             headerDef.put("Indicator 5", "Legal Framework for Data Protection (Security)");
-            headerDef.put("Indicator 6", "Laws or Regulations for privacy, confidentiality and acess to health information (Privacy)");
-            headerDef.put("Indicator 7", "Protocol for regulating or certifying devices and/or digital health services");
+            headerDef.put("Indicator 6", "Laws or Regulations for privacy, confidentiality and acess to health " +
+                            "information (Privacy)");
+            headerDef.put("Indicator 7", "Protocol for regulating or certifying devices and/or " +
+                            "digital health services");
             headerDef.put("Indicator 8", "Cross-border data security and sharing");
             headerDef.put("Category 3", "Legislation, Policy, and Compliance");
-            headerDef.put("Indicator 9", "Digital health integrated in health and related professional pre-service training (prior to deployment)");
-            headerDef.put("Indicator 10", "Digital health integrated in health and related professional in-service training (after deployment)");
+            headerDef.put("Indicator 9", "Digital health integrated in health and related professional pre-service " +
+                            "training (prior to deployment)");
+            headerDef.put("Indicator 10", "Digital health integrated in health and related professional in-service " +
+                            "training (after deployment)");
             headerDef.put("Indicator 11", "Training of digital health work force");
             headerDef.put("Indicator 12", "Maturity of public sector digital health professional careers");
             headerDef.put("Category 4", "Workforce");
@@ -119,7 +126,8 @@ public class Excel {
             headerDef.put("Indicator 16", "Planning and support for ongoing digital health infrastructure maintenance");
             headerDef.put("Category 6", "Infrastructure");
             headerDef.put("Indicator 17", "Nationally scaled digital health systems");
-            headerDef.put("Indicator 18", "Identity management of service providers, administrators, and facilities for Digital Health, including location data for GIS mapping");
+            headerDef.put("Indicator 18", "Identity management of service providers, administrators, and facilities " +
+                            "for Digital Health, including location data for GIS mapping");
             headerDef.put("Indicator 19", "Identity management of individuals for Digital Health");
             headerDef.put("Category 7", "Services and Application");
             headerDef.put("Overall Phase", "Overall Phase");
@@ -127,17 +135,30 @@ public class Excel {
             row = sheet.createRow(rownum++);
             addRow(headerDef, row);
 
-
-            for (CountryHealthScoreDto countryHealthScoreDto : countryHealthScoreDtos) {
+            for (CountryHealthScoreDto countryHealthScoreDto :countryHealthScoreDtos) {
                 row = sheet.createRow(rownum++);
-                List<CategoryHealthScoreDto> categories = countryHealthScoreDto.getCategories();
-                for (CategoryHealthScoreDto category : categories) {
-                    for (String header : headers) {
-                        headerDef.put(header, category.getName());
+                for (String header : headers) {
+                    headerDef.put(header, "Missing / Not Available");
+                    headerDef.put("Country Name", countryHealthScoreDto.getCountryName());
+                    List<CategoryHealthScoreDto> categories = countryHealthScoreDto.getCategories();
+                    for (CategoryHealthScoreDto category : categories) {
+
+                        headerDef.put("Category " + category.getId(), category.getPhase() != null ?
+                                "Phase "+category.getPhase() : "Missing / Not Available");
+                        List<IndicatorScoreDto> indicators = category.getIndicators();
+                        for (IndicatorScoreDto indicator : indicators) {
+                            headerDef.put("Indicator " + indicator.getId(), indicator.getScore() != null ?
+                                    "Phase "+indicator.getScore() : "Missing / Not Available");
+
+                        }
                     }
+                    headerDef.put("Overall Phase", countryHealthScoreDto.getOverallScore() != null ?
+                            "Phase "+countryHealthScoreDto.getCountryPhase() : "Missing / Not Available");
                     addRow(headerDef, row);
                 }
+
             }
+
             workbook.write(fileOutputStream);
             fileOutputStream.close();
         } catch (
