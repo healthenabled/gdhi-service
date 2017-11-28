@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static it.gdhi.utils.ScoreUtils.ZERO_SCORE;
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
@@ -59,7 +60,7 @@ public class HealthIndicatorService {
         }
 
         AllCountriesHealthScoreDto allCountriesData = fetchHealthScores();
-        double score = 0.0;
+        double score = ZERO_SCORE;
         List<CountryHealthScoreDto> globalHealthScoresWitOutNullScore = allCountriesData.getCountryHealthScores()
                 .stream()
                 .filter(country -> country.getOverallScore() != null)

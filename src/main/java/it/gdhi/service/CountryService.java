@@ -34,8 +34,6 @@ public class CountryService {
     @Autowired
     private  MailerService mailerService;
 
-
-
     @Transactional
     public List<Country> fetchCountries() {
         return iCountryRepository.findAll();
@@ -62,18 +60,15 @@ public class CountryService {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
         List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
         CountrySummaryDto countrySummaryDto = new CountrySummaryDto(countrySummary);
-        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
-                .map(HealthIndicatorDto::new)
-                .collect(toList());
+        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream().map(HealthIndicatorDto::new)
+                                                       .collect(toList());
         return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
     }
 
     private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
         List<HealthIndicator> healthIndicators = transformToHealthIndicator(countryId, healthIndicatorDto);
         if(healthIndicators != null) {
-            healthIndicators.stream().forEach(health -> {
-                iHealthIndicatorRepository.save(health);
-            });
+            healthIndicators.stream().forEach(health -> iHealthIndicatorRepository.save(health));
         }
     }
 

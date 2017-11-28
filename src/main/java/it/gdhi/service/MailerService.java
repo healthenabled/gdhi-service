@@ -1,7 +1,6 @@
 package it.gdhi.service;
 
 import it.gdhi.model.Country;
-import it.gdhi.utils.Constants;
 import it.gdhi.utils.MailAddresses;
 import it.gdhi.utils.Mailer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class MailerService {
 
 
     private String constructBody(Country country, String name, String feeder, String feederRole, String contactMail) {
-        return format(Constants.Mail.BODY, name, feeder, feederRole, country.getName(),
+        return format(BODY, name, feeder, feederRole, country.getName(),
                         contactMail, constructHealthIndicatorPath(country));
     }
 
