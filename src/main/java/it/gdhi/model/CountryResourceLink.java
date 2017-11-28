@@ -1,5 +1,6 @@
 package it.gdhi.model;
 
+import it.gdhi.model.id.CountryResourceLinkId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

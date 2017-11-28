@@ -1,6 +1,7 @@
 package it.gdhi.repository;
 
 import it.gdhi.model.*;
+import it.gdhi.model.id.CategoryIndicatorId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

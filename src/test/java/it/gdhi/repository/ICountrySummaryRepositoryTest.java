@@ -2,7 +2,7 @@ package it.gdhi.repository;
 
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryResourceLink;
-import it.gdhi.model.CountryResourceLinkId;
+import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.CountrySummary;
 import org.junit.Test;
 import org.junit.runner.RunWith;

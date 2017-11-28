@@ -1,8 +1,7 @@
 package it.gdhi.repository;
 
 import it.gdhi.model.CountryResourceLink;
-import it.gdhi.model.CountryResourceLinkId;
-import org.hamcrest.Matchers;
+import it.gdhi.model.id.CountryResourceLinkId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;

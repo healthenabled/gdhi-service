@@ -1,5 +1,6 @@
 package it.gdhi.model;
 
+import it.gdhi.model.id.CategoryIndicatorId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

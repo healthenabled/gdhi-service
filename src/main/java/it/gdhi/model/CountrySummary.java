@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.model.id.CountryResourceLinkId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -4,6 +4,7 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.*;
+import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;

@@ -1,7 +1,6 @@
-package it.gdhi.model;
+package it.gdhi.model.id;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,13 +12,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
-public class CategoryIndicatorId implements Serializable {
+public class CountryResourceLinkId implements Serializable {
 
-    @Column(name = "category_id")
-    private Integer categoryId;
-
-    @Column(name = "indicator_id")
-    private Integer indicatorId;
+    @Column(name = "country_id")
+    private String countryId;
+    @Column(name = "link")
+    private String link;
 
 }
