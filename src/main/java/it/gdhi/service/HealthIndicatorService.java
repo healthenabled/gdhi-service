@@ -89,12 +89,7 @@ public class HealthIndicatorService {
                     Double categoryScore = nonNullCategoryScore.get(categoryId);
                     List<IndicatorScoreDto> indicatorDtos = entry.getValue()
                             .stream()
-                            .map(healthIndicator -> new IndicatorScoreDto(healthIndicator.getIndicatorId(),
-                                    healthIndicator.getIndicatorName(),
-                                    healthIndicator.getIndicatorDescription(),
-                                    healthIndicator.getScore(),
-                                    healthIndicator.getSupportingText(),
-                                    healthIndicator.getScoreDescription()))
+                            .map(healthIndicator -> new IndicatorScoreDto(healthIndicator))
                             .sorted(comparing(IndicatorScoreDto::getId))
                             .collect(Collectors.toList());
                     return new CategoryHealthScoreDto(categoryId, categoryName, categoryScore,

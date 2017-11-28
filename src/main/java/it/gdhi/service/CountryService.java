@@ -1,12 +1,13 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.*;
+import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.GdhiQuestionnaire;
+import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,6 @@ public class CountryService {
 
     @Autowired
     private ICountrySummaryRepository iCountrySummaryRepository;
-
-    @Autowired
-    private ICountryResourceLinkRepository iCountryResourceLinkRepository;
 
     @Autowired
     private IHealthIndicatorRepository iHealthIndicatorRepository;

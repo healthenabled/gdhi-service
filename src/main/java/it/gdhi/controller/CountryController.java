@@ -7,7 +7,6 @@ import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
-import it.gdhi.service.MailerService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +24,6 @@ public class CountryController {
 
     @Autowired
     private DevelopmentIndicatorService developmentIndicatorService;
-
-    @Autowired
-    private MailerService mailerService;
 
     @RequestMapping("/countries")
     public List<Country> getCountries() {
