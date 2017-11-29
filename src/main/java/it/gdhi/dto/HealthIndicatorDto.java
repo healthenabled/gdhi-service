@@ -2,12 +2,14 @@ package it.gdhi.dto;
 
 import it.gdhi.model.HealthIndicator;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class HealthIndicatorDto {
 
     private Integer categoryId;

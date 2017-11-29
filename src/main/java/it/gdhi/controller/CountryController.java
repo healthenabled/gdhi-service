@@ -41,6 +41,7 @@ public class CountryController {
         return healthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
+    //TODO this is a duplicate of global_health_indicators. Make the app use global_health_indicators instead of this
     @RequestMapping("/countries_health_indicator_scores")
     public AllCountriesHealthScoreDto getAllCountriesHealthIndicatorScores() {
         return healthIndicatorService.fetchHealthScores();

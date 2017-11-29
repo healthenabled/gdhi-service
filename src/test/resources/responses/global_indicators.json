@@ -1,0 +1,19 @@
+{
+  "overAllScore": 3,
+  "categories": [
+    {
+      "id": 1,
+      "name": "Leadership and Governance",
+      "overallScore": null,
+      "phase": 3,
+      "indicators": null
+    },
+    {
+      "id": 2,
+      "name": "Strategy and Investment",
+      "overallScore": null,
+      "phase": 3,
+      "indicators": null
+    }
+  ]
+}
