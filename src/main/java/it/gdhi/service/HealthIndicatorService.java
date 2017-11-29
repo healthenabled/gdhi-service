@@ -4,7 +4,6 @@ import it.gdhi.dto.*;
 import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
-import it.gdhi.utils.Excel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,13 +103,13 @@ public class HealthIndicatorService {
                 convertScoreToPhase(overallScore));
     }
 
-    public void exportGlobalData() {
-        new Excel().convertJavaToExcel(fetchHealthScores().getCountryHealthScores());
+    public void createGlobalHealthIndicatorInExcel() {
+        new ExcelUtilService().convertListToExcel(fetchHealthScores().getCountryHealthScores());
     }
-    public void  exportCountryData(String countryId){
+    public void createHealthIndicatorInExcelFor(String countryId){
         fetchCountryHealthScore(countryId);
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
         countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
-        new Excel().convertJavaToExcel(countryHealthScoreDtoAsList);
+        new ExcelUtilService().convertListToExcel(countryHealthScoreDtoAsList);
     }
 }
