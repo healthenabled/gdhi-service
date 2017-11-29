@@ -60,7 +60,9 @@ public class CountryService {
     public GdhiQuestionnaire getDetails(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
         List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
-        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(null);
+        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
+                .map(CountrySummaryDto::new)
+                .orElse(null);
         List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
                 .map(HealthIndicatorDto::new)
                 .collect(toList());

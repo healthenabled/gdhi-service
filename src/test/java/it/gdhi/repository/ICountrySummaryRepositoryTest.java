@@ -48,6 +48,23 @@ public class ICountrySummaryRepositoryTest {
     }
 
     @Test
+    public void shouldFetchCountryCodeCaseInsensitive() {
+        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL"), "NZL summary", "Contact Name",
+                "Contact Designation", null, null, null,
+                null, null, null, null, null,
+                null, null);
+        entityManager.persist(expected);
+        entityManager.flush();
+        entityManager.clear();
+        CountrySummary actual = iCountrySummaryRepository.findOne("nzl");
+        assertThat(actual.getCountryId(), is("NZL"));
+        assertThat(actual.getSummary(), is("NZL summary"));
+        assertThat(actual.getContactName(), is("Contact Name"));
+        assertThat(actual.getContactDesignation(), is("Contact Designation"));
+        assertThat(actual.getCountry().getName(), is("New Zealand"));
+    }
+
+    @Test
     public void shouldSaveCountrySummaryAlongWithResourceLinks() {
         CountrySummary countrySummary1 = new CountrySummary("NZL", new Country("NZL", "NZL"), "NZL summary 1", "Contact Name",
                 "Contact Designation", null, null, null,
