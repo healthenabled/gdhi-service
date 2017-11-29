@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -59,9 +60,10 @@ public class CountryService {
     public GdhiQuestionnaire getDetails(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
         List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
-        CountrySummaryDto countrySummaryDto = new CountrySummaryDto(countrySummary);
-        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream().map(HealthIndicatorDto::new)
-                                                       .collect(toList());
+        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(null);
+        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
+                .map(HealthIndicatorDto::new)
+                .collect(toList());
         return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
     }
 

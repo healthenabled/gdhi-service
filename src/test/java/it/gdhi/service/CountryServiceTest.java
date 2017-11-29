@@ -197,6 +197,19 @@ public class CountryServiceTest {
         assertIndicators(healthIndicators, details.getHealthIndicators());
     }
 
+    @Test
+    public void shouldHandleCountriesNotAvailable() throws Exception {
+        String countryId = "IND";
+
+        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
+
+        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(asList());
+
+        GdhiQuestionnaire details = countryService.getDetails(countryId);
+
+        assertNull(details.getCountrySummary());
+    }
+
     private void assertIndicators(List<HealthIndicator> expectedHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
         assertEquals(expectedHealthIndicators.size(), actualHealthIndicators.size());
         expectedHealthIndicators.forEach(expected -> {
