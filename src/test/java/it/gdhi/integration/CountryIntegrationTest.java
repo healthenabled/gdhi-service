@@ -5,32 +5,28 @@ import it.gdhi.Application;
 import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.IHealthIndicatorRepository;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.sql.DataSource;
+import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
 @ActiveProfiles("test")
-public class CountryIntegrationTest {
+public class CountryIntegrationTest extends BaseIntegrationTest {
     @LocalServerPort
     private int port;
 
     @Autowired
     private IHealthIndicatorRepository healthIndicatorRepository;
-    @Autowired
-    private DataSource dataSource;
 
     @Test
     public void shouldGetHealthIndicatorForACountry() throws Exception {
@@ -76,12 +72,10 @@ public class CountryIntegrationTest {
                 .when()
                 .get("http://localhost:" + port + "/countries/IND/health_indicators");
 
-        response.prettyPrint();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"validated_config.health_indicators");
+        String responseJSON = response.asString();
+        String expectedJSON = expectedResponseJson("health_indicators.json");
+        HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
+        HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
+        assertEquals(expectedMap, actualMap);
     }
 }

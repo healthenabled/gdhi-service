@@ -3,15 +3,19 @@ package it.gdhi.service;
 import it.gdhi.model.Country;
 import it.gdhi.utils.MailAddresses;
 import it.gdhi.utils.Mailer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import static it.gdhi.utils.Constants.Mail.*;
+import static it.gdhi.utils.Constants.Mail.BODY;
+import static it.gdhi.utils.Constants.Mail.HEALTH_INDICATOR_PATH;
+import static it.gdhi.utils.Constants.Mail.SUBJECT;
 import static java.lang.String.format;
 
 @Service
+@Slf4j
 public class MailerService {
 
     @Autowired
@@ -30,6 +34,7 @@ public class MailerService {
             String name = entry.getValue();
             String message = constructBody(country, name, feeder, feederRole, contactEmail);
             mailer.send(email, constructSubject(country), message);
+            log.info("Mail sent successfully to " + name + " " + email);
         });
     }
 
