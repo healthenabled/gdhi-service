@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +20,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HealthIndicatorServiceTest {
@@ -31,6 +33,9 @@ public class HealthIndicatorServiceTest {
 
     @Mock
     IHealthIndicatorRepository iHealthIndicatorRepository;
+
+    @Mock
+    private ExcelUtilService excelUtilService;
 
     private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
         Integer score1 = 3;
@@ -458,5 +463,24 @@ public class HealthIndicatorServiceTest {
         assertThat(globalHealthIndicator.getOverAllScore(), is(5));
     }
 
+    @Test
+    public void shouldInvokeConvertExcelOnGlobalExport() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList());
+        healthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
+        verify(excelUtilService).convertListToExcel(anyList());
+        verify(excelUtilService).downloadFile(request, response);
+    }
+
+    @Test
+    public void shouldInvokeConvertExcelOnExportOfSingleCountry() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList());
+        healthIndicatorService.createHealthIndicatorInExcelFor("IND", request, response);
+        verify(excelUtilService).convertListToExcel(anyList());
+        verify(excelUtilService).downloadFile(request, response);
+    }
 
 }
