@@ -1,0 +1,20 @@
+{
+  "countryId": "IND",
+  "countryName": "India",
+  "summary": "summary",
+  "contactName": "contactName",
+  "contactDesignation": "contactDesignation",
+  "contactOrganization": "contactOrganization",
+  "contactEmail": "email",
+  "dataFeederName": "feeder name",
+  "dataFeederRole": "coll role",
+  "dataFeederEmail": "email",
+  "dataCollectorName": "coll name",
+  "dataCollectorRole": "coll role",
+  "dataCollectorEmail": "coll email",
+  "collectedDate": "08-09-2010",
+  "resources": [
+    "link1",
+    "link2"
+  ]
+}
