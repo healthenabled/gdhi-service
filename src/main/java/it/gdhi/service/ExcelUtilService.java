@@ -5,7 +5,11 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.IndicatorScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.repository.ICategoryRepository;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +63,12 @@ public class ExcelUtilService {
 
     private static final String HEADER_FORMAT = "attachment; filename=\'%s\'";
 
-    private static final String FILE_WITH_PATH = "/tmp/Global Health Data.xlsx";
+    private static final String FILE_WITH_PATH = "/tmp/Digital Health Data.xlsx";
 
     protected static final String WORKSHEET_NAME = "Global Health Data";
 
+    private static final Integer NO_OF_COLUMNS = 28;
+    
     @Autowired
     private ICategoryRepository iCategoryRepository;
 
@@ -73,11 +79,14 @@ public class ExcelUtilService {
             XSSFSheet sheet = workbook.createSheet(WORKSHEET_NAME);
 
             int rownum = 0;
-            populateHeaderNames(sheet, rownum++);
-            Map<String, String> headerDefinitions = populateHeaderDefinitions(sheet, rownum++);
+            populateHeaderNames(workbook, sheet, rownum++);
+            Map<String, String> headerDefinitions = populateHeaderDefinitions(workbook, sheet, rownum++);
             if (countryHealthScoreDtos != null && !countryHealthScoreDtos.isEmpty()) {
                 populateHealthIndicatorsWithDefinitionsAndScores(sheet, countryHealthScoreDtos,
                                                                  headerDefinitions, rownum);
+            }
+            for(int i = 0; i<= NO_OF_COLUMNS; i++) {
+                sheet.autoSizeColumn(i);
             }
             FileOutputStream fileOutputStream = new FileOutputStream(new File(FILE_WITH_PATH));
             workbook.write(fileOutputStream);
@@ -88,17 +97,36 @@ public class ExcelUtilService {
         }
     }
 
-    protected int populateHeaderNames(XSSFSheet sheet, int rownum) {
+    protected int populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
         Row row = sheet.createRow(rownum);
         int cellnum = 0;
-        row.createCell(cellnum++).setCellValue("");
+        XSSFCellStyle fontStyle = getFontStyle(workBook);
+        Cell firstCell = row.createCell(cellnum++);
+        firstCell.setCellStyle(fontStyle);
+        firstCell.setCellValue("");
         for (String header : FIXED_HEADERS) {
-            row.createCell(cellnum++).setCellValue(header);
+            Cell cell = row.createCell(cellnum++);
+            cell.setCellStyle(fontStyle);
+            cell.setCellValue(header);
         }
         return rownum;
     }
 
-    protected Map<String, String> populateHeaderDefinitions(XSSFSheet sheet, int rownum) {
+    private XSSFCellStyle getFontStyle(XSSFWorkbook wb) {
+        XSSFCellStyle style = wb.createCellStyle();
+
+        XSSFFont font= wb.createFont();
+        font.setFontHeightInPoints((short)10);
+        font.setFontName("Arial");
+        font.setBold(true);
+        font.setItalic(false);
+
+        style.setAlignment(CellStyle.ALIGN_CENTER);
+        style.setFont(font);
+        return style;
+    }
+
+    protected Map<String, String> populateHeaderDefinitions(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
         List<Category> categoryList = iCategoryRepository.findAll();
         Map<String, String> headerDef = new LinkedHashMap<>();
         headerDef.put(COUNTRY_NAME, COUNTRY_NAME);
@@ -110,7 +138,7 @@ public class ExcelUtilService {
         });
         headerDef.put(OVERALL_PHASE, OVERALL_PHASE);
         Row row = sheet.createRow(rownum);
-        addRow(headerDef, row);
+        addRow(headerDef, row, getFontStyle(workBook));
         return headerDef;
     }
 
@@ -139,7 +167,7 @@ public class ExcelUtilService {
             }
             content.put(OVERALL_PHASE, countryHealthScoreDto.getCountryPhase() != null ?
                     PHASE + countryHealthScoreDto.getCountryPhase() : SCORE_DESCRIPTION_NOT_AVAILABLE);
-            addRow(content, row);
+            addRow(content, row, null);
         }
     }
 
@@ -168,11 +196,15 @@ public class ExcelUtilService {
         outStream.close();
     }
 
-    protected void addRow(Map<String, String> headerDef, Row row) {
+    protected void addRow(Map<String, String> headerDef, Row row, XSSFCellStyle fontStyle) {
         int cellnum;
         cellnum = 0;
         for (String header : headerDef.keySet()) {
-            row.createCell(cellnum++).setCellValue(headerDef.get(header));
+            Cell cell = row.createCell(cellnum++);
+            if(fontStyle != null) {
+                cell.setCellStyle(fontStyle);
+            }
+            cell.setCellValue(headerDef.get(header));
         }
     }
 }
