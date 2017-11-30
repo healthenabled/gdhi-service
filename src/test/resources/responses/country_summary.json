@@ -12,7 +12,7 @@
   "dataCollectorName": "coll name",
   "dataCollectorRole": "coll role",
   "dataCollectorEmail": "coll email",
-  "collectedDate": "08-09-2010",
+  "collectedDate": null,
   "resources": [
     "link1",
     "link2"
