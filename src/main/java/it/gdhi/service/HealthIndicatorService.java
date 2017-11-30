@@ -7,7 +7,10 @@ import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -25,6 +28,9 @@ public class HealthIndicatorService {
 
     @Autowired
     private IHealthIndicatorRepository iHealthIndicatorRepository;
+
+    @Autowired
+    private ExcelUtilService excelUtilService;
 
     @Transactional
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
@@ -103,13 +109,16 @@ public class HealthIndicatorService {
                 convertScoreToPhase(overallScore));
     }
 
-    public void createGlobalHealthIndicatorInExcel() {
-        new ExcelUtilService().convertListToExcel(fetchHealthScores().getCountryHealthScores());
+    public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,
+                                                   HttpServletResponse response) throws IOException {
+        excelUtilService.convertListToExcel(fetchHealthScores().getCountryHealthScores());
+        excelUtilService.downloadFile(request, response);
     }
-    public void createHealthIndicatorInExcelFor(String countryId){
-        fetchCountryHealthScore(countryId);
+    public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
+                                                HttpServletResponse response) throws IOException {
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
         countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
-        new ExcelUtilService().convertListToExcel(countryHealthScoreDtoAsList);
+        excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
+        excelUtilService.downloadFile(request, response);
     }
 }

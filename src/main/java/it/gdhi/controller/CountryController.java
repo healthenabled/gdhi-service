@@ -7,7 +7,6 @@ import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
-import it.gdhi.service.ExcelUtilService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,14 +73,12 @@ public class CountryController {
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)
     public void exportGlobalData(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
-        healthIndicatorService.createGlobalHealthIndicatorInExcel();
-        new ExcelUtilService().downloadFile(request, response);
+        healthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
     }
 
     @RequestMapping(value = "/export_country_data/{id}", method = RequestMethod.GET)
     public void exportCountryDetails(HttpServletRequest request,
                                 HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
-        healthIndicatorService.createHealthIndicatorInExcelFor(countryId);
-        new ExcelUtilService().downloadFile(request, response);
+        healthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 }

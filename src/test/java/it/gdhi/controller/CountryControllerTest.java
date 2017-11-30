@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -106,4 +109,20 @@ public class CountryControllerTest {
 
         verify(countryService).getDetails(countryId);
     }
-}
+
+    @Test
+    public void shouldExportGlobalData() throws Exception {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        countryController.exportGlobalData(request, response);
+        verify(healthIndicatorService).createGlobalHealthIndicatorInExcel(request, response);
+    }
+
+    @Test
+    public void shouldExportDataForAGivenCountry() throws Exception {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        countryController.exportCountryDetails(request, response, "IND");
+        verify(healthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
+    }
+ }
