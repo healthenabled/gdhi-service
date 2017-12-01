@@ -5,6 +5,7 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.IndicatorScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.repository.ICategoryRepository;
+import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -65,7 +66,8 @@ public class ExcelUtilService {
     private static final String HEADER_FORMAT = "attachment; filename=\'%s\'";
 
     @Value("${excelFileLocation}")
-    private String FILE_WITH_PATH;
+    @Getter
+    private String fileWithPath;
 
     protected static final String WORKSHEET_NAME = "Global Health Data";
 
@@ -90,7 +92,7 @@ public class ExcelUtilService {
             for(int i = 0; i<= NO_OF_COLUMNS; i++) {
                 sheet.autoSizeColumn(i);
             }
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(FILE_WITH_PATH));
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(this.getFileWithPath()));
             workbook.write(fileOutputStream);
             fileOutputStream.close();
 
@@ -175,11 +177,11 @@ public class ExcelUtilService {
 
     public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        File fileToDownload = new File(FILE_WITH_PATH);
+        File fileToDownload = new File(this.getFileWithPath());
         FileInputStream inputStream = new FileInputStream(fileToDownload);
 
         ServletContext context = request.getServletContext();
-        String mimeTypeFromPath = context.getMimeType(FILE_WITH_PATH);
+        String mimeTypeFromPath = context.getMimeType(this.getFileWithPath());
         String mimeType = mimeTypeFromPath == null ? MIME_TYPE : mimeTypeFromPath;
         String headerValue = String.format(HEADER_FORMAT, fileToDownload.getName());
 
