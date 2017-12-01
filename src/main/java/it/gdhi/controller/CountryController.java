@@ -8,6 +8,7 @@ import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.HealthIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class CountryController {
 
     @Autowired
@@ -73,6 +75,7 @@ public class CountryController {
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)
     public void exportGlobalData(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
+        log.info("Entered export global data end point");
         healthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
     }
 
