@@ -9,6 +9,7 @@ import it.gdhi.repository.ICategoryRepository;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -42,6 +43,11 @@ public class ExcelUtilServiceTest {
     private ExcelUtilService excelUtilService;
     @Mock
     private ICategoryRepository iCategoryRepository;
+
+    @Before
+    public void setUp() throws Exception {
+        doReturn("/tmp/Digital Health Data.xlsx").when(excelUtilService).getFileWithPath();
+    }
 
     @Test
     public void shouldVerifyFileIsDownloaded() throws IOException {
