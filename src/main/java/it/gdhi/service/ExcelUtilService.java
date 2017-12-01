@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
@@ -63,7 +64,8 @@ public class ExcelUtilService {
 
     private static final String HEADER_FORMAT = "attachment; filename=\'%s\'";
 
-    private static final String FILE_WITH_PATH = "/tmp/Digital Health Data.xlsx";
+    @Value("${excelFileLocation}")
+    private String FILE_WITH_PATH;
 
     protected static final String WORKSHEET_NAME = "Global Health Data";
 
