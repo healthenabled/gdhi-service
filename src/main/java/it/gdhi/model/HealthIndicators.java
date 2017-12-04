@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
@@ -18,16 +20,8 @@ public class HealthIndicators {
 
     private List<HealthIndicator> healthIndicators;
 
-    public Map<Category, Double> groupByCategoryWithNotNullScores() {
-        return healthIndicators.stream()
-                .filter(healthIndicator -> healthIndicator.getScore() != null)
-                .collect(groupingBy(HealthIndicator::getCategory,
-                        averagingInt(HealthIndicator::getScore)));
-    }
-
     public Map<Integer, Double> groupByCategoryIdWithNotNullScores() {
-        return healthIndicators.stream()
-                .filter(healthIndicator -> healthIndicator.getScore() != null)
+        return excludingNullScores()
                 .collect(groupingBy(h -> h.getCategory().getId(),
                         averagingInt(HealthIndicator::getScore)));
     }
@@ -42,11 +36,30 @@ public class HealthIndicators {
     }
 
     public String getCountryName() {
-        return healthIndicators!= null && healthIndicators.size() != 0 ? healthIndicators.get(0).getCountry().getName()
-                                                                       : null;
+        return Optional.ofNullable(healthIndicators)
+                .filter(indicators -> indicators.size() > 0)
+                .map(indicators -> indicators.get(0).getCountry().getName())
+                .orElse(null);
     }
+
+    public Double getTotalScore() {
+        return groupByCategoryIdWithNotNullScores()
+                .values().stream().mapToDouble(d ->d).sum();
+    }
+
 
     public Map<Category, List<HealthIndicator>> groupByCategory() {
         return this.healthIndicators.stream().collect(groupingBy(HealthIndicator::getCategory));
+    }
+
+    public Integer getCountOfCountriesWithAlteastOneScore() {
+        return excludingNullScores()
+                .collect(groupingBy(indicators -> indicators.getCountry().getId()))
+                .size();
+    }
+
+    private Stream<HealthIndicator> excludingNullScores() {
+        return healthIndicators.stream()
+                .filter(healthIndicator -> healthIndicator.getScore() != null);
     }
 }

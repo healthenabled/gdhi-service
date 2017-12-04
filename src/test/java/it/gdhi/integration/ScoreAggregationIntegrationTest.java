@@ -38,12 +38,14 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer categoryId1 = 1;
         Integer categoryId2 = 2;
         Integer categoryId3 = 3;
+        Integer categoryId4 = 4;
         Integer indicatorId1_1 = 1;
         Integer indicatorId1_2 = 2;
         Integer indicatorId2_1 = 3;
         Integer indicatorId2_2 = 4;
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
+        Integer indicatorId4_1 = 7;
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
@@ -51,7 +53,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build());
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
@@ -61,7 +64,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp12").build());
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(4).supportingText("sp12").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
@@ -71,7 +75,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build());
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
