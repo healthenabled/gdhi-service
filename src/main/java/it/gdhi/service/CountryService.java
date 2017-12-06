@@ -8,6 +8,7 @@ import it.gdhi.model.CountrySummary;
 import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
+import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class CountryService {
 
     @Autowired
     private  MailerService mailerService;
+
+    @Autowired
+    private ICountryResourceLinkRepository iCountryResourceLinkRepository;
 
     @Transactional
     public List<Country> fetchCountries() {
@@ -87,6 +91,7 @@ public class CountryService {
 
     private void saveCountryContactInfo(String countryId, CountrySummaryDto countrySummaryDetailDto) {
         CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
+        iCountryResourceLinkRepository.deleteResources(countryId);
         iCountrySummaryRepository.save(countrySummary);
     }
 }
