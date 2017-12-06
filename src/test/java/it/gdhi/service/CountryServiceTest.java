@@ -3,7 +3,10 @@ package it.gdhi.service;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.model.*;
+import it.gdhi.model.Country;
+import it.gdhi.model.CountryResourceLink;
+import it.gdhi.model.CountrySummary;
+import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
@@ -14,6 +17,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -24,10 +28,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryServiceTest {
@@ -120,9 +123,10 @@ public class CountryServiceTest {
         countryService.save(gdhiQuestionnaire);
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<HealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(HealthIndicator.class);
-
-        verify(iCountrySummaryRepository).save(summaryCaptor.capture());
-        verify(iHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
+        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository, iHealthIndicatorRepository);
+        inOrder.verify(iCountryResourceLinkRepository).deleteResources("ARG");
+        inOrder.verify(iCountrySummaryRepository).save(summaryCaptor.capture());
+        inOrder.verify(iHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
         CountrySummary summaryCaptorValue = summaryCaptor.getValue();
         assertThat(summaryCaptorValue.getCountryId(), is("ARG"));
         assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));

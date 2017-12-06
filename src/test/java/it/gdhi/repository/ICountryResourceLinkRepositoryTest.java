@@ -45,4 +45,22 @@ public class ICountryResourceLinkRepositoryTest {
         assertThat(actual.stream().map(a -> a.getLink()).collect(toList()), containsInAnyOrder("Res 1", "Res 3"));
     }
 
+    @Test
+    public void shouldDeleteCountryResourceLinksForAGivenCountry() {
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1"));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2"));
+        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3"));
+        entityManager.persist(countryResourceLink1);
+        entityManager.persist(countryResourceLink2);
+        entityManager.persist(countryResourceLink3);
+        entityManager.flush();
+        entityManager.clear();
+        iCountryResourceLinkRepository.deleteResources("NZL");
+        List<CountryResourceLink> actual1 = iCountryResourceLinkRepository.findAllBy("NZL");
+        List<CountryResourceLink> actual2 = iCountryResourceLinkRepository.findAllBy("AUS");
+        assertThat(actual1.size(), is(0));
+        assertThat(actual2.size(), is(1));
+        assertThat(actual2.stream().map(a -> a.getLink()).collect(toList()), containsInAnyOrder("Res 2"));
+    }
+
 }
