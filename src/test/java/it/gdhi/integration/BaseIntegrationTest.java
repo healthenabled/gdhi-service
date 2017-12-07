@@ -31,6 +31,7 @@ public class BaseIntegrationTest {
 
     @Autowired
     IHealthIndicatorRepository healthIndicatorRepository;
+
     @After
     public void tearDown() throws Exception {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

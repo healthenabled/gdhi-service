@@ -153,11 +153,11 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .when()
                 .get("http://localhost:" + port + "/countries/IND");
 
-        assertResponse(response.asString(), "country_details.json");
+        assertResponse(response.asString(), "country_body.json");
     }
 
     @Test
-    public void shouldSaveCountryDetails() throws Exception {
+    public void shouldSaveAndEditCountryDetails() throws Exception {
 
         Response response = given()
                 .contentType("application/json")
@@ -166,5 +166,27 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .post("http://localhost:" + port + "/countries");
 
         assertEquals(200, response.getStatusCode());
+
+        response = given()
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:" + port + "/countries/IND");
+
+        assertResponse(response.asString(), "country_body.json");
+
+        response = given()
+                .contentType("application/json")
+                .when()
+                .body(expectedResponseJson("country_body_edit.json"))
+                .post("http://localhost:" + port + "/countries");
+
+        assertEquals(200, response.getStatusCode());
+
+        response = given()
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:" + port + "/countries/IND");
+
+        assertResponse(response.asString(), "country_body_edit.json");
     }
 }

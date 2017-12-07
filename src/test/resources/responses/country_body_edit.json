@@ -1,0 +1,60 @@
+{
+  "countryId": "IND",
+  "countrySummary": {
+    "countryId": "IND",
+    "countryName": "India",
+    "summary": "summary new",
+    "contactName": "contactName new",
+    "contactDesignation": "contactDesignation new",
+    "contactOrganization": "contactOrganization new",
+    "contactEmail": "email new",
+    "dataFeederName": "feeder name new",
+    "dataFeederRole": "coll role new",
+    "dataFeederEmail": "email new",
+    "dataCollectorName": "coll name new",
+    "dataCollectorRole": "coll role new",
+    "dataCollectorEmail": "coll email new",
+    "collectedDate": null,
+    "resources": [
+      "link1 new"
+    ]
+  },
+  "healthIndicators": [
+    {
+      "categoryId": 1,
+      "indicatorId": 1,
+      "score": 2,
+      "supportingText": "sp1 new"
+    },
+    {
+      "categoryId": 1,
+      "indicatorId": 2,
+      "score": 3,
+      "supportingText": "sp2 new"
+    },
+    {
+      "categoryId": 2,
+      "indicatorId": 3,
+      "score": null,
+      "supportingText": "sp3 new"
+    },
+    {
+      "categoryId": 2,
+      "indicatorId": 4,
+      "score": 4,
+      "supportingText": "sp4 new"
+    },
+    {
+      "categoryId": 3,
+      "indicatorId": 5,
+      "score": 1,
+      "supportingText": "sp5 new"
+    },
+    {
+      "categoryId": 3,
+      "indicatorId": 6,
+      "score": null,
+      "supportingText": "sp6 new"
+    }
+  ]
+}
