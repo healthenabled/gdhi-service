@@ -1,6 +1,7 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
+import it.gdhi.model.HealthIndicator;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,20 @@ public class HealthIndicatorService {
     }
 
     @Transactional
-    public AllCountriesHealthScoreDto fetchHealthScores() {
-        List<String> countriesWithHealthScores = iHealthIndicatorRepository.findCountriesWithHealthScores();
-
-        List<CountryHealthScoreDto> globalHealthScores = countriesWithHealthScores.stream()
-                .map(countryId -> fetchCountryHealthScore(countryId))
-                .sorted(comparing(CountryHealthScoreDto::getCountryName,
-                        nullsLast(Comparator.naturalOrder())))
+    public CountriesHealthScoreDto fetchHealthScores() {
+        HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.findAll());
+        Map<String, List<HealthIndicator>> groupByCountry = healthIndicators.groupByCountry();
+        List<CountryHealthScoreDto> globalHealthScores = groupByCountry
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    String countryId = entry.getKey();
+                    List<HealthIndicator> indicators = entry.getValue();
+                    return transformToCountryHealthDto(countryId, new HealthIndicators(indicators));
+                })
+                .sorted(comparing(CountryHealthScoreDto::getCountryName, nullsLast(Comparator.naturalOrder())))
                 .collect(toList());
-        return new AllCountriesHealthScoreDto(globalHealthScores);
+        return new CountriesHealthScoreDto(globalHealthScores);
     }
 
     @Transactional
@@ -57,7 +63,7 @@ public class HealthIndicatorService {
         Double overallScore = healthIndicators.getTotalScore();
         Integer countryCount = healthIndicators.getCountOfCountriesWithAlteastOneScore();
         double score = overallScore / countryCount;
-        return new GlobalHealthScoreDto((convertScoreToPhase(score)), sortedCategoriesWithIndicators);
+        return new GlobalHealthScoreDto(convertScoreToPhase(score), sortedCategoriesWithIndicators);
     }
 
     public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,

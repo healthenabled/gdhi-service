@@ -3,11 +3,8 @@ package it.gdhi.integration;
 import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.IHealthIndicatorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,11 +22,6 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private IHealthIndicatorRepository healthIndicatorRepository;
-
-    @Autowired
-    private ICountrySummaryRepository countrySummaryRepository;
     @Test
     public void shouldGetOverAllGlobalScore() throws Exception {
         String india = "IND";

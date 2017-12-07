@@ -19,5 +19,8 @@ public interface IHealthIndicatorRepository extends Repository<HealthIndicator, 
 
     HealthIndicator save(HealthIndicator healthIndicatorSetupData);
 
+    default List<HealthIndicator> find(String countryId, Integer categoryId, Integer score) {
+        return null;
+    }
 }
 

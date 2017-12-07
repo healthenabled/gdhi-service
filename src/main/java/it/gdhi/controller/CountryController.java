@@ -47,7 +47,7 @@ public class CountryController {
     }
 
     @RequestMapping("/countries_health_indicator_scores")
-    public AllCountriesHealthScoreDto getAllCountriesHealthIndicatorScores() {
+    public CountriesHealthScoreDto getAllCountriesHealthIndicatorScores() {
         return healthIndicatorService.fetchHealthScores();
     }
 

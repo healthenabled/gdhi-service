@@ -166,4 +166,23 @@ public class IHealthIndicatorRepositoryTest {
         assertThat(countries, is(Matchers.containsInAnyOrder("ARG", "IND")));
     }
 
+    @Test
+    public void shouldFilterHealthRepositoryBasedOnCategoryAndPhase() throws Exception {
+
+    }
+
+    @Test
+    public void shouldGetAllCountriesWithGivenCategory() throws Exception {
+
+    }
+
+    @Test
+    public void shouldGetAllCountriesWithGivenPhase() throws Exception {
+
+    }
+
+    @Test
+    public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
+
+    }
 }

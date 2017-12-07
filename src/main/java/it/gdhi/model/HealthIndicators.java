@@ -62,4 +62,8 @@ public class HealthIndicators {
         return healthIndicators.stream()
                 .filter(healthIndicator -> healthIndicator.getScore() != null);
     }
+
+    public Map<String, List<HealthIndicator>> groupByCountry() {
+        return this.healthIndicators.stream().collect(groupingBy(HealthIndicator::getCountryId));
+    }
 }

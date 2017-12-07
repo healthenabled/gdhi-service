@@ -1,6 +1,6 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.AllCountriesHealthScoreDto;
+import it.gdhi.dto.CountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.GlobalHealthScoreDto;
@@ -56,13 +56,13 @@ public class CountryControllerTest {
 
     @Test
     public void shouldInvokeFetchHealthScoresOnGettingGlobalInfo() {
-        AllCountriesHealthScoreDto mockGlobalHealthScore = mock(AllCountriesHealthScoreDto.class);
+        CountriesHealthScoreDto mockGlobalHealthScore = mock(CountriesHealthScoreDto.class);
 
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
         when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
         when(healthIndicatorService.fetchHealthScores()).thenReturn(mockGlobalHealthScore);
-        AllCountriesHealthScoreDto globalHealthIndicators = countryController.getAllCountriesHealthIndicatorScores();
+        CountriesHealthScoreDto globalHealthIndicators = countryController.getAllCountriesHealthIndicatorScores();
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));

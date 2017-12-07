@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class AllCountriesHealthScoreDto {
+public class CountriesHealthScoreDto {
 
     List<CountryHealthScoreDto> countryHealthScores;
 }
