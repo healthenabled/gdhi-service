@@ -56,8 +56,7 @@ values
  null,
  null,
  '2015-11-09'),
- (
- 'PER',
+ ('PER',
  'Peru is facing the historic challenge of taking a quantitative and qualitative leap in improving the health status of Peruvians through a series of reform policy measures aimed at building an integrated health system that strengthens the National System of health.
  Our desire is to reach a health integrally connected, where all the information that is generated in the health system is captured in the place where it is produced and then flows and is shared at different levels, with different roles, and that allows to streamline the processes and procedures; that reduces waiting times and simplifies procedures in an efficient and timely manner. All this, in short, will improve the quality of life of the people and will allow a substantial modernization in public health within the framework of the health reform in Peru.',
  'Walter H. Curioso',
@@ -72,7 +71,8 @@ values
  null,
  '2017-11-10'
   ),
-  ('MLI', '"2008: Creation of National eHealth Agency (ANTIM)
+  ('MLI',
+  '"2008: Creation of National eHealth Agency (ANTIM)
  2012: National Country eHealth Survey and Assessment
  2013: eHealth Policy and Strategic Plan for 2014–2020 drafted
  2014: Adoption of National eHealth Agency Roadmap 2014-2018
@@ -103,7 +103,9 @@ values
  by ANTIM will centralize all the national health system data. ANTIM also
  coordinates and promotes mHealth solutions by convening stakeholders once
  a month to an mHealth working group."',
- null, null,
+ null,
+ null,
+ null,
  'oussouly@gmail.com',
  'ousmane ly',
  'CEO ANTIM',
@@ -111,20 +113,20 @@ values
   '',
   null,
   null,
-  null,
   '2017-11-13'),
-  ('UGA', 'There are over 90 digital health initiatives in Uganda. Many of these innovations have been limited in scale and hence implemented as stand alone and vertical projects. This prompted the Ministry of Health to issue a moratorium on digital health innovations in 2012 in Uganda and demanded that all digital health initiatives followed issues of interoperability, sustainability, scale, and conformity to MoH data requirements. This therefore enabled Ministry of Health to define and implement an eHealth strategy and framework for digital health in Uganda. ', null, null, 'lilian@healthenabled.org', 'Lilian Nabunnya', 'Digital Health Program Manager ', 'lilian@healthenabled.org', '', null, null, null, '2017-11-14'),
-  ('IND', '"India is progressing towards the implementation of digital health. For this, Govt. of India is introducing Integrated Health Information Platform where National Level  Health Information exchange will be setup for interoperability of EHR. Further, to harness the use of mobile phones in India, Govt. of India is planning to roll out National Level Health Helpline where remote advisory will be provided to general public on health related issues."', null, null, 'JITENDRA.ARORA@GOV.IN', 'ANKIT TRIPATHI', 'ADDITIONAL DIRECTOR', 'ankit_tripathi11@hotmail.com', '', null, null, null, '2017-11-12'),
+  ('UGA',
+  'There are over 90 digital health initiatives in Uganda. Many of these innovations have been limited in scale and hence implemented as stand alone and vertical projects. This prompted the Ministry of Health to issue a moratorium on digital health innovations in 2012 in Uganda and demanded that all digital health initiatives followed issues of interoperability, sustainability, scale, and conformity to MoH data requirements. This therefore enabled Ministry of Health to define and implement an eHealth strategy and framework for digital health in Uganda. ', null, null, null, 'lilian@healthenabled.org', 'Lilian Nabunnya', 'Digital Health Program Manager ', 'lilian@healthenabled.org', '', null, null, '2017-11-14'),
+  ('IND', '"India is progressing towards the implementation of digital health. For this, Govt. of India is introducing Integrated Health Information Platform where National Level  Health Information exchange will be setup for interoperability of EHR. Further, to harness the use of mobile phones in India, Govt. of India is planning to roll out National Level Health Helpline where remote advisory will be provided to general public on health related issues."', null, null, null, 'JITENDRA.ARORA@GOV.IN', 'ANKIT TRIPATHI', 'ADDITIONAL DIRECTOR', 'ankit_tripathi11@hotmail.com', '', null, null, '2017-11-12'),
   ('THA', '"Thailand Digital Health situation
  1. Silo type health information systems. No integration and interoperability  and mostly aim for administration and management.
  2. Health personnel spend 40% of work-hours managed reports and documents for administration an reimbursement
  3. Lack of  leadership and national governance body to lead the national HIS development
  4. Inadequate HIS foundations development : health data standards; health information security, privacy; informatics workforces
- 5. It is very difficult for patient to get access and use their own health records"', null, null, 'Boonchai Kijsanayotin, boon', 'Boonchai Kijsanayotin', 'Manager of Health Information Standards Development Center, Ministry of Public Health, Thailand', 'kijs0001@gmail.com', '', null, null, null, '2017-11-22'),
-  ('MOZ', 'National electronic aggregate M&E system in place, mortality system in place, point of care under implementation ', null, null, 'Antonio.sitoi@gmail.com', 'Alessandro Campione', 'Jembi programs director', 'alessandro.campione@gmail.com', '', null, null, null, '2017-11-23'),
-  ('PHL', 'The country has established a multisectoral  National eHealth Governance Steering Committee and Technical Working Group. The governance body has formally adopted COBIT5 as their IT Governance framework. Following the framework, an eHealth strategy was developed, a health enterpries architecture expert group was formed and other public-private committes were created and activated. ', null, null, 'Undersecretary Herminigildo', 'Alvin Marcelo', 'member, national eHealth Technical Working Group', 'admarcelo@up.edu.ph', '', null, null, null, '2017-11-23'),
-  ('GHA', 'We have a system of aggregated data collection by use of the DHIS ad also electronic medical records systems at our public hospital facilities. We are currently deploying eTracker at the primary care level (community health compounds to collect real time transactional data', null, null, 'kawoonor@gmail.com', 'Dr. Koku Awoonoor', 'Director PPME, GHS', 'kawoonor@gmail.com', '', null, null, null, '2017-11-23'),
-  ('NZL', 'New Zealand has some pockets of good digital health but is still making progress at a national level. ', null, null, 'r.whittaker@auckland.ac.nz', 'Robyn Whittaker', 'Assoc Prof, CD Innovation', 'r.whittaker@auckland.ac.nz', '', null, null, null, '2017-11-17');
+ 5. It is very difficult for patient to get access and use their own health records"', null, null, 'Boonchai Kijsanayotin, boon', ' boonchai@hsri.or.th', 'Boonchai Kijsanayotin', 'Manager of Health Information Standards Development Center, Ministry of Public Health, Thailand', 'kijs0001@gmail.com', '', null, null, '2017-11-22'),
+  ('MOZ', 'National electronic aggregate M&E system in place, mortality system in place, point of care under implementation ', null, null, null, 'Antonio.sitoi@gmail.com', 'Alessandro Campione', 'Jembi programs director', 'alessandro.campione@gmail.com', '', null, null, '2017-11-23'),
+  ('PHL', 'The country has established a multisectoral  National eHealth Governance Steering Committee and Technical Working Group. The governance body has formally adopted COBIT5 as their IT Governance framework. Following the framework, an eHealth strategy was developed, a health enterpries architecture expert group was formed and other public-private committes were created and activated. ', null, null, 'Undersecretary Herminigildo', 'usecvalle.ofim.doh@gmail.com', 'Alvin Marcelo', 'member, national eHealth Technical Working Group', 'admarcelo@up.edu.ph', '', null, null, '2017-11-23'),
+  ('GHA', 'We have a system of aggregated data collection by use of the DHIS ad also electronic medical records systems at our public hospital facilities. We are currently deploying eTracker at the primary care level (community health compounds to collect real time transactional data', null, null, null, 'kawoonor@gmail.com', 'Dr. Koku Awoonoor', 'Director PPME, GHS', 'kawoonor@gmail.com', '', null, null, '2017-11-23'),
+  ('NZL', 'New Zealand has some pockets of good digital health but is still making progress at a national level. ', null, null, null, 'r.whittaker@auckland.ac.nz', 'Robyn Whittaker', 'Assoc Prof, CD Innovation', 'r.whittaker@auckland.ac.nz', '', null, null, '2017-11-17');
 
  insert into validated_config.health_indicators (country_id, category_id, indicator_id, indicator_score, supporting_text) values
  ('JOR',
