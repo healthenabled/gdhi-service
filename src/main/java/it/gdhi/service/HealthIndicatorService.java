@@ -1,7 +1,6 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
-import it.gdhi.model.Category;
 import it.gdhi.model.HealthIndicators;
 import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static it.gdhi.utils.ScoreUtils.ZERO_SCORE;
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
@@ -48,46 +46,44 @@ public class HealthIndicatorService {
                 .sorted(comparing(CountryHealthScoreDto::getCountryName,
                         nullsLast(Comparator.naturalOrder())))
                 .collect(toList());
-        return transformToGlobalHealthDto(globalHealthScores);
+        return new AllCountriesHealthScoreDto(globalHealthScores);
     }
 
     @Transactional
     public GlobalHealthScoreDto getGlobalHealthIndicator() {
         HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.findAll());
-        List<CategoryHealthScoreDto> categories = new ArrayList<>();
-        Map<Category, Double> categoryDoubleMap = healthIndicators.groupByCategoryWithNotNullScores();
-
-        for (Map.Entry<Category, Double> categoryDoubleEntry : categoryDoubleMap.entrySet()) {
-            CategoryHealthScoreDto categoryHealthScoreDto =
-                    new CategoryHealthScoreDto(categoryDoubleEntry.getKey().getId(),
-                            categoryDoubleEntry.getKey().getName(),
-                            convertScoreToPhase(categoryDoubleEntry.getValue()));
-            categories.add(categoryHealthScoreDto);
-        }
-
-        AllCountriesHealthScoreDto allCountriesData = fetchHealthScores();
-        double score = ZERO_SCORE;
-        List<CountryHealthScoreDto> globalHealthScoresWitOutNullScore = allCountriesData.getCountryHealthScores()
-                .stream()
-                .filter(country -> country.getOverallScore() != null)
-                .collect(Collectors.toList());
-        for (CountryHealthScoreDto countryHealthScore : globalHealthScoresWitOutNullScore) {
-            score += countryHealthScore.getOverallScore();
-        }
-
-        int size = globalHealthScoresWitOutNullScore.size();
-        List<CategoryHealthScoreDto> sortedCategories = categories.stream()
-                .sorted(comparing(CategoryHealthScoreDto::getId)).collect(toList());
-        return new GlobalHealthScoreDto((convertScoreToPhase(score / size)), sortedCategories);
+        List<CategoryHealthScoreDto> sortedCategoriesWithIndicators =
+                getSortedCategoriesWithIndicators(healthIndicators);
+        Double overallScore = healthIndicators.getTotalScore();
+        Integer countryCount = healthIndicators.getCountOfCountriesWithAlteastOneScore();
+        double score = overallScore / countryCount;
+        return new GlobalHealthScoreDto((convertScoreToPhase(score)), sortedCategoriesWithIndicators);
     }
 
-    private AllCountriesHealthScoreDto transformToGlobalHealthDto(List<CountryHealthScoreDto> globalHealthScores) {
-        return new AllCountriesHealthScoreDto(globalHealthScores);
+    public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,
+                                                   HttpServletResponse response) throws IOException {
+        excelUtilService.convertListToExcel(fetchHealthScores().getCountryHealthScores());
+        excelUtilService.downloadFile(request, response);
+    }
+
+    public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
+                                                HttpServletResponse response) throws IOException {
+        List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
+        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
+        excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
+        excelUtilService.downloadFile(request, response);
     }
 
     private CountryHealthScoreDto transformToCountryHealthDto(String countryId, HealthIndicators healthIndicators) {
+        List<CategoryHealthScoreDto> categoryDtos = getSortedCategoriesWithIndicators(healthIndicators);
+        Double overallScore = healthIndicators.getOverallScore();
+        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), overallScore, categoryDtos,
+                convertScoreToPhase(overallScore));
+    }
+
+    private List<CategoryHealthScoreDto> getSortedCategoriesWithIndicators(HealthIndicators healthIndicators) {
         Map<Integer, Double> nonNullCategoryScore = healthIndicators.groupByCategoryIdWithNotNullScores();
-        List<CategoryHealthScoreDto> categoryDtos = healthIndicators.groupByCategory()
+        return healthIndicators.groupByCategory()
                 .entrySet()
                 .stream()
                 .map(entry -> {
@@ -104,21 +100,5 @@ public class HealthIndicatorService {
                 })
                 .sorted(comparing(CategoryHealthScoreDto::getId))
                 .collect(Collectors.toList());
-        Double overallScore = healthIndicators.getOverallScore();
-        return new CountryHealthScoreDto(countryId, healthIndicators.getCountryName(), overallScore, categoryDtos,
-                convertScoreToPhase(overallScore));
-    }
-
-    public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,
-                                                   HttpServletResponse response) throws IOException {
-        excelUtilService.convertListToExcel(fetchHealthScores().getCountryHealthScores());
-        excelUtilService.downloadFile(request, response);
-    }
-    public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
-                                                HttpServletResponse response) throws IOException {
-        List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
-        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
-        excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
-        excelUtilService.downloadFile(request, response);
     }
 }
