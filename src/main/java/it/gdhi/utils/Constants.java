@@ -9,6 +9,7 @@ public class Constants {
     public static final String CATEGORY = "Category ";
     public static final String INDICATOR = "Indicator ";
     public static final String OVERALL_PHASE = "Overall Phase";
+    public static final String ALL = "all";
 
 
     public static class Mail {

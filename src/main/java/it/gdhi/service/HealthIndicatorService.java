@@ -38,9 +38,13 @@ public class HealthIndicatorService {
         return transformToCountryHealthDto(countryId, healthIndicators);
     }
 
-    @Transactional
     public CountriesHealthScoreDto fetchHealthScores() {
-        HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.findAll());
+        return this.fetchHealthScores(null, null);
+    }
+
+    @Transactional
+    public CountriesHealthScoreDto fetchHealthScores(Integer categoryId, Integer score) {
+        HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.find(categoryId, score));
         Map<String, List<HealthIndicator>> groupByCountry = healthIndicators.groupByCountry();
         List<CountryHealthScoreDto> globalHealthScores = groupByCountry
                 .entrySet()
@@ -55,15 +59,16 @@ public class HealthIndicatorService {
         return new CountriesHealthScoreDto(globalHealthScores);
     }
 
+
     @Transactional
-    public GlobalHealthScoreDto getGlobalHealthIndicator() {
-        HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.findAll());
+    public GlobalHealthScoreDto getGlobalHealthIndicator(Integer categoryId, Integer score) {
+        HealthIndicators healthIndicators = new HealthIndicators(iHealthIndicatorRepository.find(categoryId, score));
         List<CategoryHealthScoreDto> sortedCategoriesWithIndicators =
                 getSortedCategoriesWithIndicators(healthIndicators);
-        Double overallScore = healthIndicators.getTotalScore();
+        Double totalScore = healthIndicators.getTotalScore();
         Integer countryCount = healthIndicators.getCountOfCountriesWithAlteastOneScore();
-        double score = overallScore / countryCount;
-        return new GlobalHealthScoreDto(convertScoreToPhase(score), sortedCategoriesWithIndicators);
+        double overallScore = totalScore / countryCount;
+        return new GlobalHealthScoreDto(convertScoreToPhase(overallScore), sortedCategoriesWithIndicators);
     }
 
     public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,

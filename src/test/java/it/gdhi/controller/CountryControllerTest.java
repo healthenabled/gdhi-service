@@ -61,22 +61,22 @@ public class CountryControllerTest {
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
         when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(healthIndicatorService.fetchHealthScores()).thenReturn(mockGlobalHealthScore);
-        CountriesHealthScoreDto globalHealthIndicators = countryController.getAllCountriesHealthIndicatorScores();
+        when(healthIndicatorService.fetchHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
+        CountriesHealthScoreDto globalHealthIndicators = countryController.getCountriesHealthIndicatorScores(4, null);
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
-        verify(healthIndicatorService).fetchHealthScores();
+        verify(healthIndicatorService).fetchHealthScores(4, null);
     }
 
     @Test
     public void shouldInvokeGetGlobalHealthIndicator() {
         GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
 
-        when(healthIndicatorService.getGlobalHealthIndicator()).thenReturn(expected);
-        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator();
+        when(healthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
+        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator(null, 2);
         assertThat(expected, is(actual));
-        verify(healthIndicatorService).getGlobalHealthIndicator();
+        verify(healthIndicatorService).getGlobalHealthIndicator(null, 2);
     }
 
     @Test
