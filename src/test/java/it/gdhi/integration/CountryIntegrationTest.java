@@ -8,6 +8,7 @@ import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.service.MailerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
@@ -31,6 +36,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
+    @Autowired
+    private MailerService mailerService;
 
     @Test
     public void shouldGetHealthIndicatorForACountry() throws Exception {
@@ -158,6 +165,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveAndEditCountryDetails() throws Exception {
+        mailerService = mock(MailerService.class);
+        doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
 
         Response response = given()
                 .contentType("application/json")
