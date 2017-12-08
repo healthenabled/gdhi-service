@@ -47,14 +47,16 @@ public class CountryController {
     }
 
     @RequestMapping("/countries_health_indicator_scores")
-    public CountriesHealthScoreDto getCountriesHealthIndicatorScores(@RequestParam("categoryId") Integer categoryId,
-                                                                     @RequestParam("phase") Integer score) {
+    public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "phase", required = false) Integer score) {
         return healthIndicatorService.fetchHealthScores(categoryId, score);
     }
 
     @RequestMapping("/global_health_indicators")
-    public GlobalHealthScoreDto getGlobalHealthIndicator(@RequestParam("categoryId") Integer categoryId,
-                                                         @RequestParam("phase") Integer score) {
+    public GlobalHealthScoreDto getGlobalHealthIndicator(
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "phase", required = false) Integer score) {
         return healthIndicatorService.getGlobalHealthIndicator(categoryId, score);
     }
 
