@@ -83,9 +83,4 @@ public class IHealthIndicatorFilterRepositoryTest {
     public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
 
     }
-
-    @Test
-    public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven1() throws Exception {
-
-    }
 }

@@ -330,49 +330,37 @@ public class HealthIndicatorServiceTest {
 
         when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(countryIds);
 
-        HealthIndicator mock1 = mock(HealthIndicator.class);
-        when(mock1.getScore()).thenReturn(1);
-        Country mockCountry1 = mock(Country.class);
-        when(mock1.getCountry()).thenReturn(mockCountry1);
-        when(mock1.getCountryId()).thenReturn("IND");
-        when(mockCountry1.getName()).thenReturn("India");
-        when(mock1.getCategory()).thenReturn(mock(Category.class));
-        when(mock1.getCategory().getId()).thenReturn(9);
-        when(mock1.getCategory().getName()).thenReturn("Category 1");
 
-        HealthIndicator mock2 = mock(HealthIndicator.class);
-        when(mock2.getScore()).thenReturn(2);
-        Country mockCountry2 = mock(Country.class);
-        when(mock2.getCountry()).thenReturn(mockCountry2);
-        when(mock2.getCountryId()).thenReturn("USA");
-        when(mockCountry2.getName()).thenReturn("United States");
-        when(mock2.getCategory()).thenReturn(mock(Category.class));
-        when(mock2.getCategory().getId()).thenReturn(8);
-        when(mock2.getCategory().getName()).thenReturn("Category 2");
+        Category category1 = Category.builder().id(9).name("Category 1").build();
+        Country country1 = new Country("IND", "India");
+        Indicator indicator1 = Indicator.builder().indicatorId(1).build();
+        HealthIndicator mock1 = HealthIndicator.builder().country(country1).category(category1).indicator(indicator1).score(1).build();
 
-        HealthIndicator mock3 = mock(HealthIndicator.class);
-        Country mockCountry3 = mock(Country.class);
-        when(mock3.getCountry()).thenReturn(mockCountry3);
-        when(mock3.getCountryId()).thenReturn("USA");
-        when(mockCountry3.getName()).thenReturn("United States");
-        when(mock3.getCategory()).thenReturn(mock(Category.class));
-        when(mock3.getCategory().getId()).thenReturn(7);
-        when(mock3.getCategory().getName()).thenReturn("Category 4");
-        when(mock3.getScore()).thenReturn(3);
+        Category category2 = Category.builder().id(8).name("Category 2").build();
+        Country country2 = new Country("USA", "United States");
+        Indicator indicator2 = Indicator.builder().indicatorId(2).build();
+        HealthIndicator mock2 = HealthIndicator.builder().country(country2).category(category2).indicator(indicator2).score(2).build();
 
-        HealthIndicator mock4 = mock(HealthIndicator.class);
-        Country mockCountry4 = mock(Country.class);
-        when(mock4.getCountry()).thenReturn(mockCountry4);
-        when(mock4.getCountryId()).thenReturn("USA");
-        when(mockCountry4.getName()).thenReturn("United States");
-        when(mock4.getCategory()).thenReturn(mock(Category.class));
-        when(mock4.getCategory().getId()).thenReturn(6);
-        when(mock4.getCategory().getName()).thenReturn("Category 5");
-        when(mock4.getScore()).thenReturn(4);
+        Category category3 = Category.builder().id(7).name("Category 4").build();
+        Indicator indicator3 = Indicator.builder().indicatorId(3).build();
+        HealthIndicator mock3 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator3).score(3).build();
+
+        Indicator indicator4 = Indicator.builder().indicatorId(4).build();
+        HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
 
         when(iHealthIndicatorRepository.findAll()).thenReturn(asList(mock1, mock2, mock3, mock4));
         CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores();
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(2));
+        CountryHealthScoreDto actualInd = countriesHealthScoreDto.getCountryHealthScores().stream().filter(c -> c.getCountryId().equals("IND")).findFirst().get();
+        CountryHealthScoreDto actualUSA = countriesHealthScoreDto.getCountryHealthScores().stream().filter(c -> c.getCountryId().equals("USA")).findFirst().get();
+        assertThat(actualInd.getOverallScore(), is(1.0));
+        assertThat(actualUSA.getOverallScore(), is(2.75));
+        assertThat(actualUSA.getCategories().size(), is(2));
+        CategoryHealthScoreDto actualCategory3 = actualUSA.getCategories().stream().filter(c -> c.getId().equals(category3.getId())).findFirst().get();
+        assertThat(actualCategory3.getOverallScore(), is(3.5));
+        assertThat(actualCategory3.getIndicators().size(), is(2));
+        CategoryHealthScoreDto actualCategory2 = actualUSA.getCategories().stream().filter(c -> c.getId().equals(category2.getId())).findFirst().get();
+        assertThat(actualCategory2.getOverallScore(), is(2.0));
     }
 
     @Test
