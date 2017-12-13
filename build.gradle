@@ -1,5 +1,6 @@
 group 'gdhi-service'
 version '1.0-SNAPSHOT'
+def jenkinsBuild = System.getenv("BUILD_NUMBER") ?: "0"
 
 buildscript {
     repositories {
@@ -21,7 +22,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 jar {
     baseName = 'gdhi'
-    version = '1.0'
+    version = '1.0.' + jenkinsBuild
 }
 
 repositories {
