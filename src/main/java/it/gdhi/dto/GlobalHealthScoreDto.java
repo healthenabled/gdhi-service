@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class GlobalHealthScoreDto {
-    Integer overAllScore;
-    List<CategoryHealthScoreDto> categories;
+    private Integer overAllScore;
+    private List<CategoryHealthScoreDto> categories;
 }

@@ -67,7 +67,7 @@ public class HealthIndicatorService {
                 getSortedCategoriesWithIndicators(healthIndicators);
         Double totalScore = healthIndicators.getTotalScore();
         Integer countryCount = healthIndicators.getCountOfCountriesWithAlteastOneScore();
-        double overallScore = totalScore / countryCount;
+        double overallScore = countryCount != 0 ? totalScore / countryCount : 0.0;
         return new GlobalHealthScoreDto(convertScoreToPhase(overallScore), sortedCategoriesWithIndicators);
     }
 
