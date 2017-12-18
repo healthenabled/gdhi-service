@@ -3,21 +3,21 @@
     {
       "countryId": "IND",
       "countryName": "India",
-      "overallScore": 1.0,
+      "overallScore": 2.0,
       "categories": [
         {
           "id": 1,
           "name": "Leadership and Governance",
-          "overallScore": 1.0,
-          "phase": 1,
+          "overallScore": 2.0,
+          "phase": 2,
           "indicators": [
             {
               "id": 1,
               "name": "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
               "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
-              "score": 1,
+              "score": 3,
               "supportingText": "sp1",
-              "scoreDescription": "Nascent governance structure for digital health is constituted on a case-by-case basis"
+              "scoreDescription": "Governance structure and any related working groups have a scope of work (SOW) and conduct regular meetings with stakeholder participation/ consultation."
             },
             {
               "id": 2,
@@ -30,31 +30,7 @@
           ]
         }
       ],
-      "countryPhase": 1
-    },
-    {
-      "countryId": "GBR",
-      "countryName": "United Kingdom",
-      "overallScore": 1.0,
-      "categories": [
-        {
-          "id": 1,
-          "name": "Leadership and Governance",
-          "overallScore": 1.0,
-          "phase": 1,
-          "indicators": [
-            {
-              "id": 1,
-              "name": "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
-              "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
-              "score": 1,
-              "supportingText": "sp7",
-              "scoreDescription": "Nascent governance structure for digital health is constituted on a case-by-case basis"
-            }
-          ]
-        }
-      ],
-      "countryPhase": 1
+      "countryPhase": 2
     }
   ]
 }

@@ -19,9 +19,8 @@ public interface IHealthIndicatorRepository extends Repository<HealthIndicator, 
 
     HealthIndicator save(HealthIndicator healthIndicatorSetupData);
 
-    @Query("SELECT h FROM HealthIndicator h WHERE (?1 is null or h.category.id = ?1) " +
-            "and (?2 is null or h.score = ?2)")
-    List<HealthIndicator> find(Integer categoryId, Integer score);
+    @Query("SELECT h FROM HealthIndicator h WHERE (?1 is null or h.category.id = ?1)")
+    List<HealthIndicator> find(Integer categoryId);
 
 }
 

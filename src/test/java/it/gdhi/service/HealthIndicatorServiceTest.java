@@ -342,7 +342,7 @@ public class HealthIndicatorServiceTest {
 
         Indicator indicator4 = Indicator.builder().indicatorId(4).build();
         HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
-        when(iHealthIndicatorRepository.find(null, null)).thenReturn(asList(mock1, mock2, mock3, mock4));
+        when(iHealthIndicatorRepository.find(null)).thenReturn(asList(mock1, mock2, mock3, mock4));
 
         CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(null, null);
 
@@ -360,28 +360,50 @@ public class HealthIndicatorServiceTest {
     }
 
     @Test
-    public void shouldFetchIndicatorsBasedOnFilters() throws Exception {
+    public void shouldReturnEmptyListWhenPhaseForGivenCategoryIsNotPresentWhileFetchingGlobalHealthScores() {
+        String USA = "USA";
+        String India = "IND";
+
         Category category1 = Category.builder().id(9).name("Category 1").build();
-        Country country1 = new Country("IND", "India");
+        Country country1 = new Country(India, "India");
         Indicator indicator1 = Indicator.builder().indicatorId(1).build();
         HealthIndicator mock1 = HealthIndicator.builder().country(country1).category(category1).indicator(indicator1).score(1).build();
 
         Category category2 = Category.builder().id(8).name("Category 2").build();
-        Country country2 = new Country("USA", "United States");
+        Country country2 = new Country(USA, "United States");
         Indicator indicator2 = Indicator.builder().indicatorId(2).build();
         HealthIndicator mock2 = HealthIndicator.builder().country(country2).category(category2).indicator(indicator2).score(2).build();
 
+        when(iHealthIndicatorRepository.find(1)).thenReturn(asList(mock1, mock2));
+
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(1, 5);
+
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(0));
+    }
+
+    @Test
+    public void shouldFetchIndicatorsBasedOnFilters() throws Exception {
         Category category3 = Category.builder().id(7).name("Category 4").build();
+        Country country1 = new Country("IND", "India");
+        Indicator indicator1 = Indicator.builder().indicatorId(1).build();
+        HealthIndicator mock1 = HealthIndicator.builder().country(country1).category(category3).indicator(indicator1).score(1).build();
+
+        Country country2 = new Country("USA", "United States");
+
         Indicator indicator3 = Indicator.builder().indicatorId(3).build();
         HealthIndicator mock3 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator3).score(3).build();
 
         Indicator indicator4 = Indicator.builder().indicatorId(4).build();
         HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
-        when(iHealthIndicatorRepository.find(3, 2)).thenReturn(asList(mock1, mock2, mock3, mock4));
+        when(iHealthIndicatorRepository.find(3)).thenReturn(asList(mock1, mock3, mock4));
 
-        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(3, 2);
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(3, 4);
 
-        assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(2));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(1));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getOverallScore(), is(3.5));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().size(), is(1));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().get(0).getOverallScore(), is(3.5));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().get(0).getPhase(), is(4));
     }
 
     @Test
@@ -414,7 +436,7 @@ public class HealthIndicatorServiceTest {
                 .category(category1).score(0).build();
 
         List<HealthIndicator> healthIndicators = asList(healthIndicator, healthIndicator1, healthIndicator2, healthIndicator3, healthIndicator4);
-        when(iHealthIndicatorRepository.find(null, null)).thenReturn(healthIndicators);
+        when(iHealthIndicatorRepository.find(null)).thenReturn(healthIndicators);
 
         GlobalHealthScoreDto globalHealthIndicator = healthIndicatorService.getGlobalHealthIndicator(null, null);
 
@@ -423,16 +445,17 @@ public class HealthIndicatorServiceTest {
         assertEquals(4, actualCategory.getPhase().intValue());
         actualCategory = globalHealthIndicator.getCategories().stream().filter(cat -> cat.getId().equals(category1.getId())).findFirst().get();
         assertEquals(1, actualCategory.getPhase().intValue());
-        assertThat(globalHealthIndicator.getOverAllScore(), is(2));
+        assertThat(globalHealthIndicator.getOverAllScore(), is(3));
     }
 
     @Test
     public void fetchGlobalHealthScoresShouldIgnoreCountryWithAllIndicatorsMissing() {
         HealthIndicator mock1 = mock(HealthIndicator.class);
-        when(mock1.getScore()).thenReturn(5);
+        when(mock1.getScore()).thenReturn(2);
         Country mockCountry1 = mock(Country.class);
         Category mock = mock(Category.class);
 
+        when(mock1.getCountryId()).thenReturn("IND");
         when(mock1.getCountry()).thenReturn(mockCountry1);
         when(mockCountry1.getId()).thenReturn("IND");
         when(mock1.getCategory()).thenReturn(mock);
@@ -444,6 +467,7 @@ public class HealthIndicatorServiceTest {
         Country mockCountry2 = mock(Country.class);
 
         when(mock2.getCountry()).thenReturn(mockCountry2);
+        when(mock2.getCountryId()).thenReturn("USA");
         when(mockCountry2.getId()).thenReturn("USA");
         when(mock2.getCategory()).thenReturn(mock);
         when(mock2.getCategory().getId()).thenReturn(9);
@@ -453,6 +477,7 @@ public class HealthIndicatorServiceTest {
         when(mock3.getScore()).thenReturn(null);
 
         when(mock3.getCountry()).thenReturn(mockCountry2);
+        when(mock3.getCountryId()).thenReturn("USA");
         when(mockCountry2.getId()).thenReturn("USA");
         when(mock3.getCategory()).thenReturn(mock);
         when(mock3.getCategory().getId()).thenReturn(8);
@@ -463,14 +488,53 @@ public class HealthIndicatorServiceTest {
         healthIndicators.add(mock1);
         healthIndicators.add(mock2);
 
-        when(iHealthIndicatorRepository.find(1, 2)).thenReturn(healthIndicators);
+        when(iHealthIndicatorRepository.find(1)).thenReturn(healthIndicators);
         when(iHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList("IND", "USA"));
         when(iHealthIndicatorRepository.findHealthIndicatorsFor("IND")).thenReturn(asList(mock1));
         when(iHealthIndicatorRepository.findHealthIndicatorsFor("USA")).thenReturn(asList(mock2, mock3));
+
         GlobalHealthScoreDto globalHealthIndicator = healthIndicatorService.getGlobalHealthIndicator(1, 2);
 
         assertEquals(1,globalHealthIndicator.getCategories().size());
-        assertThat(globalHealthIndicator.getOverAllScore(), is(5));
+        assertThat(globalHealthIndicator.getOverAllScore(), is(2));
+    }
+
+    @Test
+    public void shouldConsiderOnlyCategoriesWithGivenPhase() throws Exception {
+        Category category = Category.builder().id(9).name("Category 1").build();
+
+        HealthIndicator healthIndicator = HealthIndicator.builder()
+                .country(new Country("IND", "India"))
+                .indicator(Indicator.builder().indicatorId(1).build())
+                .category(category).score(5).build();
+
+        HealthIndicator healthIndicator1 = HealthIndicator.builder()
+                .country(new Country("IND", "India"))
+                .indicator(Indicator.builder().indicatorId(2).build())
+                .category(category).score(2).build();
+
+        HealthIndicator healthIndicator2 = HealthIndicator.builder()
+                .country(new Country("USA", "USA"))
+                .indicator(Indicator.builder().indicatorId(1).build())
+                .category(category).score(2).build();
+
+        HealthIndicator healthIndicator3 = HealthIndicator.builder()
+                .country(new Country("USA", "USA"))
+                .indicator(Indicator.builder().indicatorId(2).build())
+                .category(category).score(1).build();
+
+        HealthIndicator healthIndicator4 = HealthIndicator.builder()
+                .country(new Country("USA", "USA"))
+                .indicator(Indicator.builder().indicatorId(3).build())
+                .category(category).score(null).build();
+        when(iHealthIndicatorRepository.find(category.getId())).thenReturn(asList(healthIndicator, healthIndicator1, healthIndicator2, healthIndicator3, healthIndicator4));
+
+        GlobalHealthScoreDto globalHealthIndicator = healthIndicatorService.getGlobalHealthIndicator(category.getId(), 2);
+
+        assertEquals(2, globalHealthIndicator.getOverAllScore().intValue());
+        assertEquals(1, globalHealthIndicator.getCategories().size());
+        assertEquals(1.5, globalHealthIndicator.getCategories().get(0).getOverallScore().doubleValue(), 0.01);
+        assertEquals(2, globalHealthIndicator.getCategories().get(0).getPhase().intValue());
     }
 
     @Test

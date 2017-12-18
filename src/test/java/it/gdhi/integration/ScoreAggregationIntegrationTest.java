@@ -209,7 +209,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(3).supportingText("sp1").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
@@ -241,7 +241,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries_health_indicator_scores?categoryId="+categoryId1+"&phase=1");
+                .get("http://localhost:" + port + "/countries_health_indicator_scores?categoryId="+categoryId1+"&phase=2");
 
         assertResponse(response.asString(), "filtered_countries_health_indicators.json");
     }

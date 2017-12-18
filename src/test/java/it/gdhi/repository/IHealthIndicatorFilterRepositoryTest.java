@@ -68,25 +68,19 @@ public class IHealthIndicatorFilterRepositoryTest {
 
     @Test
     public void shouldFilterHealthRepositoryBasedOnCategoryAndPhase() throws Exception {
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(categoryId1, indicatorScore1);
-        assertEquals(2, healthIndicators.size());
-    }
-
-    @Test
-    public void shouldGetAllCountriesWithGivenCategory() throws Exception {
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(categoryId1, null);
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(categoryId1);
         assertEquals(3, healthIndicators.size());
     }
 
     @Test
-    public void shouldGetAllCountriesWithGivenPhase() throws Exception {
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(null, indicatorScore1);
-        assertEquals(2, healthIndicators.size());
+    public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(null);
+        assertEquals(4, healthIndicators.size());
     }
 
     @Test
-    public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(null, null);
-        assertEquals(4, healthIndicators.size());
+    public void shouldReturnEmptyListWhenGivenCategoryHasNoHealthIndicatorPresent() throws Exception {
+        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.find(7);
+        assertEquals(0, healthIndicators.size());
     }
 }

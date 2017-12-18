@@ -80,4 +80,8 @@ public class HealthIndicatorsTest {
     public void shouldGetTotalScore() throws Exception {
         assertEquals(new Double(3.33), new HealthIndicators(healthIndicators).getTotalScore(), 0.01);
     }
+
+    @Test
+    public void shouldGetScoresOf() throws Exception {
+    }
 }

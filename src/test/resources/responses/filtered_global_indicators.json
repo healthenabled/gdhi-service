@@ -6,32 +6,7 @@
       "name": "Leadership and Governance",
       "overallScore": 1.0,
       "phase": 1,
-      "indicators": [
-        {
-          "id": 1,
-          "name": "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
-          "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
-          "score": 1,
-          "supportingText": "sp1",
-          "scoreDescription": "Nascent governance structure for digital health is constituted on a case-by-case basis"
-        },
-        {
-          "id": 1,
-          "name": "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
-          "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
-          "score": 1,
-          "supportingText": "sp7",
-          "scoreDescription": "Nascent governance structure for digital health is constituted on a case-by-case basis"
-        },
-        {
-          "id": 2,
-          "name": "Digital Health prioritized at the national level through planning",
-          "indicatorDescription": "Is digital health included and budgeted for in national health or relevant national strategies and/or plan(s)?",
-          "score": 1,
-          "supportingText": "sp2",
-          "scoreDescription": "Digital health is being implemented in an ad hoc fashion in health programs with some discussion of inclusion in national health or other relevant national strategies or plans"
-        }
-      ]
+      "indicators": null
     }
   ]
 }
