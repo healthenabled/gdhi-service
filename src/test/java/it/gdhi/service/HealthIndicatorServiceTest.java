@@ -344,7 +344,7 @@ public class HealthIndicatorServiceTest {
         HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iHealthIndicatorRepository.find(null)).thenReturn(asList(mock1, mock2, mock3, mock4));
 
-        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(null, null);
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchCountriesHealthScores(null, null);
 
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(2));
         CountryHealthScoreDto actualInd = countriesHealthScoreDto.getCountryHealthScores().stream().filter(c -> c.getCountryId().equals("IND")).findFirst().get();
@@ -376,7 +376,7 @@ public class HealthIndicatorServiceTest {
 
         when(iHealthIndicatorRepository.find(1)).thenReturn(asList(mock1, mock2));
 
-        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(1, 5);
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchCountriesHealthScores(1, 5);
 
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(0));
     }
@@ -397,7 +397,7 @@ public class HealthIndicatorServiceTest {
         HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iHealthIndicatorRepository.find(3)).thenReturn(asList(mock1, mock3, mock4));
 
-        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchHealthScores(3, 4);
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchCountriesHealthScores(3, 4);
 
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(1));
         assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getOverallScore(), is(3.5));

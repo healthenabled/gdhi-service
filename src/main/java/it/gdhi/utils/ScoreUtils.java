@@ -9,8 +9,6 @@ import static java.math.RoundingMode.CEILING;
 
 public class ScoreUtils {
 
-    public static double ZERO_SCORE = 0.0;
-
     public static Integer convertScoreToPhase(Double score) {
         Integer result = null;
         if(score != null) {

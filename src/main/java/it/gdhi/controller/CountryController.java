@@ -50,7 +50,7 @@ public class CountryController {
     public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
             @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @RequestParam(value = "phase", required = false) Integer score) {
-        return healthIndicatorService.fetchHealthScores(categoryId, score);
+        return healthIndicatorService.fetchCountriesHealthScores(categoryId, score);
     }
 
     @RequestMapping("/global_health_indicators")
