@@ -42,6 +42,38 @@
               "score": 3,
               "supportingText": "sp3",
               "scoreDescription": "National digital health costed plan developed and approved"
+            },
+            {
+              "id": 4,
+              "name": "Public funding for digital health",
+              "indicatorDescription": "What is the estimated percent (%) of the annual public spending on health committed to information and communications technology (ICT) ?",
+              "score": null,
+              "supportingText": "sp4",
+              "scoreDescription": "Missing or Not Available"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Legislation, Policy, and Compliance",
+          "overallScore": null,
+          "phase": null,
+          "indicators": [
+            {
+              "id": 5,
+              "name": "Legal Framework for Data Protection (Security)",
+              "indicatorDescription": "Is there a law on data security (storage, transmission, use) that is relevant to digital health?",
+              "score": null,
+              "supportingText": "sp5",
+              "scoreDescription": "Missing or Not Available"
+            },
+            {
+              "id": 6,
+              "name": "Laws or Regulations for privacy, confidentiality and acess to health information (Privacy)",
+              "indicatorDescription": "Is there a law to protect individual privacy, governing ownership, access and sharing of individually identifiable digital health data ?",
+              "score": null,
+              "supportingText": "sp6",
+              "scoreDescription": "Missing or Not Available"
             }
           ]
         }
@@ -90,6 +122,38 @@
               "score": 5,
               "supportingText": "sp9",
               "scoreDescription": "National digital health strategy and costed plan fully implemented with planning underway for the next 3-5 year cycle"
+            },
+            {
+              "id": 4,
+              "name": "Public funding for digital health",
+              "indicatorDescription": "What is the estimated percent (%) of the annual public spending on health committed to information and communications technology (ICT) ?",
+              "score": null,
+              "supportingText": "sp10",
+              "scoreDescription": "Missing or Not Available"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Legislation, Policy, and Compliance",
+          "overallScore": null,
+          "phase": null,
+          "indicators": [
+            {
+              "id": 5,
+              "name": "Legal Framework for Data Protection (Security)",
+              "indicatorDescription": "Is there a law on data security (storage, transmission, use) that is relevant to digital health?",
+              "score": null,
+              "supportingText": "sp11",
+              "scoreDescription": "Missing or Not Available"
+            },
+            {
+              "id": 6,
+              "name": "Laws or Regulations for privacy, confidentiality and acess to health information (Privacy)",
+              "indicatorDescription": "Is there a law to protect individual privacy, governing ownership, access and sharing of individually identifiable digital health data ?",
+              "score": null,
+              "supportingText": "sp12",
+              "scoreDescription": "Missing or Not Available"
             }
           ]
         }

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.gdhi.utils.ListUtils.findFirst;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
@@ -404,6 +405,35 @@ public class HealthIndicatorServiceTest {
         assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().size(), is(1));
         assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().get(0).getOverallScore(), is(3.5));
         assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories().get(0).getPhase(), is(4));
+    }
+
+    @Test
+    public void shouldFilterAtCountryLevelIfCategoryIsNull() throws Exception {
+        Country country1 = new Country("IND", "India");
+        Country country2 = new Country("USA", "United States");
+        Category category2 = Category.builder().id(6).name("Category 4").build();
+        Category category3 = Category.builder().id(7).name("Category 4").build();
+        Indicator indicator1 = Indicator.builder().indicatorId(1).build();
+        Indicator indicator3 = Indicator.builder().indicatorId(3).build();
+        Indicator indicator4 = Indicator.builder().indicatorId(4).build();
+        Indicator indicator5 = Indicator.builder().indicatorId(5).build();
+
+        HealthIndicator mock1 = HealthIndicator.builder().country(country1).category(category3).indicator(indicator1).score(1).build();
+        HealthIndicator mock2 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(2).build();
+        HealthIndicator mock3 = HealthIndicator.builder().country(country2).category(category3).indicator(indicator3).score(3).build();
+        HealthIndicator mock4 = HealthIndicator.builder().country(country2).category(category2).indicator(indicator5).score(5).build();
+        when(iHealthIndicatorRepository.find(null)).thenReturn(asList(mock1, mock2, mock3, mock4));
+
+        CountriesHealthScoreDto countriesHealthScoreDto = healthIndicatorService.fetchCountriesHealthScores(null, 4);
+
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(1));
+        assertThat(countriesHealthScoreDto.getCountryHealthScores().get(0).getOverallScore(), is(3.75));
+        List<CategoryHealthScoreDto> categories = countriesHealthScoreDto.getCountryHealthScores().get(0).getCategories();
+        assertThat(categories.size(), is(2));
+        assertThat(findFirst(categories, c -> c.getId().equals(category3.getId())).getOverallScore(), is(2.5));
+        assertThat(findFirst(categories, c -> c.getId().equals(category3.getId())).getPhase(), is(3));
+        assertThat(findFirst(categories, c -> c.getId().equals(category2.getId())).getOverallScore(), is(5.0));
+        assertThat(findFirst(categories, c -> c.getId().equals(category2.getId())).getPhase(), is(5));
     }
 
     @Test

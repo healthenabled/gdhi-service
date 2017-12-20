@@ -252,7 +252,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/global_health_indicators?phase=3");
+                .get("http://localhost:" + port + "/global_health_indicators?phase=4");
 
         assertResponse(response.asString(), "global_indicators_filtered_by_phase.json");
 
