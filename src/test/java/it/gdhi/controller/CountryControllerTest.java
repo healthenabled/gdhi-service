@@ -1,6 +1,6 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.AllCountriesHealthScoreDto;
+import it.gdhi.dto.CountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.GlobalHealthScoreDto;
@@ -56,27 +56,27 @@ public class CountryControllerTest {
 
     @Test
     public void shouldInvokeFetchHealthScoresOnGettingGlobalInfo() {
-        AllCountriesHealthScoreDto mockGlobalHealthScore = mock(AllCountriesHealthScoreDto.class);
+        CountriesHealthScoreDto mockGlobalHealthScore = mock(CountriesHealthScoreDto.class);
 
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
         when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(healthIndicatorService.fetchHealthScores()).thenReturn(mockGlobalHealthScore);
-        AllCountriesHealthScoreDto globalHealthIndicators = countryController.getAllCountriesHealthIndicatorScores();
+        when(healthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
+        CountriesHealthScoreDto globalHealthIndicators = countryController.getCountriesHealthIndicatorScores(4, null);
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
-        verify(healthIndicatorService).fetchHealthScores();
+        verify(healthIndicatorService).fetchCountriesHealthScores(4, null);
     }
 
     @Test
     public void shouldInvokeGetGlobalHealthIndicator() {
         GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
 
-        when(healthIndicatorService.getGlobalHealthIndicator()).thenReturn(expected);
-        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator();
+        when(healthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
+        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator(null, 2);
         assertThat(expected, is(actual));
-        verify(healthIndicatorService).getGlobalHealthIndicator();
+        verify(healthIndicatorService).getGlobalHealthIndicator(null, 2);
     }
 
     @Test

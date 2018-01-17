@@ -165,5 +165,4 @@ public class IHealthIndicatorRepositoryTest {
         assertThat(countries.size(), is(2));
         assertThat(countries, is(Matchers.containsInAnyOrder("ARG", "IND")));
     }
-
 }

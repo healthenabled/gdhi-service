@@ -46,15 +46,18 @@ public class CountryController {
         return healthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
-    //TODO this is a duplicate of global_health_indicators. Make the app use global_health_indicators instead of this
     @RequestMapping("/countries_health_indicator_scores")
-    public AllCountriesHealthScoreDto getAllCountriesHealthIndicatorScores() {
-        return healthIndicatorService.fetchHealthScores();
+    public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "phase", required = false) Integer score) {
+        return healthIndicatorService.fetchCountriesHealthScores(categoryId, score);
     }
 
     @RequestMapping("/global_health_indicators")
-    public GlobalHealthScoreDto getGlobalHealthIndicator() {
-        return healthIndicatorService.getGlobalHealthIndicator();
+    public GlobalHealthScoreDto getGlobalHealthIndicator(
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "phase", required = false) Integer score) {
+        return healthIndicatorService.getGlobalHealthIndicator(categoryId, score);
     }
 
     @RequestMapping("/countries/{id}/country_summary")

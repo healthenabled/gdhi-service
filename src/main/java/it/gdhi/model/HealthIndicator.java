@@ -77,6 +77,10 @@ public class HealthIndicator {
         return this.indicator.getDefinition();
     }
 
+    public String getCountryId() {
+        return this.country.getId();
+    }
+
     public String getScoreDescription() {
         return Optional.ofNullable(indicatorScore)
                 .map(IndicatorScore::getDefinition)

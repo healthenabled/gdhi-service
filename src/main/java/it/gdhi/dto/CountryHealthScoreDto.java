@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,10 @@ public class CountryHealthScoreDto {
     private List<CategoryHealthScoreDto> categories;
 
     private Integer countryPhase;
+
+    @JsonIgnore
+    public boolean hasCategories() {
+        return this.getCategories().size() > 0;
+    }
 
 }
