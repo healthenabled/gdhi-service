@@ -1,6 +1,6 @@
 package it.gdhi.dto;
 
-import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.CountryHealthIndicator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +16,12 @@ public class IndicatorScoreDto {
     private String supportingText;
     private String scoreDescription;
 
-    public IndicatorScoreDto(HealthIndicator healthIndicator) {
-        this.id = healthIndicator.getIndicatorId();
-        this.name = healthIndicator.getIndicatorName();
-        this.indicatorDescription = healthIndicator.getIndicatorDescription();
-        this.score = healthIndicator.getScore();
-        this.supportingText = healthIndicator.getSupportingText();
-        this.scoreDescription = healthIndicator.getScoreDescription();
+    public IndicatorScoreDto(CountryHealthIndicator countryHealthIndicator) {
+        this.id = countryHealthIndicator.getIndicatorId();
+        this.name = countryHealthIndicator.getIndicatorName();
+        this.indicatorDescription = countryHealthIndicator.getIndicatorDescription();
+        this.score = countryHealthIndicator.getScore();
+        this.supportingText = countryHealthIndicator.getSupportingText();
+        this.scoreDescription = countryHealthIndicator.getScoreDescription();
     }
 }

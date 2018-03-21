@@ -6,7 +6,7 @@ import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.service.HealthIndicatorService;
+import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CountryController {
     private CountryService countryService;
 
     @Autowired
-    private HealthIndicatorService healthIndicatorService;
+    private CountryHealthIndicatorService countryHealthIndicatorService;
 
     @Autowired
     private DevelopmentIndicatorService developmentIndicatorService;
@@ -43,21 +43,21 @@ public class CountryController {
 
     @RequestMapping("/countries/{id}/health_indicators")
     public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
-        return healthIndicatorService.fetchCountryHealthScore(countryId);
+        return countryHealthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
     @RequestMapping("/countries_health_indicator_scores")
     public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
             @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @RequestParam(value = "phase", required = false) Integer score) {
-        return healthIndicatorService.fetchCountriesHealthScores(categoryId, score);
+        return countryHealthIndicatorService.fetchCountriesHealthScores(categoryId, score);
     }
 
     @RequestMapping("/global_health_indicators")
     public GlobalHealthScoreDto getGlobalHealthIndicator(
             @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @RequestParam(value = "phase", required = false) Integer score) {
-        return healthIndicatorService.getGlobalHealthIndicator(categoryId, score);
+        return countryHealthIndicatorService.getGlobalHealthIndicator(categoryId, score);
     }
 
     @RequestMapping("/countries/{id}/country_summary")
@@ -79,12 +79,12 @@ public class CountryController {
     public void exportGlobalData(HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
         log.info("Entered export global data end point");
-        healthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
+        countryHealthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
     }
 
     @RequestMapping(value = "/export_country_data/{id}", method = RequestMethod.GET)
     public void exportCountryDetails(HttpServletRequest request,
                                 HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
-        healthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
+        countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 }

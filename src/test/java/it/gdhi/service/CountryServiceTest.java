@@ -4,15 +4,15 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountryResourceLinkId;
-import it.gdhi.model.id.HealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.IHealthIndicatorRepository;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +44,7 @@ public class CountryServiceTest {
     @Mock
     ICountryResourceLinkRepository iCountryResourceLinkRepository;
     @Mock
-    IHealthIndicatorRepository iHealthIndicatorRepository;
+    ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
     @Mock
     MailerService mailerService;
 
@@ -122,16 +122,16 @@ public class CountryServiceTest {
                 .healthIndicators(healthIndicatorDtos).build();
         countryService.save(gdhiQuestionnaire);
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
-        ArgumentCaptor<HealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(HealthIndicator.class);
-        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository, iHealthIndicatorRepository);
+        ArgumentCaptor<CountryHealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(CountryHealthIndicator.class);
+        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository, iCountryHealthIndicatorRepository);
         inOrder.verify(iCountryResourceLinkRepository).deleteResources("ARG");
         inOrder.verify(iCountrySummaryRepository).save(summaryCaptor.capture());
-        inOrder.verify(iHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
+        inOrder.verify(iCountryHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
         CountrySummary summaryCaptorValue = summaryCaptor.getValue();
         assertThat(summaryCaptorValue.getCountryId(), is("ARG"));
         assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));
         assertThat(summaryCaptorValue.getCountryResourceLinks().get(0).getLink(), is("Res 1"));
-        assertThat(healthIndicatorsCaptorList.getValue().getHealthIndicatorId().getCategoryId(), is(1));
+        assertThat(healthIndicatorsCaptorList.getValue().getCountryHealthIndicatorId().getCategoryId(), is(1));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class CountryServiceTest {
                 .healthIndicators(healthIndicatorDtos).build();
 
         when(iCountrySummaryRepository.save(any(CountrySummary.class))).thenReturn(CountrySummary.builder().build());
-        when(iHealthIndicatorRepository.save(any(HealthIndicator.class))).thenReturn(HealthIndicator.builder().build());
+        when(iCountryHealthIndicatorRepository.save(any(CountryHealthIndicator.class))).thenReturn(CountryHealthIndicator.builder().build());
         when(countryDetailRepository.find(countryId)).thenReturn(country);
 
         countryService.save(gdhiQuestionnaire);
@@ -184,21 +184,21 @@ public class CountryServiceTest {
                 .build();
 
         when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
-        HealthIndicator indicator1 = HealthIndicator.builder()
-                .healthIndicatorId(new HealthIndicatorId(countryId, 1, 2))
+        CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2))
                 .score(5)
                 .build();
-        HealthIndicator indicator2 = HealthIndicator.builder()
-                .healthIndicatorId(new HealthIndicatorId(countryId, 2, 3))
+        CountryHealthIndicator indicator2 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 2, 3))
                 .score(4)
                 .build();
-        List<HealthIndicator> healthIndicators = asList(indicator1, indicator2);
-        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(healthIndicators);
+        List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(countryHealthIndicators);
 
         GdhiQuestionnaire details = countryService.getDetails(countryId);
 
         assertSummary(countrySummary, details.getCountrySummary());
-        assertIndicators(healthIndicators, details.getHealthIndicators());
+        assertIndicators(countryHealthIndicators, details.getHealthIndicators());
     }
 
     @Test
@@ -207,19 +207,19 @@ public class CountryServiceTest {
 
         when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
 
-        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(asList());
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(asList());
 
         GdhiQuestionnaire details = countryService.getDetails(countryId);
 
         assertNull(details.getCountrySummary());
     }
 
-    private void assertIndicators(List<HealthIndicator> expectedHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
-        assertEquals(expectedHealthIndicators.size(), actualHealthIndicators.size());
-        expectedHealthIndicators.forEach(expected -> {
+    private void assertIndicators(List<CountryHealthIndicator> expectedCountryHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
+        assertEquals(expectedCountryHealthIndicators.size(), actualHealthIndicators.size());
+        expectedCountryHealthIndicators.forEach(expected -> {
             HealthIndicatorDto actualIndicator = actualHealthIndicators.stream()
-                    .filter(actual -> actual.getCategoryId().equals(expected.getHealthIndicatorId().getCategoryId())
-                            && actual.getIndicatorId().equals(expected.getHealthIndicatorId().getIndicatorId()))
+                    .filter(actual -> actual.getCategoryId().equals(expected.getCountryHealthIndicatorId().getCategoryId())
+                            && actual.getIndicatorId().equals(expected.getCountryHealthIndicatorId().getIndicatorId()))
                     .findFirst()
                     .get();
             assertEquals(expected.getScore(), actualIndicator.getScore());

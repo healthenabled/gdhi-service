@@ -7,7 +7,7 @@ import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.service.HealthIndicatorService;
+import it.gdhi.service.CountryHealthIndicatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,7 +36,7 @@ public class CountryControllerTest {
     private DevelopmentIndicatorService developmentIndicatorService;
 
     @Mock
-    private HealthIndicatorService healthIndicatorService;
+    private CountryHealthIndicatorService countryHealthIndicatorService;
 
     @Test
     public void shouldListCountries() {
@@ -48,10 +48,10 @@ public class CountryControllerTest {
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
-        when(healthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
         CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(countryId);
         assertThat(healthIndicatorForGivenCountryCode, is(countryHealthScoreMock));
-        verify(healthIndicatorService).fetchCountryHealthScore(countryId);
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId);
     }
 
     @Test
@@ -61,22 +61,22 @@ public class CountryControllerTest {
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
         when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(healthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
+        when(countryHealthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
         CountriesHealthScoreDto globalHealthIndicators = countryController.getCountriesHealthIndicatorScores(4, null);
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
-        verify(healthIndicatorService).fetchCountriesHealthScores(4, null);
+        verify(countryHealthIndicatorService).fetchCountriesHealthScores(4, null);
     }
 
     @Test
     public void shouldInvokeGetGlobalHealthIndicator() {
         GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
 
-        when(healthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
+        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
         GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator(null, 2);
         assertThat(expected, is(actual));
-        verify(healthIndicatorService).getGlobalHealthIndicator(null, 2);
+        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class CountryControllerTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         countryController.exportGlobalData(request, response);
-        verify(healthIndicatorService).createGlobalHealthIndicatorInExcel(request, response);
+        verify(countryHealthIndicatorService).createGlobalHealthIndicatorInExcel(request, response);
     }
 
     @Test
@@ -123,6 +123,6 @@ public class CountryControllerTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         countryController.exportCountryDetails(request, response, "IND");
-        verify(healthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
+        verify(countryHealthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
     }
  }

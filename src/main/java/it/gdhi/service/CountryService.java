@@ -4,13 +4,13 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.HealthIndicator;
-import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.IHealthIndicatorRepository;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CountryService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Autowired
-    private IHealthIndicatorRepository iHealthIndicatorRepository;
+    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
     @Autowired
     private  MailerService mailerService;
@@ -63,29 +63,31 @@ public class CountryService {
 
     public GdhiQuestionnaire getDetails(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
+        List<CountryHealthIndicator> countryHealthIndicators =
+                iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
         CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
                 .map(CountrySummaryDto::new)
                 .orElse(null);
-        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
+        List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
                 .map(HealthIndicatorDto::new)
                 .collect(toList());
         return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
     }
 
     private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
-        List<HealthIndicator> healthIndicators = transformToHealthIndicator(countryId, healthIndicatorDto);
-        if(healthIndicators != null) {
-            healthIndicators.stream().forEach(health -> iHealthIndicatorRepository.save(health));
+        List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId,
+                healthIndicatorDto);
+        if(countryHealthIndicators != null) {
+            countryHealthIndicators.stream().forEach(health -> iCountryHealthIndicatorRepository.save(health));
         }
     }
 
-    private List<HealthIndicator> transformToHealthIndicator(String countryId,
-                                                             List<HealthIndicatorDto> healthIndicatorDto) {
+    private List<CountryHealthIndicator> transformToHealthIndicator(String countryId,
+                                                                    List<HealthIndicatorDto> healthIndicatorDto) {
         return healthIndicatorDto.stream().map(dto -> {
-            HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId, dto.getCategoryId(),
-                                                  dto.getIndicatorId());
-            return new HealthIndicator(healthIndicatorId, dto.getScore(), dto.getSupportingText());
+            CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,
+                    dto.getCategoryId(), dto.getIndicatorId());
+            return new CountryHealthIndicator(countryHealthIndicatorId, dto.getScore(), dto.getSupportingText());
         }).collect(toList());
     }
 

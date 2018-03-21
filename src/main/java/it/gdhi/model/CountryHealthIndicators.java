@@ -16,14 +16,14 @@ import static java.util.stream.Collectors.groupingBy;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class HealthIndicators {
+public class CountryHealthIndicators {
 
-    private List<HealthIndicator> healthIndicators;
+    private List<CountryHealthIndicator> countryHealthIndicators;
 
     public Map<Integer, Double> groupByCategoryIdWithNotNullScores() {
         return excludingNullScores()
                 .collect(groupingBy(h -> h.getCategory().getId(),
-                        averagingInt(HealthIndicator::getScore)));
+                        averagingInt(CountryHealthIndicator::getScore)));
     }
 
     public Double getOverallScore() {
@@ -36,7 +36,7 @@ public class HealthIndicators {
     }
 
     public String getCountryName() {
-        return Optional.ofNullable(healthIndicators)
+        return Optional.ofNullable(countryHealthIndicators)
                 .filter(indicators -> indicators.size() > 0)
                 .map(indicators -> indicators.get(0).getCountry().getName())
                 .orElse(null);
@@ -48,8 +48,8 @@ public class HealthIndicators {
     }
 
 
-    public Map<Category, List<HealthIndicator>> groupByCategory() {
-        return this.healthIndicators.stream().collect(groupingBy(HealthIndicator::getCategory));
+    public Map<Category, List<CountryHealthIndicator>> groupByCategory() {
+        return this.countryHealthIndicators.stream().collect(groupingBy(CountryHealthIndicator::getCategory));
     }
 
     public Integer getCountOfCountriesWithAlteastOneScore() {
@@ -58,12 +58,12 @@ public class HealthIndicators {
                 .size();
     }
 
-    private Stream<HealthIndicator> excludingNullScores() {
-        return healthIndicators.stream()
+    private Stream<CountryHealthIndicator> excludingNullScores() {
+        return countryHealthIndicators.stream()
                 .filter(healthIndicator -> healthIndicator.getScore() != null);
     }
 
-    public Map<String, List<HealthIndicator>> groupByCountry() {
-        return this.healthIndicators.stream().collect(groupingBy(HealthIndicator::getCountryId));
+    public Map<String, List<CountryHealthIndicator>> groupByCountry() {
+        return this.countryHealthIndicators.stream().collect(groupingBy(CountryHealthIndicator::getCountryId));
     }
 }

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class HealthIndicatorId implements Serializable {
+public class CountryHealthIndicatorId implements Serializable {
 
     @Column(name = "country_id")
     private String countryId;

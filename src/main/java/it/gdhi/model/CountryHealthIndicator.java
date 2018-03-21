@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
-import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.CountryHealthIndicatorId;
+import it.gdhi.model.id.CountryHealthIndicatorId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,10 +20,10 @@ import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 @NoArgsConstructor
 @Getter
 @Builder
-public class HealthIndicator {
+public class CountryHealthIndicator {
 
     @EmbeddedId
-    private HealthIndicatorId healthIndicatorId;
+    private CountryHealthIndicatorId countryHealthIndicatorId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
@@ -54,13 +55,14 @@ public class HealthIndicator {
     @Column(name = "supporting_text")
     private String supportingText;
 
-    public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore) {
-        this.healthIndicatorId = healthIndicatorId;
+    public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore) {
+        this.countryHealthIndicatorId = countryHealthIndicatorId;
         this.score = indicatorScore;
     }
 
-    public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore, String supportingText) {
-        this.healthIndicatorId = healthIndicatorId;
+    public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore,
+                                  String supportingText) {
+        this.countryHealthIndicatorId = countryHealthIndicatorId;
         this.score = indicatorScore;
         this.supportingText = supportingText;
     }
