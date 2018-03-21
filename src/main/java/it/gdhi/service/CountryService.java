@@ -6,11 +6,10 @@ import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.id.CountryHealthIndicatorId;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,17 +49,6 @@ public class CountryService {
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
-    @Transactional
-    public void save(GdhiQuestionnaire gdhiQuestionnaire) {
-         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
-         saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
-         String feederName = gdhiQuestionnaire.getDataFeederName();
-         String feederRole = gdhiQuestionnaire.getDataFeederRole();
-         String contactEmail = gdhiQuestionnaire.getContactEmail();
-         Country country = iCountryRepository.find(gdhiQuestionnaire.getCountryId());
-         mailerService.send(country, feederName, feederRole, contactEmail);
-    }
-
     public GdhiQuestionnaire getDetails(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
         List<CountryHealthIndicator> countryHealthIndicators =
@@ -72,28 +60,5 @@ public class CountryService {
                 .map(HealthIndicatorDto::new)
                 .collect(toList());
         return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
-    }
-
-    private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
-        List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId,
-                healthIndicatorDto);
-        if(countryHealthIndicators != null) {
-            countryHealthIndicators.stream().forEach(health -> iCountryHealthIndicatorRepository.save(health));
-        }
-    }
-
-    private List<CountryHealthIndicator> transformToHealthIndicator(String countryId,
-                                                                    List<HealthIndicatorDto> healthIndicatorDto) {
-        return healthIndicatorDto.stream().map(dto -> {
-            CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,
-                    dto.getCategoryId(), dto.getIndicatorId());
-            return new CountryHealthIndicator(countryHealthIndicatorId, dto.getScore(), dto.getSupportingText());
-        }).collect(toList());
-    }
-
-    private void saveCountryContactInfo(String countryId, CountrySummaryDto countrySummaryDetailDto) {
-        CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
-        iCountryResourceLinkRepository.deleteResources(countryId);
-        iCountrySummaryRepository.save(countrySummary);
     }
 }

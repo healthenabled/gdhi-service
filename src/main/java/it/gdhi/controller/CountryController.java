@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
+import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.CountryHealthIndicatorService;
@@ -23,6 +24,9 @@ public class CountryController {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private CountryHealthDataService countryHealthDataService;
 
     @Autowired
     private CountryHealthIndicatorService countryHealthIndicatorService;
@@ -67,7 +71,7 @@ public class CountryController {
 
     @RequestMapping(value = "/countries", method = RequestMethod.POST)
     public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryService.save(gdhiQuestionnaire);
+        countryHealthDataService.save(gdhiQuestionnaire);
     }
 
     @RequestMapping(value = "/countries/{id}", method = RequestMethod.GET)

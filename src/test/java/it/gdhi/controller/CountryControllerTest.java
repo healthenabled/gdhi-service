@@ -1,13 +1,11 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.CountriesHealthScoreDto;
-import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.GdhiQuestionnaire;
-import it.gdhi.dto.GlobalHealthScoreDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.DevelopmentIndicator;
+import it.gdhi.service.CountryHealthDataService;
+import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.service.CountryHealthIndicatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -31,6 +29,9 @@ public class CountryControllerTest {
 
     @Mock
     private CountryService countryService;
+
+    @Mock
+    private CountryHealthDataService countryHealthDataService;
 
     @Mock
     private DevelopmentIndicatorService developmentIndicatorService;
@@ -82,9 +83,18 @@ public class CountryControllerTest {
     @Test
     public void shouldSaveHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
-        doNothing().when(countryService).save(mock);
+        doNothing().when(countryHealthDataService).save(mock);
         countryController.saveHealthIndicatorsFor(mock);
-        verify(countryService).save(mock);
+        verify(countryHealthDataService).save(mock);
+    }
+
+    @Test
+    public void shouldFetchCountrySummary() {
+        CountrySummaryDto countrySummary = mock(CountrySummaryDto.class);
+        String countryId = "IND";
+        when(countryService.fetchCountrySummary(countryId)).thenReturn(countrySummary);
+        CountrySummaryDto actualCountrySummary = countryController.fetchCountrySummary(countryId);
+        assertThat(actualCountrySummary, is(countrySummary));
     }
 
     @Test

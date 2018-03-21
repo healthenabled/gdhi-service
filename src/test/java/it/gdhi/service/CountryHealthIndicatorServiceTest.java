@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CountryCountryHealthIndicatorServiceTest {
+public class CountryHealthIndicatorServiceTest {
 
     @InjectMocks
     CountryHealthIndicatorService countryHealthIndicatorService;
