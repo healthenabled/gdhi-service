@@ -15,7 +15,7 @@ import java.util.Optional;
 import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 
 @Entity
-@Table(schema = "validated_config", name="health_indicators")
+@Table(schema = "country_health_data", name="health_indicators")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -35,8 +35,8 @@ public class BaseIntegrationTest {
     @After
     public void tearDown() throws Exception {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"validated_config.health_indicators",
-                "validated_config.countries_summary", "validated_config.country_resource_links");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"country_health_data.health_indicators",
+                "country_health_data.countries_summary", "country_health_data.country_resource_links");
     }
 
     ObjectMapper getMapper() {

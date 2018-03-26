@@ -15,7 +15,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Entity
-@Table(schema ="validated_config", name="countries_summary")
+@Table(schema ="country_health_data", name="countries_summary")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

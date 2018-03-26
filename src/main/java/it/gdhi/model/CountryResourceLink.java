@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema ="validated_config", name="country_resource_links")
+@Table(schema ="country_health_data", name="country_resource_links")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
