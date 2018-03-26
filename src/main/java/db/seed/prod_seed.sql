@@ -28,7 +28,7 @@ values
 
 
 
- INSERT INTO country_health_data.countries_summary
+ INSERT INTO country_health_data.country_summary
  (country_id,
   summary,
   contact_name,
