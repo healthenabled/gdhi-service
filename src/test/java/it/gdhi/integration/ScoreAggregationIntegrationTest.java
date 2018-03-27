@@ -444,7 +444,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(0).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null)
+                        .supportingText("sp8").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(5).supportingText("sp9").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),

@@ -83,12 +83,12 @@
     {
       "countryId": "GBR",
       "countryName": "United Kingdom",
-      "overallScore": 2.75,
+      "overallScore": 3.0,
       "categories": [
         {
           "id": 1,
           "name": "Leadership and Governance",
-          "overallScore": 0.5,
+          "overallScore": 1.0,
           "phase": 1,
           "indicators": [
             {
@@ -103,9 +103,9 @@
               "id": 2,
               "name": "Digital Health prioritized at the national level through planning",
               "indicatorDescription": "Is digital health included and budgeted for in national health or relevant national strategies and/or plan(s)?",
-              "score": 0,
+              "score": null,
               "supportingText": "sp8",
-              "scoreDescription": "Not included"
+              "scoreDescription": "Missing or Not Available"
             }
           ]
         },
