@@ -101,7 +101,7 @@ public class ExcelUtilService {
         }
     }
 
-    protected int populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
+    protected void populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
         Row row = sheet.createRow(rownum);
         int cellnum = 0;
         XSSFCellStyle fontStyle = getFontStyle(workBook);
@@ -113,7 +113,6 @@ public class ExcelUtilService {
             cell.setCellStyle(fontStyle);
             cell.setCellValue(header);
         }
-        return rownum;
     }
 
     private XSSFCellStyle getFontStyle(XSSFWorkbook wb) {
@@ -134,10 +133,9 @@ public class ExcelUtilService {
         List<Category> categoryList = iCategoryRepository.findAll();
         Map<String, String> headerDef = new LinkedHashMap<>();
         headerDef.put(COUNTRY_NAME, COUNTRY_NAME);
-        categoryList.stream().forEach(category -> {
-            category.getIndicators().stream().forEach(indicator -> {
-                headerDef.put(INDICATOR + indicator.getIndicatorId(), indicator.getName());
-            });
+        categoryList.forEach(category -> {
+            category.getIndicators().forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
+                    indicator.getName()));
             headerDef.put(CATEGORY + category.getId(), category.getName());
         });
         headerDef.put(OVERALL_PHASE, OVERALL_PHASE);

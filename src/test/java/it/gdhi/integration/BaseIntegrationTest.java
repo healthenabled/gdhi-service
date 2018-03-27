@@ -48,7 +48,7 @@ public class BaseIntegrationTest {
     }
 
     void setupHealthIndicatorsForCountry(String countryId, List<HealthIndicatorDto> healthIndicatorDtos) {
-        healthIndicatorDtos.stream().forEach(healthIndicator -> {
+        healthIndicatorDtos.forEach(healthIndicator -> {
             CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,healthIndicator.getCategoryId(),healthIndicator.getIndicatorId());
             CountryHealthIndicator countryHealthIndicatorSetupData1 = new CountryHealthIndicator(countryHealthIndicatorId1, healthIndicator.getScore(), healthIndicator.getSupportingText());
             healthIndicatorRepository.save(countryHealthIndicatorSetupData1);
@@ -60,9 +60,5 @@ public class BaseIntegrationTest {
         HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
         HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
         assertEquals(expectedMap, actualMap);
-    }
-
-    SimpleDateFormat getDateFormat() {
-        return dateFormat;
     }
 }

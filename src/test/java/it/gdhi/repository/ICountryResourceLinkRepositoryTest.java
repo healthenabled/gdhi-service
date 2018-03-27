@@ -42,7 +42,7 @@ public class ICountryResourceLinkRepositoryTest {
         entityManager.clear();
         List<CountryResourceLink> actual = iCountryResourceLinkRepository.findAllBy("NZL");
         assertThat(actual.size(), is(2));
-        assertThat(actual.stream().map(a -> a.getLink()).collect(toList()), containsInAnyOrder("Res 1", "Res 3"));
+        assertThat(actual.stream().map(CountryResourceLink::getLink).collect(toList()), containsInAnyOrder("Res 1", "Res 3"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ICountryResourceLinkRepositoryTest {
         List<CountryResourceLink> actual2 = iCountryResourceLinkRepository.findAllBy("AUS");
         assertThat(actual1.size(), is(0));
         assertThat(actual2.size(), is(1));
-        assertThat(actual2.stream().map(a -> a.getLink()).collect(toList()), containsInAnyOrder("Res 2"));
+        assertThat(actual2.stream().map(CountryResourceLink::getLink).collect(toList()), containsInAnyOrder("Res 2"));
     }
 
 }

@@ -1,6 +1,7 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.CategoryIndicatorDto;
+import it.gdhi.dto.ScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.model.Indicator;
 import it.gdhi.model.IndicatorScore;
@@ -82,14 +83,14 @@ public class CategoryIndicatorServiceTest {
         assertThat(categoryIndicatorMapping.get(0).getIndicators().get(0).getIndicatorId(), is(1));
         assertThat(categoryIndicatorMapping.get(0).getIndicators().get(0).getIndicatorName(), is("Ind 1"));
         assertThat(categoryIndicatorMapping.get(0).getIndicators().get(0).getIndicatorDefinition(), is("Ind Def 1"));
-        assertThat(categoryIndicatorMapping.get(0).getIndicators().get(0).getScores().stream().map(s -> s.getScoreDefinition())
+        assertThat(categoryIndicatorMapping.get(0).getIndicators().get(0).getScores().stream().map(ScoreDto::getScoreDefinition)
                 .collect(toList()), hasItems("Score 1", "Score 2"));
         assertThat(categoryIndicatorMapping.get(1).getCategoryId(), is(4));
         assertThat(categoryIndicatorMapping.get(1).getCategoryName(), is("Cat 4"));
         assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getIndicatorId(), is(2));
         assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getIndicatorName(), is("Ind 2"));
         assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getIndicatorDefinition(), is("Ind Def 2"));
-        assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getScores().stream().map(s -> s.getScoreDefinition())
+        assertThat(categoryIndicatorMapping.get(1).getIndicators().get(0).getScores().stream().map(ScoreDto::getScoreDefinition)
                 .collect(toList()), hasItems("Score 3", "Score 4"));
 
     }

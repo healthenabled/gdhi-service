@@ -45,9 +45,9 @@ public class ICategoryRepositoryTest {
                 .categoryIndicatorId(CategoryIndicatorId.builder().categoryId(category9.getId()).indicatorId(indicator20.getIndicatorId()).build()).build();
         entityManager.persist(categoryIndicator1);
         entityManager.persist(categoryIndicator2);
-        IndicatorScore indicatorScore = IndicatorScore.builder().id(180l).indicatorId(indicator20.getIndicatorId()).score(null).definition("NA").build();
-        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(190l).indicatorId(indicator20.getIndicatorId()).score(2).definition("score 2").build();
-        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(500l).indicatorId(indicator20.getIndicatorId()).score(1).definition("score 1").build();
+        IndicatorScore indicatorScore = IndicatorScore.builder().id(180L).indicatorId(indicator20.getIndicatorId()).score(null).definition("NA").build();
+        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(190L).indicatorId(indicator20.getIndicatorId()).score(2).definition("score 2").build();
+        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(500L).indicatorId(indicator20.getIndicatorId()).score(1).definition("score 1").build();
         entityManager.persist(indicatorScore);
         entityManager.persist(indicatorScore1);
         entityManager.persist(indicatorScore2);

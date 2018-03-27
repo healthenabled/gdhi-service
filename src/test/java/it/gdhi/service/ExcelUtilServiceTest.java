@@ -29,6 +29,7 @@ import static it.gdhi.service.ExcelUtilService.WORKSHEET_NAME;
 import static it.gdhi.utils.Constants.HEADER_KEY;
 import static it.gdhi.utils.Constants.MIME_TYPE;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -110,7 +111,7 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndHealthScoresWhenCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, asList(), 4));
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, emptyList(), 4));
         List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));

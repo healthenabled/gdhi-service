@@ -42,7 +42,7 @@ public class MailerServiceTest {
         String feederRole = "feeder role";
         String contactEmail = "contact@test.com";
 
-        Map<String, String> address =  new HashMap<String, String>();
+        Map<String, String> address = new HashMap<>();
         address.put(email1, name1);
         address.put(email2, name2);
         when(mailAddresses.getAddressMap()).thenReturn(address);

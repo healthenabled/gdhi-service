@@ -78,10 +78,6 @@ public class CountryHealthIndicatorsTest {
 
     @Test
     public void shouldGetTotalScore() throws Exception {
-        assertEquals(new Double(3.33), new CountryHealthIndicators(countryHealthIndicators).getTotalScore(), 0.01);
-    }
-
-    @Test
-    public void shouldGetScoresOf() throws Exception {
+        assertEquals(3.33, new CountryHealthIndicators(countryHealthIndicators).getTotalScore(), 0.01);
     }
 }

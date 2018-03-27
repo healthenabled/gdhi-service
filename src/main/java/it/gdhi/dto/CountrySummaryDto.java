@@ -1,6 +1,7 @@
 package it.gdhi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,7 +60,7 @@ public class CountrySummaryDto {
     private List<String> transformResourceLinks(CountrySummary countrySummary) {
         return Optional.ofNullable(countrySummary.getCountryResourceLinks())
                 .map(list -> list.stream()
-                        .map(countryResourceLink -> countryResourceLink.getLink())
+                        .map(CountryResourceLink::getLink)
                         .collect(toList()))
                 .orElse(null);
 

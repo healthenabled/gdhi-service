@@ -116,18 +116,6 @@ public class Application {
         return jpaProperties;
     }
 
-//    @Bean
-//    LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
-//                                                                Environment env) {
-//        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-//        entityManagerFactoryBean.setDataSource(dataSource);
-//        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-//
-
-//
-//        return entityManagerFactoryBean;
-//    }
-
     @Bean
     public PlatformTransactionManager transactionManager() {
 

@@ -5,6 +5,6 @@ import java.util.function.Function;
 
 public class ListUtils {
     public static <T> T findFirst(List<T> list, Function<T, Boolean> perdicate) {
-        return list.stream().filter(i -> perdicate.apply(i)).findFirst().get();
+        return list.stream().filter(perdicate::apply).findFirst().get();
     }
 }

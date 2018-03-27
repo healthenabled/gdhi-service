@@ -8,7 +8,6 @@ import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +30,6 @@ public class CountryService {
 
     @Autowired
     private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
-
-    @Autowired
-    private  MailerService mailerService;
-
-    @Autowired
-    private ICountryResourceLinkRepository iCountryResourceLinkRepository;
 
     @Transactional
     public List<Country> fetchCountries() {

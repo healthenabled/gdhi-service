@@ -44,7 +44,7 @@ public class CountryHealthIndicatorServiceTest {
         Country country1 = new Country("IND", "India");
         Category category1 = new Category(categoryId1, "Leadership and Governance");
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition1");
-        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(1l).indicatorId(indicatorId2).score(score2).definition("score 1").build();
+        IndicatorScore indicatorScore1 = IndicatorScore.builder().id(1L).indicatorId(indicatorId2).score(score2).definition("score 1").build();
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, indicatorScore1, score1,  "st1");
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId2,indicatorId2);
@@ -52,9 +52,9 @@ public class CountryHealthIndicatorServiceTest {
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 2", "Definition2");
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition3");
 
-        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(1l).indicatorId(indicatorId2).score(score2).definition("score 2").build();
+        IndicatorScore indicatorScore2 = IndicatorScore.builder().id(1L).indicatorId(indicatorId2).score(score2).definition("score 2").build();
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category2, indicator2, indicatorScore2,  score2, "st2" );
-        IndicatorScore indicatorScore3 = IndicatorScore.builder().id(2l).indicatorId(indicatorId3).score(score3).definition("score 3").build();
+        IndicatorScore indicatorScore3 = IndicatorScore.builder().id(2L).indicatorId(indicatorId3).score(score3).definition("score 3").build();
         CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category2, indicator3, indicatorScore3,  score3, "st3" );
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator3, countryHealthIndicator2, countryHealthIndicator1);
@@ -563,7 +563,7 @@ public class CountryHealthIndicatorServiceTest {
 
         assertEquals(2, globalHealthIndicator.getOverAllScore().intValue());
         assertEquals(1, globalHealthIndicator.getCategories().size());
-        assertEquals(1.5, globalHealthIndicator.getCategories().get(0).getOverallScore().doubleValue(), 0.01);
+        assertEquals(1.5, globalHealthIndicator.getCategories().get(0).getOverallScore(), 0.01);
         assertEquals(2, globalHealthIndicator.getCategories().get(0).getPhase().intValue());
     }
 

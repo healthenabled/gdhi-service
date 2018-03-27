@@ -17,7 +17,7 @@ public class CategoryIndicatorService {
     private ICategoryRepository iCategoryRepository;
 
     public List<CategoryIndicatorDto> getHealthIndicatorOptions() {
-        return iCategoryRepository.findAll().stream().map(category -> new CategoryIndicatorDto(category))
+        return iCategoryRepository.findAll().stream().map(CategoryIndicatorDto::new)
                                   .collect(toList());
     }
 }

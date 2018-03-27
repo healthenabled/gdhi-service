@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -149,7 +150,7 @@ public class CountryServiceTest {
 
         when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(asList());
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(Collections.emptyList());
 
         GdhiQuestionnaire details = countryService.getDetails(countryId);
 

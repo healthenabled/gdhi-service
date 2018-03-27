@@ -129,6 +129,19 @@ public class ICountryHealthIndicatorRepositoryTest {
     }
 
     @Test
+    public void shouldNotFetchDataWhenCountryDataNotPresent() throws Exception {
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.findHealthIndicatorsFor("IND");
+        assertEquals(0, countryHealthIndicators.size());
+    }
+
+    @Test
+    public void shouldNotFetchDataWhenCountryIdIsNotSpecified() throws Exception {
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
+                .findHealthIndicatorsFor(null);
+        assertEquals(0, countryHealthIndicators.size());
+    }
+
+    @Test
     public void shouldFetchUniqueCountryIdsFromHealthIndicatorTable() {
         String countryId1 = "IND";
         Integer categoryId1 = 1;

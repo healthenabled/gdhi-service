@@ -58,7 +58,7 @@ public class CountryHealthDataService {
         List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId,
                 healthIndicatorDto);
         if(countryHealthIndicators != null) {
-            countryHealthIndicators.stream().forEach(health -> iCountryHealthIndicatorRepository.save(health));
+            countryHealthIndicators.forEach(health -> iCountryHealthIndicatorRepository.save(health));
         }
     }
 

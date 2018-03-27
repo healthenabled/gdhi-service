@@ -12,10 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -24,10 +22,10 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles("test")
 public class ICountryHealthIndicatorFilterRepositoryTest {
 
-    String countryId1 = "IND";
-    Integer categoryId1 = 1;
-    Integer indicatorId1 = 1;
-    Integer indicatorScore1 = 1;
+    private String countryId1 = "IND";
+    private Integer categoryId1 = 1;
+    private Integer indicatorId1 = 1;
+    private Integer indicatorScore1 = 1;
 
     String countryId2 = "ARG";
     Integer indicatorId2 = 2;

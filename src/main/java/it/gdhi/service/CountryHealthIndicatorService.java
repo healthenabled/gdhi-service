@@ -73,7 +73,7 @@ public class CountryHealthIndicatorService {
         CountriesHealthScoreDto countries = this.fetchCountriesHealthScores(categoryId, phase);
         List<CategoryHealthScoreDto> categories = getCategoriesInCountries(countries);
         Map<Integer, List<CategoryHealthScoreDto>> groupByCategory = categories.stream()
-                .collect(groupingBy(cat -> cat.getId()));
+                .collect(groupingBy(CategoryHealthScoreDto::getId));
         List<CategoryHealthScoreDto> categoryHealthScores = groupByCategory.entrySet().stream()
                 .map(this::getCategoryHealthScoreDto).collect(toList());
         Integer globalPhase = convertScoreToPhase(getAverageCategoryScore(categoryHealthScores));
@@ -107,14 +107,14 @@ public class CountryHealthIndicatorService {
         return countries.getCountryHealthScores()
                 .stream()
                 .map(CountryHealthScoreDto::getCategories)
-                .flatMap(list -> list.stream())
+                .flatMap(Collection::stream)
                 .collect(toList());
     }
 
     private Double getAverageCategoryScore(List<CategoryHealthScoreDto> categoriesHealthScore) {
         OptionalDouble optionalGlobalScore = categoriesHealthScore.stream()
                 .filter(c -> !isNull(c.getOverallScore()))
-                .mapToDouble(cat -> cat.getOverallScore())
+                .mapToDouble(CategoryHealthScoreDto::getOverallScore)
                 .average();
         return optionalGlobalScore.isPresent() ? optionalGlobalScore.getAsDouble() : null;
     }

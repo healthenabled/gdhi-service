@@ -28,7 +28,7 @@ public class CategoryIndicatorDto {
 
     private List<IndicatorDto> transformToIndicatorDto(Category category) {
         List<Indicator> indicators = category.getIndicators();
-        return indicators != null  ? indicators.stream().map(indicator -> new IndicatorDto(indicator))
+        return indicators != null  ? indicators.stream().map(IndicatorDto::new)
                 .collect(toList()) : emptyList();
     }
 

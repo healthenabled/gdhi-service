@@ -25,12 +25,6 @@ public class IndicatorDto {
 
     private List<ScoreDto> scores;
 
-    public IndicatorDto(Integer indicatorId, String indicatorName, String indicatorDefinition) {
-        this.indicatorId = indicatorId;
-        this.indicatorName = indicatorName;
-        this.indicatorDefinition = indicatorDefinition;
-    }
-
     public IndicatorDto(Indicator indicator) {
         this.indicatorId = indicator.getIndicatorId();
         this.indicatorName = indicator.getName();
@@ -40,7 +34,7 @@ public class IndicatorDto {
 
     private List<ScoreDto> getScores(Indicator indicator) {
         List<IndicatorScore> options = indicator.getOptions();
-        return options != null ? options.stream().map(option -> new ScoreDto(option))
+        return options != null ? options.stream().map(ScoreDto::new)
                                    .collect(toList()) : null;
     }
 }

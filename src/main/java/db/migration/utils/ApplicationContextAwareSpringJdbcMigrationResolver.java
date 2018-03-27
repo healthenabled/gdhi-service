@@ -51,7 +51,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver implements Migra
             resolvedMigrations.add(resolvedMigration);
         }
 
-        Collections.sort(resolvedMigrations, new ResolvedMigrationComparator());
+        resolvedMigrations.sort(new ResolvedMigrationComparator());
         return resolvedMigrations;
     }
 
