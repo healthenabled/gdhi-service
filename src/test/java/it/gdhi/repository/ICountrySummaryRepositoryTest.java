@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import java.util.UUID;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -32,9 +34,7 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldFetchPopulationGivenCountryCode() {
-        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL", "NZ"),
-                "NZL summary",
-                "Contact Name",
+        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, null);
@@ -51,9 +51,7 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldFetchCountryCodeCaseInsensitive() {
-        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL", "NZ"),
-                "NZL summary",
-                "Contact Name",
+        CountrySummary expected = new CountrySummary("NZL", new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, null);
@@ -70,9 +68,7 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldSaveCountrySummaryAlongWithResourceLinks() {
-        CountrySummary countrySummary1 = new CountrySummary("NZL", new Country("NZL", "NZL", "NZ"),
-                "NZL summary 1",
-                "Contact Name",
+        CountrySummary countrySummary1 = new CountrySummary("NZL", new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary 1", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com"))));
@@ -86,9 +82,7 @@ public class ICountrySummaryRepositoryTest {
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getCountryId(), is("NZL"));
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getLink(), is("www.google.com"));
 
-        CountrySummary countrySummary2 = new CountrySummary("NZL", new Country("NZL", "NZL", "NZ"),
-                "NZL summary 2",
-                "Contact Name",
+        CountrySummary countrySummary2 = new CountrySummary("NZL", new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary 2", "Contact Name",
                 "Contact Designation", null, null, null,
                 null, null, null, null, null,
                 null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com"))));

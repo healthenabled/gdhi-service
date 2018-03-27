@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -90,5 +91,10 @@ public class CountryController {
     public void exportCountryDetails(HttpServletRequest request,
                                 HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
+    }
+
+    @RequestMapping(value = "/country_info/{uuid}", method = RequestMethod.GET)
+        public Country getCountryDetails(@PathVariable("uuid") UUID countryUUID) {
+        return countryService.fetchCountryFromUUID(countryUUID);
     }
 }

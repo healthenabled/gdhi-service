@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,6 +35,10 @@ public class CountryService {
     @Transactional
     public List<Country> fetchCountries() {
         return iCountryRepository.findAll();
+    }
+
+    public Country fetchCountryFromUUID(UUID countryUUID) {
+        return iCountryRepository.findByUUID(countryUUID);
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ICountryRepository extends Repository<Country, Long> {
 
@@ -14,4 +15,6 @@ public interface ICountryRepository extends Repository<Country, Long> {
     Country find(String id);
 
     Country save(Country country);
+    @Query("SELECT c from Country c WHERE c.unique_id = ?1")
+    Country findByUUID(UUID countryUUID);
 }

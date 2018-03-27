@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -63,7 +64,7 @@ public class CountryServiceTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .summary(summary)
-                .country(new Country(countryId, "Argentina", "AR"))
+                .country(new Country(countryId, "Argentina", UUID.randomUUID(),"AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -110,7 +111,7 @@ public class CountryServiceTest {
         String countryId = "IND";
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
-                .country(new Country("IND", "India", "IN"))
+                .country(new Country("Ind", "India",UUID.randomUUID(),"IN"))
                 .summary("summary")
                 .contactName("contactName")
                 .contactDesignation("contact designation")

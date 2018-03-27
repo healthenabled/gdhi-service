@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -72,7 +73,7 @@ public class CountryHealthDataServiceTest {
     @Test
     public void shouldSendEmailOnSuccessfulSaveOfCountryDetailsAndIndicators() throws Exception {
         String countryId = "ARG";
-        Country country = new Country(countryId, "Argentina", "AR");
+        Country country = new Country(countryId, "Argentina", "AR",UUID.randomUUID());
         List<String> resourceLinks = asList("Res 1");
         String feeder = "feeder";
         String feederRole = "feeder role";

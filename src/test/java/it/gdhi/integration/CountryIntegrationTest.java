@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -82,7 +83,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .summary("summary")
-                .country(new Country(countryId, "India", "IN"))
+                .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
@@ -127,7 +128,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .summary("summary")
-                .country(new Country(countryId, "India", "IN"))
+                .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
