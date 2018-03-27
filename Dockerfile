@@ -30,7 +30,9 @@ RUN mkdir /opt/gdhi/service/logs
 
 COPY --from=0 /home/gradle/gdhi-service/build/libs/gdhi-1.0.0.jar /opt/gdhi/service
 
-COPY --from=0 /home/gradle/gdhi-service/application.yml /opt/gdhi/service  
+COPY application.yml /opt/gdhi/service  
+
+COPY logback-spring.xml /opt/gdhi/service  
 
 EXPOSE 8888
 
