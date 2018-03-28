@@ -14,7 +14,8 @@ import static org.junit.Assert.assertNull;
 public class CountrySummaryTest {
     @Test
     public void shouldTransformIntoCountryResourceLinks() throws Exception {
-        CountrySummary countrySummary = new CountrySummary("IND", CountrySummaryDto.builder().resources(asList("res1", "res2")).build());
+
+        CountrySummary countrySummary = new CountrySummary("IND","PUBLISHED", CountrySummaryDto.builder().resources(asList("res1", "res2")).build());
         assertEquals(2, countrySummary.getCountryResourceLinks().size());
         assertThat(countrySummary.getCountryResourceLinks().stream().map(CountryResourceLink::getLink).collect(Collectors.toList()),
                 Matchers.containsInAnyOrder("res1", "res2"));
@@ -22,7 +23,7 @@ public class CountrySummaryTest {
 
     @Test
     public void shouldHandleEmptyResource() throws Exception {
-        CountrySummary countrySummary = new CountrySummary("IND", CountrySummaryDto.builder().build());
+        CountrySummary countrySummary = new CountrySummary("IND","PUBLISHED", CountrySummaryDto.builder().build());
         assertNull(countrySummary.getCountryResourceLinks());
     }
 }

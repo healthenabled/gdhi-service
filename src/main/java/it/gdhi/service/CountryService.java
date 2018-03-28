@@ -43,20 +43,27 @@ public class CountryService {
 
     @Transactional
     public CountrySummaryDto fetchCountrySummary(String countryId) {
-        CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
+        CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, "PUBLISHED");
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
     public GdhiQuestionnaire getDetails(String countryId) {
-        CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
+        List<CountrySummary> countrySummaries = iCountrySummaryRepository.findAll(countryId);
+
+        CountrySummary countrySummary =  countrySummaries.size() > 1 ?
+                countrySummaries.stream()
+                .filter(countrySummaryTmp -> !countrySummaryTmp.getStatus()
+                        .equalsIgnoreCase("PUBLISHED")).findFirst().get() :
+                Optional.ofNullable(countrySummaries.get(0)).get();
+
         List<CountryHealthIndicator> countryHealthIndicators =
-                iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
+                iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, countrySummary.getStatus());
         CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
                 .map(CountrySummaryDto::new)
                 .orElse(null);
         List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
                 .map(HealthIndicatorDto::new)
                 .collect(toList());
-        return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
+        return new GdhiQuestionnaire(countryId, countrySummary.getStatus() , countrySummaryDto, healthIndicatorDtos);
     }
 }

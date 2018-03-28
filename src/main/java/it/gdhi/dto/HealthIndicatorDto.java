@@ -14,6 +14,8 @@ public class HealthIndicatorDto {
 
     private Integer categoryId;
     private Integer indicatorId;
+    private String  status;
+
     private Integer score;
     private String supportingText;
 
@@ -22,5 +24,6 @@ public class HealthIndicatorDto {
         this.indicatorId = countryHealthIndicator.getCountryHealthIndicatorId().getIndicatorId();
         this.score = countryHealthIndicator.getScore();
         this.supportingText = countryHealthIndicator.getSupportingText();
+        this.status = countryHealthIndicator.getCountryHealthIndicatorId().getStatus();
     }
 }

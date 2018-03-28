@@ -39,8 +39,10 @@ public class CountryHealthDataService {
 
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire) {
-        saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
-        saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
+        saveCountryContactInfo(gdhiQuestionnaire.getCountryId(),
+                gdhiQuestionnaire.getStatus(), gdhiQuestionnaire.getCountrySummary());
+        saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
+                gdhiQuestionnaire.getStatus(), gdhiQuestionnaire.getHealthIndicators());
         String feederName = gdhiQuestionnaire.getDataFeederName();
         String feederRole = gdhiQuestionnaire.getDataFeederRole();
         String contactEmail = gdhiQuestionnaire.getContactEmail();
@@ -48,25 +50,30 @@ public class CountryHealthDataService {
         mailerService.send(country, feederName, feederRole, contactEmail);
     }
 
-    private void saveCountryContactInfo(String countryId, CountrySummaryDto countrySummaryDetailDto) {
-        CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
+    private void saveCountryContactInfo(String countryId, String status ,
+                                        CountrySummaryDto countrySummaryDetailDto) {
+        CountrySummary countrySummary = new CountrySummary(countryId, status,
+                countrySummaryDetailDto);
         iCountryResourceLinkRepository.deleteResources(countryId);
         iCountrySummaryRepository.save(countrySummary);
     }
 
-    private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
-        List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId,
+    private void saveHealthIndicators(String countryId, String status,
+                                      List<HealthIndicatorDto> healthIndicatorDto) {
+        List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId, status,
                 healthIndicatorDto);
         if(countryHealthIndicators != null) {
-            countryHealthIndicators.forEach(health -> iCountryHealthIndicatorRepository.save(health));
+            countryHealthIndicators.forEach(health ->
+                    iCountryHealthIndicatorRepository.save(health));
         }
     }
 
     private List<CountryHealthIndicator> transformToHealthIndicator(String countryId,
+                                                                    String status,
                                                                     List<HealthIndicatorDto> healthIndicatorDto) {
         return healthIndicatorDto.stream().map(dto -> {
             CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,
-                    dto.getCategoryId(), dto.getIndicatorId());
+                    dto.getCategoryId(), dto.getIndicatorId(), status);
             return new CountryHealthIndicator(countryHealthIndicatorId, dto.getScore(), dto.getSupportingText());
         }).collect(toList());
     }

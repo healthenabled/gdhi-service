@@ -1,6 +1,8 @@
 package it.gdhi.repository;
 
+import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
+import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -29,6 +32,9 @@ public class ICountryHealthIndicatorRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private ICountrySummaryRepository countrySummaryRepository;
+
     @Test
     public void shouldFetchCountryCategoryIndicatorDetailsOnHealthIndicatorScoreFetchForCountry() {
 
@@ -36,8 +42,31 @@ public class ICountryHealthIndicatorRepositoryTest {
         Integer categoryId = 1;
         Integer indicatorId = 2;
         Integer indicatorScore = 3;
+        String status = "PUBLISHED";
 
-        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId);
+        CountrySummary countrySummaryIndia = CountrySummary.builder()
+                .countryId(countryId)
+                .status(status)
+                .summary("summary")
+                .country(new Country(countryId, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryIndia);
+
+        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId,status);
         CountryHealthIndicator countryHealthIndicatorSetupData = new CountryHealthIndicator(countryHealthIndicatorId, indicatorScore);
 
         entityManager.persist(countryHealthIndicatorSetupData);
@@ -59,8 +88,32 @@ public class ICountryHealthIndicatorRepositoryTest {
         Integer categoryId = 1;
         Integer indicatorId = 2;
         Integer indicatorScore = 3;
+        String status = "PUBLISHED";
 
-        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId);
+        CountrySummary countrySummaryIndia = CountrySummary.builder()
+                .countryId(countryId)
+                .status(status)
+                .summary("summary")
+                .country(new Country(countryId, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryIndia);
+
+
+        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId,status);
         CountryHealthIndicator countryHealthIndicatorSetupData = new CountryHealthIndicator(countryHealthIndicatorId, indicatorScore);
 
         iCountryHealthIndicatorRepository.save(countryHealthIndicatorSetupData);
@@ -81,8 +134,32 @@ public class ICountryHealthIndicatorRepositoryTest {
         Integer categoryId = 7;
         Integer indicatorId = 13;
         Integer score = 3;
+        String status = "PUBLISHED";
 
-        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId);
+        CountrySummary countrySummaryIndia = CountrySummary.builder()
+                .countryId(countryId)
+                .status(status)
+                .summary("summary")
+                .country(new Country(countryId, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryIndia);
+
+
+        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId,status);
         CountryHealthIndicator countryHealthIndicatorSetupData = new CountryHealthIndicator(countryHealthIndicatorId, score);
         entityManager.persist(countryHealthIndicatorSetupData);
         entityManager.flush();
@@ -108,8 +185,32 @@ public class ICountryHealthIndicatorRepositoryTest {
         Integer categoryId = 7;
         Integer indicatorId = 13;
         Integer score = null;
+        String status="PUBLISHED";
 
-        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId);
+        CountrySummary countrySummaryIndia = CountrySummary.builder()
+                .countryId(countryId)
+                .status(status)
+                .summary("summary")
+                .country(new Country(countryId, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryIndia);
+
+
+        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,categoryId,indicatorId,status);
         CountryHealthIndicator countryHealthIndicatorSetupData = new CountryHealthIndicator(countryHealthIndicatorId, score);
         entityManager.persist(countryHealthIndicatorSetupData);
         entityManager.flush();
@@ -146,25 +247,95 @@ public class ICountryHealthIndicatorRepositoryTest {
         String countryId1 = "IND";
         Integer categoryId1 = 1;
         Integer indicatorId1 = 1;
+        String status1 = "PUBLISHED";
         Integer indicatorScore1 = 1;
+        CountrySummary countrySummaryIndia = CountrySummary.builder()
+                .countryId(countryId1)
+                .status(status1)
+                .summary("summary")
+                .country(new Country(countryId1, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryIndia);
+
 
         String countryId2 = "ARG";
         Integer categoryId2 = 1;
         Integer indicatorId2 = 2;
+        String status2 = "PUBLISHED";
         Integer indicatorScore2 = 3;
+
+        Country countryArg = new Country(countryId2, "Argentina");
+        CountrySummary countrySummaryARG = CountrySummary.builder()
+                .countryId(countryId2)
+                .status(status2)
+                .summary("summary")
+                .country(countryArg)
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryARG);
 
         String countryId3 = "ARG";
         Integer categoryId3 = 1;
         Integer indicatorId3 = 1;
+        String status3 = "DRAFT";
         Integer indicatorScore3 = 4;
 
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1);
+        CountrySummary countrySummaryDraftARG = CountrySummary.builder()
+                .countryId(countryId3)
+                .status(status3)
+                .summary("summary")
+                .country(countryArg)
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummaryDraftARG);
+
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1,status1);
         CountryHealthIndicator countryHealthIndicatorSetupData1 = new CountryHealthIndicator(countryHealthIndicatorId1, indicatorScore1);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId2,categoryId2,indicatorId2);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId2,categoryId2,indicatorId2,status2);
         CountryHealthIndicator countryHealthIndicatorSetupData2 = new CountryHealthIndicator(countryHealthIndicatorId2, indicatorScore2);
 
-        CountryHealthIndicatorId countryHealthIndicatorId3 = new CountryHealthIndicatorId(countryId3,categoryId3,indicatorId3);
+        CountryHealthIndicatorId countryHealthIndicatorId3 = new CountryHealthIndicatorId(countryId3,categoryId3,indicatorId3,status3);
         CountryHealthIndicator countryHealthIndicatorSetupData3 = new CountryHealthIndicator(countryHealthIndicatorId3, indicatorScore3);
 
         entityManager.persist(countryHealthIndicatorSetupData1);

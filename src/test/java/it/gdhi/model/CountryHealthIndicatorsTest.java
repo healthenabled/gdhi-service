@@ -17,8 +17,9 @@ public class CountryHealthIndicatorsTest {
     @Before
     public void setUp() throws Exception {
         String india = "IND";
+        String status = "PUBLISHED";
         CountryHealthIndicator countryHealthIndicator = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
                 .country(new Country(india, "india",UUID.randomUUID(), "IN"))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
@@ -27,7 +28,7 @@ public class CountryHealthIndicatorsTest {
 
         CountryHealthIndicator countryHealthIndicator1 = CountryHealthIndicator.builder()
                 .country(new Country(india, "india",UUID.randomUUID(), "IN"))
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(2).build())
                 .score(3)
@@ -36,7 +37,7 @@ public class CountryHealthIndicatorsTest {
 
         String japan = "JAP";
         CountryHealthIndicator countryHealthIndicatorJap = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 1))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 1, status))
                 .country(new Country(japan, "japan",UUID.randomUUID(),"JP"))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
@@ -44,7 +45,7 @@ public class CountryHealthIndicatorsTest {
                 .build();
 
         CountryHealthIndicator countryHealthIndicator1Jap = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 2))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 2, status))
                 .country(new Country(japan, "japan",UUID.randomUUID(),"JP"))
                 .category(Category.builder().id(2).build())
                 .indicator(Indicator.builder().indicatorId(3).build())
@@ -53,7 +54,7 @@ public class CountryHealthIndicatorsTest {
 
         String uk = "UK";
         CountryHealthIndicator countryHealthIndicatorUK = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 1))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 1, status))
                 .country(new Country(uk, "uk",UUID.randomUUID(),"UK"))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
@@ -62,7 +63,7 @@ public class CountryHealthIndicatorsTest {
 
         CountryHealthIndicator countryHealthIndicator1UK = CountryHealthIndicator.builder()
                 .country(new Country(uk, "uk",UUID.randomUUID(),"UK"))
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 2))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 2, status))
                 .category(Category.builder().id(2).build())
                 .indicator(Indicator.builder().indicatorId(3).build())
                 .score(null)

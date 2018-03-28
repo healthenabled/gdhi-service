@@ -32,9 +32,9 @@ public class ICountryResourceLinkRepositoryTest {
 
     @Test
     public void shouldFetchCountryResourceLinks() {
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2"));
-        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3"));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1","PUBLISHED"));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2","PUBLISHED"));
+        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3","PUBLISHED"));
         entityManager.persist(countryResourceLink1);
         entityManager.persist(countryResourceLink2);
         entityManager.persist(countryResourceLink3);
@@ -47,9 +47,9 @@ public class ICountryResourceLinkRepositoryTest {
 
     @Test
     public void shouldDeleteCountryResourceLinksForAGivenCountry() {
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2"));
-        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3"));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1","PUBLISHED"));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2","PUBLISHED"));
+        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3","PUBLISHED"));
         entityManager.persist(countryResourceLink1);
         entityManager.persist(countryResourceLink2);
         entityManager.persist(countryResourceLink3);

@@ -23,4 +23,7 @@ public class CountryHealthIndicatorId implements Serializable {
     @Column(name = "indicator_id")
     private Integer indicatorId;
 
+    @Column(name = "status")
+    private String status;
+
 }

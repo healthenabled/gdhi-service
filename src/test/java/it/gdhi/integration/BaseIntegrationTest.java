@@ -36,7 +36,7 @@ public class BaseIntegrationTest {
     public void tearDown() throws Exception {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"country_health_data.health_indicators",
-                "country_health_data.country_summary", "country_health_data.country_resource_links");
+                "country_health_data.country_resource_links","country_health_data.country_summary");
     }
 
     ObjectMapper getMapper() {
@@ -49,7 +49,7 @@ public class BaseIntegrationTest {
 
     void setupHealthIndicatorsForCountry(String countryId, List<HealthIndicatorDto> healthIndicatorDtos) {
         healthIndicatorDtos.forEach(healthIndicator -> {
-            CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,healthIndicator.getCategoryId(),healthIndicator.getIndicatorId());
+            CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,healthIndicator.getCategoryId(),healthIndicator.getIndicatorId(),healthIndicator.getStatus());
             CountryHealthIndicator countryHealthIndicatorSetupData1 = new CountryHealthIndicator(countryHealthIndicatorId1, healthIndicator.getScore(), healthIndicator.getSupportingText());
             healthIndicatorRepository.save(countryHealthIndicatorSetupData1);
         });

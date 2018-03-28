@@ -16,6 +16,8 @@ public class GdhiQuestionnaire {
 
     private String countryId;
 
+    private String status;
+
     private CountrySummaryDto countrySummary;
 
     private List<HealthIndicatorDto> healthIndicators;

@@ -58,8 +58,9 @@ public class CountryServiceTest {
         String contactOrganization = "Contact Organization";
         String link1 = "Link 1";
         String link2 = "Link 2";
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2));
+        String status = "PUBLISHED";
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1, status));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2, status));
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
@@ -109,6 +110,7 @@ public class CountryServiceTest {
     @Test
     public void shouldGetGlobalHealthScoreDto() throws Exception {
         String countryId = "IND";
+        String statusValue = "PUBLISHED";
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .country(new Country("Ind", "India",UUID.randomUUID(),"IN"))
@@ -124,16 +126,17 @@ public class CountryServiceTest {
                 .dataCollectorRole("collector role")
                 .dataCollectorEmail("collector email")
                 .collectedDate(new Date())
-                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link"))))
+                .status(statusValue)
+                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link", statusValue))))
                 .build();
 
         when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
         CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2, statusValue))
                 .score(5)
                 .build();
         CountryHealthIndicator indicator2 = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 2, 3))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 2, 3, statusValue))
                 .score(4)
                 .build();
         List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);

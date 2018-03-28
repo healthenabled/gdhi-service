@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +44,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Test
     public void shouldGetHealthIndicatorForACountry() throws Exception {
         String countryId = "IND";
+        String status = "PUBLISHED";
+
         Integer categoryId1 = 1;
         Integer categoryId2 = 2;
         Integer categoryId3 = 3;
@@ -53,13 +56,35 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countryId(countryId)
+                .status(status)
+                .summary("summary")
+                .country(new Country(countryId, "India"))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                //TODO fix date assertion, that seem to fail only in local
+//                .collectedDate(getDateFormat().parse("09/09/2010"))
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummary);
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(2).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp1").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
 
         setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
 
@@ -75,13 +100,16 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Test
     public void shouldGetCountrySummary() throws Exception {
         String countryId = "IND";
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2"));
+        String status = "PUBLISHED";
+
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
 
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
+                .status(status)
                 .summary("summary")
                 .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
                 .contactName("contactName")
@@ -112,8 +140,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Test
     public void shouldGetCountryDetails() throws Exception {
         String countryId = "IND";
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2"));
+        String status = "PUBLISHED";
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
         Integer categoryId1 = 1;
         Integer categoryId2 = 2;
         Integer categoryId3 = 3;
@@ -127,6 +156,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
+                .status(status)
                 .summary("summary")
                 .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
                 .contactName("contactName")
@@ -147,12 +177,12 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         countrySummaryRepository.save(countrySummary);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(2).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp1").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
 
         setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
 

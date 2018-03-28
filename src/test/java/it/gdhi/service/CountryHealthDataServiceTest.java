@@ -50,7 +50,7 @@ public class CountryHealthDataServiceTest {
         List<String> resourceLinks = asList("Res 1");
         CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
                 .resources(resourceLinks).build();
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId("ARG")
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
@@ -84,7 +84,7 @@ public class CountryHealthDataServiceTest {
                 .contactEmail(contactEmail)
                 .resources(resourceLinks).build();
 
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1,"PUBLISHED", 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
