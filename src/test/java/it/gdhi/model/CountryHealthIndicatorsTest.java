@@ -19,7 +19,7 @@ public class CountryHealthIndicatorsTest {
         String india = "IND";
         CountryHealthIndicator countryHealthIndicator = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1))
-                .country(new Country(india, "india",UUID.randomUUID()), "IN")
+                .country(new Country(india, "india",UUID.randomUUID(), "IN"))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
                 .score(5)

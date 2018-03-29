@@ -73,7 +73,7 @@ public class CountryHealthDataServiceTest {
     @Test
     public void shouldSendEmailOnSuccessfulSaveOfCountryDetailsAndIndicators() throws Exception {
         String countryId = "ARG";
-        Country country = new Country(countryId, "Argentina", "AR",UUID.randomUUID());
+        Country country = new Country(countryId, "Argentina",UUID.randomUUID(), "AR");
         List<String> resourceLinks = asList("Res 1");
         String feeder = "feeder";
         String feederRole = "feeder role";
