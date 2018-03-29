@@ -41,7 +41,7 @@ public class CountrySummaryDto {
 
 
     public CountrySummaryDto(CountrySummary countrySummary) {
-        this.countryId = countrySummary.getCountryId();
+        this.countryId = countrySummary.getCountrySummaryId().getCountryId();
         this.countryName = countrySummary.getCountry().getName();
         this.countryAlpha2Code = countrySummary.getCountry().getAlpha2Code();
         this.summary = countrySummary.getSummary();

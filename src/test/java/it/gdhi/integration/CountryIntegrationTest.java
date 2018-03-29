@@ -7,6 +7,7 @@ import it.gdhi.model.Country;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryResourceLinkId;
+import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.MailerService;
 import org.junit.Test;
@@ -41,26 +42,11 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private MailerService mailerService;
 
-    @Test
-    public void shouldGetHealthIndicatorForACountry() throws Exception {
-        String countryId = "IND";
-        String status = "PUBLISHED";
-
-        Integer categoryId1 = 1;
-        Integer categoryId2 = 2;
-        Integer categoryId3 = 3;
-        Integer indicatorId1_1 = 1;
-        Integer indicatorId1_2 = 2;
-        Integer indicatorId2_1 = 3;
-        Integer indicatorId2_2 = 4;
-        Integer indicatorId3_1 = 5;
-        Integer indicatorId3_2 = 6;
-
+    private void addCountrySummary(String countryId, String countryName, String status, String alpha2Code, List<CountryResourceLink> countryResourceLinks)  {
         CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
-                .status(status)
+                .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary("summary")
-                .country(new Country(countryId, "India"))
+                .country(new Country(countryId, countryName, UUID.randomUUID(), alpha2Code))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
@@ -72,11 +58,28 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(new ArrayList<>())
+                .countryResourceLinks(countryResourceLinks)
                 .build();
         countrySummaryRepository.save(countrySummary);
+    }
+
+    @Test
+    public void shouldGetHealthIndicatorForACountry() throws Exception {
+        String countryId = "IND";
+        String status = "PUBLISHED";
+        String alpha2Code = "IN";
+
+        Integer categoryId1 = 1;
+        Integer categoryId2 = 2;
+        Integer categoryId3 = 3;
+        Integer indicatorId1_1 = 1;
+        Integer indicatorId1_2 = 2;
+        Integer indicatorId2_1 = 3;
+        Integer indicatorId2_2 = 4;
+        Integer indicatorId3_1 = 5;
+        Integer indicatorId3_2 = 6;
+
+        addCountrySummary(countryId, "India", status, alpha2Code, new ArrayList<>());
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -101,33 +104,14 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     public void shouldGetCountrySummary() throws Exception {
         String countryId = "IND";
         String status = "PUBLISHED";
+        String alpha2code = "IN";
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
 
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
-                .status(status)
-                .summary("summary")
-                .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
-                .contactName("contactName")
-                .contactDesignation("contactDesignation")
-                .contactOrganization("contactOrganization")
-                .contactEmail("email")
-                .dataFeederName("feeder name")
-                .dataFeederRole("feeder role")
-                .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(countryResourceLinks)
-                .build();
-        countrySummaryRepository.save(countrySummary);
+        addCountrySummary(countryId, "India", status, alpha2code, countryResourceLinks);
 
         Response response = given()
                 .contentType("application/json")
@@ -140,7 +124,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Test
     public void shouldGetCountryDetails() throws Exception {
         String countryId = "IND";
-        String status = "PUBLISHED";
+        String status = "DRAFT";
+        String alpha2code = "IN";
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
         Integer categoryId1 = 1;
@@ -154,27 +139,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
-                .status(status)
-                .summary("summary")
-                .country(new Country(countryId, "India",UUID.randomUUID(),"IN"))
-                .contactName("contactName")
-                .contactDesignation("contactDesignation")
-                .contactOrganization("contactOrganization")
-                .contactEmail("email")
-                .dataFeederName("feeder name")
-                .dataFeederRole("feeder role")
-                .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(countryResourceLinks)
-                .build();
-        countrySummaryRepository.save(countrySummary);
+        addCountrySummary(countryId, "India", status, alpha2code, countryResourceLinks);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -203,7 +168,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .body(expectedResponseJson("country_body.json"))
-                .post("http://localhost:" + port + "/countries");
+                .post("http://localhost:" + port + "/countries/save");
 
         assertEquals(200, response.getStatusCode());
 
@@ -218,7 +183,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .body(expectedResponseJson("country_body_edit.json"))
-                .post("http://localhost:" + port + "/countries");
+                .post("http://localhost:" + port + "/countries/save");
 
         assertEquals(200, response.getStatusCode());
 

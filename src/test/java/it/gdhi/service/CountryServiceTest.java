@@ -9,6 +9,7 @@ import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountryResourceLinkId;
+import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
@@ -63,7 +64,7 @@ public class CountryServiceTest {
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2, status));
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
         CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
+                .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary(summary)
                 .country(new Country(countryId, "Argentina", UUID.randomUUID(),"AR"))
                 .contactName(contactName)
@@ -79,7 +80,7 @@ public class CountryServiceTest {
                 .collectedDate(new Date())
                 .countryResourceLinks(countryResourceLinks)
                 .build();
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
+        when(iCountrySummaryRepository.findByCountryAndStatus(countryId, status)).thenReturn(countrySummary);
 
         CountrySummaryDto countrySummaryDto = countryService.fetchCountrySummary(countryId);
 
@@ -112,7 +113,7 @@ public class CountryServiceTest {
         String countryId = "IND";
         String statusValue = "PUBLISHED";
         CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
+                .countrySummaryId(new CountrySummaryId(countryId, statusValue))
                 .country(new Country("Ind", "India",UUID.randomUUID(),"IN"))
                 .summary("summary")
                 .contactName("contactName")
@@ -126,11 +127,10 @@ public class CountryServiceTest {
                 .dataCollectorRole("collector role")
                 .dataCollectorEmail("collector email")
                 .collectedDate(new Date())
-                .status(statusValue)
                 .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link", statusValue))))
                 .build();
 
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
+        when(iCountrySummaryRepository.findAll(countryId)).thenReturn(asList(countrySummary));
         CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2, statusValue))
                 .score(5)
@@ -140,7 +140,7 @@ public class CountryServiceTest {
                 .score(4)
                 .build();
         List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(countryHealthIndicators);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, statusValue)).thenReturn(countryHealthIndicators);
 
         GdhiQuestionnaire details = countryService.getDetails(countryId);
 
@@ -152,13 +152,13 @@ public class CountryServiceTest {
     public void shouldHandleCountriesNotAvailable() throws Exception {
         String countryId = "IND";
 
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
+        when(iCountrySummaryRepository.findAll(countryId)).thenReturn(null);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(Collections.emptyList());
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, null)).thenReturn(Collections.emptyList());
 
         GdhiQuestionnaire details = countryService.getDetails(countryId);
 
-        assertNull(details.getCountrySummary());
+        assertNull(details);
     }
 
     private void assertIndicators(List<CountryHealthIndicator> expectedCountryHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {

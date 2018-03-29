@@ -7,6 +7,7 @@ import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryHealthIndicatorId;
+import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
@@ -39,10 +40,12 @@ public class CountryHealthDataService {
 
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire) {
+        String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
+        String newStatus = getNextStatus(currentStatus);
         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(),
-                gdhiQuestionnaire.getStatus(), gdhiQuestionnaire.getCountrySummary());
+                newStatus, gdhiQuestionnaire.getCountrySummary());
         saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
-                gdhiQuestionnaire.getStatus(), gdhiQuestionnaire.getHealthIndicators());
+                newStatus, gdhiQuestionnaire.getHealthIndicators());
         String feederName = gdhiQuestionnaire.getDataFeederName();
         String feederRole = gdhiQuestionnaire.getDataFeederRole();
         String contactEmail = gdhiQuestionnaire.getContactEmail();
@@ -52,10 +55,20 @@ public class CountryHealthDataService {
 
     private void saveCountryContactInfo(String countryId, String status ,
                                         CountrySummaryDto countrySummaryDetailDto) {
-        CountrySummary countrySummary = new CountrySummary(countryId, status,
+        CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, status),
                 countrySummaryDetailDto);
         iCountryResourceLinkRepository.deleteResources(countryId);
         iCountrySummaryRepository.save(countrySummary);
+    }
+
+    private String getNextStatus(String currentStatus) {
+        if (currentStatus != null) {
+            if (currentStatus == "NEW" || currentStatus == "DRAFT") {
+                return "DRAFT";
+            }
+            return currentStatus;
+        }
+        return "DRAFT";
     }
 
     private void saveHealthIndicators(String countryId, String status,

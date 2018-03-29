@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.model.id.CountrySummaryId;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class CountrySummaryTest {
     @Test
     public void shouldTransformIntoCountryResourceLinks() throws Exception {
 
-        CountrySummary countrySummary = new CountrySummary("IND","PUBLISHED", CountrySummaryDto.builder().resources(asList("res1", "res2")).build());
+        CountrySummary countrySummary = new CountrySummary(new CountrySummaryId("IND","PUBLISHED"), CountrySummaryDto.builder().resources(asList("res1", "res2")).build());
         assertEquals(2, countrySummary.getCountryResourceLinks().size());
         assertThat(countrySummary.getCountryResourceLinks().stream().map(CountryResourceLink::getLink).collect(Collectors.toList()),
                 Matchers.containsInAnyOrder("res1", "res2"));
@@ -23,7 +24,7 @@ public class CountrySummaryTest {
 
     @Test
     public void shouldHandleEmptyResource() throws Exception {
-        CountrySummary countrySummary = new CountrySummary("IND","PUBLISHED", CountrySummaryDto.builder().build());
+        CountrySummary countrySummary = new CountrySummary(new CountrySummaryId("IND","PUBLISHED"), CountrySummaryDto.builder().build());
         assertNull(countrySummary.getCountryResourceLinks());
     }
 }

@@ -70,8 +70,13 @@ public class CountryController {
         return countryService.fetchCountrySummary(countryId);
     }
 
-    @RequestMapping(value = "/countries", method = RequestMethod.POST)
+    @RequestMapping(value = "/countries/save", method = RequestMethod.POST)
     public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        countryHealthDataService.save(gdhiQuestionnaire);
+    }
+
+    @RequestMapping(value = "/countries/submit", method = RequestMethod.POST)
+    public void submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
         countryHealthDataService.save(gdhiQuestionnaire);
     }
 

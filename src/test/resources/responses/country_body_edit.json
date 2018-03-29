@@ -1,6 +1,6 @@
 {
   "countryId": "IND",
-  "status":"PUBLISHED",
+  "status":"DRAFT",
   "countrySummary": {
     "countryId": "IND",
     "countryName": "India",
@@ -25,42 +25,42 @@
     {
       "categoryId": 1,
       "indicatorId": 1,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": 2,
       "supportingText": "sp1 new"
     },
     {
       "categoryId": 1,
       "indicatorId": 2,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": 3,
       "supportingText": "sp2 new"
     },
     {
       "categoryId": 2,
       "indicatorId": 3,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": null,
       "supportingText": "sp3 new"
     },
     {
       "categoryId": 2,
       "indicatorId": 4,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": 4,
       "supportingText": "sp4 new"
     },
     {
       "categoryId": 3,
       "indicatorId": 5,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": 1,
       "supportingText": "sp5 new"
     },
     {
       "categoryId": 3,
       "indicatorId": 6,
-      "status":"PUBLISHED",
+      "status":"DRAFT",
       "score": null,
       "supportingText": "sp6 new"
     }

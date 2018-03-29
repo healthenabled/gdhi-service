@@ -4,6 +4,7 @@ import it.gdhi.model.Country;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.model.id.CountrySummaryId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -32,18 +35,33 @@ public class ICountrySummaryRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
+    private void addCountrySummary(String countryId, String countryName, String alpha2code, String summary, List<CountryResourceLink> countryResourceLinkList) {
+        String status = "PUBLISHED";
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countrySummaryId(new CountrySummaryId(countryId, status))
+                .summary(summary)
+                .country(new Country(countryId, countryName, UUID.randomUUID(), alpha2code))
+                .contactName("Contact Name")
+                .contactDesignation("Contact Designation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataCollectorName("coll name")
+                .dataCollectorRole("coll role")
+                .dataFeederRole("coll role")
+                .dataCollectorEmail("coll email")
+                .countryResourceLinks(countryResourceLinkList)
+                .build();
+        iCountrySummaryRepository.save(countrySummary);
+    }
+
     @Test
     public void shouldFetchPopulationGivenCountryCode() {
-        CountrySummary expected = new CountrySummary("NZL", "PUBLISHED",
-                new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary", "Contact Name",
-                "Contact Designation", null, null, null,
-                null, null, null, null, null,
-                null, null);
-        entityManager.persist(expected);
-        entityManager.flush();
-        entityManager.clear();
+        addCountrySummary("NZL", "New Zealand", "NZ","NZL summary", new ArrayList<>());
         CountrySummary actual = iCountrySummaryRepository.findOne("NZL");
-        assertThat(actual.getCountryId(), is("NZL"));
+        assertThat(actual.getCountrySummaryId().getCountryId(), is("NZL"));
         assertThat(actual.getSummary(), is("NZL summary"));
         assertThat(actual.getContactName(), is("Contact Name"));
         assertThat(actual.getContactDesignation(), is("Contact Designation"));
@@ -52,16 +70,9 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldFetchCountryCodeCaseInsensitive() {
-        CountrySummary expected = new CountrySummary("NZL", "PUBLISHED" ,
-                new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary", "Contact Name",
-                "Contact Designation", null, null, null,
-                null, null, null, null, null,
-                null, null);
-        entityManager.persist(expected);
-        entityManager.flush();
-        entityManager.clear();
+        addCountrySummary("NZL", "New Zealand", "NZ","NZL summary", new ArrayList<>());
         CountrySummary actual = iCountrySummaryRepository.findOne("nzl");
-        assertThat(actual.getCountryId(), is("NZL"));
+        assertThat(actual.getCountrySummaryId().getCountryId(), is("NZL"));
         assertThat(actual.getSummary(), is("NZL summary"));
         assertThat(actual.getContactName(), is("Contact Name"));
         assertThat(actual.getContactDesignation(), is("Contact Designation"));
@@ -70,30 +81,22 @@ public class ICountrySummaryRepositoryTest {
 
     @Test
     public void shouldSaveCountrySummaryAlongWithResourceLinks() {
-        CountrySummary countrySummary1 = new CountrySummary("NZL", "PUBLISHED",new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary 1", "Contact Name",
-                "Contact Designation", null, null, null,
-                null, null, null, null, null,
-                null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com","PUBLISHED"))));
-
-        iCountrySummaryRepository.save(countrySummary1);
+        addCountrySummary("NZL", "New Zealand", "NZ", "NZL summary 1",
+                asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com","PUBLISHED"))));
 
         CountrySummary nzl1 = iCountrySummaryRepository.findOne("NZL");
-        assertThat(nzl1.getCountryId(), is("NZL"));
+        assertThat(nzl1.getCountrySummaryId().getCountryId(), is("NZL"));
         assertThat(nzl1.getSummary(), is("NZL summary 1"));
         assertThat(nzl1.getContactName(), is("Contact Name"));
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getCountryId(), is("NZL"));
         assertThat(nzl1.getCountryResourceLinks().get(0).getCountryResourceLinkId().getLink(), is("www.google.com"));
 
-        CountrySummary countrySummary2 = new CountrySummary("NZL", "PUBLISHED" ,
-                new Country("NZL", "NZL",UUID.randomUUID(),"NZ"), "NZL summary 2", "Contact Name",
-                "Contact Designation", null, null, null,
-                null, null, null, null, null,
-                null, asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com","PUBLISHED"))));
+        addCountrySummary("NZL", "New Zealand", "NZ","NZL summary 2",
+                asList(new CountryResourceLink(new CountryResourceLinkId("NZL", "www.google.com","PUBLISHED"))));
 
-        CountrySummary nzl2 = iCountrySummaryRepository.save(countrySummary2);
-        assertThat(nzl2.getCountryId(), is("NZL"));
+        CountrySummary nzl2 = iCountrySummaryRepository.findOne("NZL");
+        assertThat(nzl2.getCountrySummaryId().getCountryId(), is("NZL"));
         assertThat(nzl2.getSummary(), is("NZL summary 2"));
-
     }
 
 }

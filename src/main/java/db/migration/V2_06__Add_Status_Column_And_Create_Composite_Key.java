@@ -2,7 +2,7 @@ package db.migration;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class V2_04__Add_Status_Column_And_Create_Composite_Key extends BaseMigration {
+public class V2_06__Add_Status_Column_And_Create_Composite_Key extends BaseMigration {
 
     @Override
     public void doMigrate(JdbcTemplate jdbcTemplate) {

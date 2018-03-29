@@ -48,22 +48,32 @@ public class CountryService {
     }
 
     public GdhiQuestionnaire getDetails(String countryId) {
+
+        GdhiQuestionnaire gdhiQuestionnaire = null;
+
         List<CountrySummary> countrySummaries = iCountrySummaryRepository.findAll(countryId);
 
-        CountrySummary countrySummary =  countrySummaries.size() > 1 ?
-                countrySummaries.stream()
-                .filter(countrySummaryTmp -> !countrySummaryTmp.getStatus()
-                        .equalsIgnoreCase("PUBLISHED")).findFirst().get() :
-                Optional.ofNullable(countrySummaries.get(0)).get();
 
-        List<CountryHealthIndicator> countryHealthIndicators =
-                iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, countrySummary.getStatus());
-        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
-                .map(CountrySummaryDto::new)
-                .orElse(null);
-        List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
-                .map(HealthIndicatorDto::new)
-                .collect(toList());
-        return new GdhiQuestionnaire(countryId, countrySummary.getStatus() , countrySummaryDto, healthIndicatorDtos);
+        if(countrySummaries != null) {
+            CountrySummary countrySummary = countrySummaries.size() > 1 ?
+                    countrySummaries.stream()
+                            .filter(countrySummaryTmp -> !countrySummaryTmp.getCountrySummaryId().getStatus()
+                                    .equalsIgnoreCase("PUBLISHED")).findFirst().get() :
+                    Optional.ofNullable(countrySummaries.get(0)).get();
+
+            List<CountryHealthIndicator> countryHealthIndicators =
+                    iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId,
+                            countrySummary.getCountrySummaryId().getStatus());
+            CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
+                    .map(CountrySummaryDto::new)
+                    .orElse(null);
+            List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
+                    .map(HealthIndicatorDto::new)
+                    .collect(toList());
+            gdhiQuestionnaire = new GdhiQuestionnaire(countryId, countrySummary.getCountrySummaryId().getStatus(),
+                    countrySummaryDto, healthIndicatorDtos);
+        }
+
+        return gdhiQuestionnaire;
     }
 }

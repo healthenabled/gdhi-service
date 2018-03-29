@@ -5,6 +5,7 @@ import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -30,12 +32,13 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
 
-    private void setUpCountrySummaryDataFor3Countries(List<String> countryIds, String status){
-        CountrySummary countrySummaryIndia = CountrySummary.builder()
-                .countryId(countryIds.get(0))
-                .status(status)
+
+    private void addCountrySummary(String countryId, String countryName, String alpha2code) {
+        String status = "PUBLISHED";
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary("summary")
-                .country(new Country(countryIds.get(0), "India"))
+                .country(new Country(countryId, countryName, UUID.randomUUID(), alpha2code))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
@@ -47,56 +50,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
                 .countryResourceLinks(new ArrayList<>())
                 .build();
-
-        CountrySummary countrySummaryGBR = CountrySummary.builder()
-                .countryId(countryIds.get(1))
-                .status(status)
-                .summary("summary")
-                .country(new Country(countryIds.get(1), "UK"))
-                .contactName("contactName")
-                .contactDesignation("contactDesignation")
-                .contactOrganization("contactOrganization")
-                .contactEmail("email")
-                .dataFeederName("feeder name")
-                .dataFeederRole("feeder role")
-                .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(new ArrayList<>())
-                .build();
-
-        CountrySummary countrySummaryPak = CountrySummary.builder()
-                .countryId(countryIds.get(2))
-                .status(status)
-                .summary("summary")
-                .country(new Country(countryIds.get(2), "Pakistan"))
-                .contactName("contactName")
-                .contactDesignation("contactDesignation")
-                .contactOrganization("contactOrganization")
-                .contactEmail("email")
-                .dataFeederName("feeder name")
-                .dataFeederRole("feeder role")
-                .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(new ArrayList<>())
-                .build();
-        countrySummaryRepository.save(countrySummaryIndia);
-        countrySummaryRepository.save(countrySummaryGBR);
-        countrySummaryRepository.save(countrySummaryPak);
-
+        countrySummaryRepository.save(countrySummary);
     }
 
     @Test
@@ -117,7 +73,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId4_1 = 7;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -179,7 +137,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId4_1 = 7;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).status(status).supportingText("sp1").build(),
@@ -241,7 +201,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId4_1 = 7;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -303,7 +265,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId4_1 = 7;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -363,7 +327,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -419,7 +385,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),
@@ -475,7 +443,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),
@@ -531,7 +501,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
 
         String status = "PUBLISHED";
-        setUpCountrySummaryDataFor3Countries(asList(india,uk, pakistan), status);
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),

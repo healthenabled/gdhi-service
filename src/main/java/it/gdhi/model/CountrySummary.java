@@ -2,6 +2,7 @@ package it.gdhi.model;
 
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.model.id.CountryResourceLinkId;
+import it.gdhi.model.id.CountrySummaryId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -21,17 +22,13 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor
 @Getter
 @Builder
-public class CountrySummary {
+public class CountrySummary implements Serializable{
 
-    @Id
-    @Column(name="country_id")
-    private String countryId;
-
-    @NotNull
-    private String status;
+    @EmbeddedId
+    CountrySummaryId countrySummaryId;
 
     @OneToOne
-    @JoinColumn(name="country_id", referencedColumnName = "id")
+    @JoinColumn(name="country_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Country country;
     private String summary;
     private String contactName;
@@ -48,12 +45,11 @@ public class CountrySummary {
 
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id", insertable = false, updatable = false)
     private List<CountryResourceLink> countryResourceLinks;
 
-    public CountrySummary(String countryId, String status, CountrySummaryDto countrySummaryDetailDto) {
-        this.countryId = countryId;
-        this.status = status;
+    public CountrySummary(CountrySummaryId countrySummaryId, CountrySummaryDto countrySummaryDetailDto) {
+        this.countrySummaryId = countrySummaryId;
         this.summary = countrySummaryDetailDto.getSummary();
         this.contactName = countrySummaryDetailDto.getContactName();
         this.contactDesignation = countrySummaryDetailDto.getContactDesignation();
@@ -66,7 +62,8 @@ public class CountrySummary {
         this.dataCollectorRole = countrySummaryDetailDto.getDataCollectorRole();
         this.dataCollectorEmail = countrySummaryDetailDto.getDataCollectorEmail();
         this.collectedDate = countrySummaryDetailDto.getCollectedDate();
-        this.countryResourceLinks = transformToResourceLinks(countryId, status , countrySummaryDetailDto);
+        this.countryResourceLinks = transformToResourceLinks(countrySummaryId.getCountryId(),
+                countrySummaryId.getStatus() , countrySummaryDetailDto);
     }
 
     private List<CountryResourceLink> transformToResourceLinks(String countryId,

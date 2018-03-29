@@ -64,7 +64,7 @@ public class CountryHealthDataServiceTest {
         inOrder.verify(iCountrySummaryRepository).save(summaryCaptor.capture());
         inOrder.verify(iCountryHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
         CountrySummary summaryCaptorValue = summaryCaptor.getValue();
-        assertThat(summaryCaptorValue.getCountryId(), is("ARG"));
+        assertThat(summaryCaptorValue.getCountrySummaryId().getCountryId(), is("ARG"));
         assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));
         assertThat(summaryCaptorValue.getCountryResourceLinks().get(0).getLink(), is("Res 1"));
         assertThat(healthIndicatorsCaptorList.getValue().getCountryHealthIndicatorId().getCategoryId(), is(1));

@@ -4,6 +4,7 @@ import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryHealthIndicatorId;
+import it.gdhi.model.id.CountrySummaryId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -51,10 +53,10 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
         String status = "PUBLISHED";
 
         CountrySummary countrySummaryIndia = CountrySummary.builder()
-                .countryId(countryId1)
-                .status(status)
+
+                .countrySummaryId(new CountrySummaryId(countryId1, status))
                 .summary("summary")
-                .country(new Country(countryId1, "India"))
+                .country(new Country(countryId1, "India", UUID.randomUUID(), "IN"))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
@@ -66,17 +68,14 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
                 .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummaryIndia);
 
         CountrySummary countrySummaryARG = CountrySummary.builder()
-                .countryId(countryId2)
-                .status(status)
+                .countrySummaryId(new CountrySummaryId(countryId2, status))
                 .summary("summary")
-                .country(new Country(countryId2, "Argentina"))
+                .country(new Country(countryId2, "Argentina", UUID.randomUUID(), "AR"))
                 .contactName("contactName")
                 .contactDesignation("contactDesignation")
                 .contactOrganization("contactOrganization")
@@ -88,9 +87,6 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
-                //TODO fix date assertion, that seem to fail only in local
-//                .collectedDate(getDateFormat().parse("09/09/2010"))
-                .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummaryARG);
 
