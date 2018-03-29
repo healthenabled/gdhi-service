@@ -3,6 +3,7 @@
   "countrySummary": {
     "countryId": "IND",
     "countryName": "India",
+    "countryAlpha2Code": "IN",
     "summary": "summary",
     "contactName": "contactName",
     "contactDesignation": "contactDesignation",
