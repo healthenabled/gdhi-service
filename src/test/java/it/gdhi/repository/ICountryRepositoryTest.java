@@ -34,7 +34,7 @@ public class ICountryRepositoryTest {
 
     @Test
     public void shouldGetCountryGivenId() throws Exception {
-        Country country = new Country("ABC", "Republic of ABC");
+        Country country = new Country("ABC", "Republic of ABC", "AB");
         entityManager.persist(country);
         entityManager.flush();
         entityManager.clear();

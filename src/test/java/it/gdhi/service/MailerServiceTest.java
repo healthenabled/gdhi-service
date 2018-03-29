@@ -37,7 +37,7 @@ public class MailerServiceTest {
         String email2 = "test2@test.com";
         String name1 = "test1";
         String name2 = "test2";
-        Country country = new Country("Ind", "India");
+        Country country = new Country("Ind", "India", "IN");
         String feeder = "feeder";
         String feederRole = "feeder role";
         String contactEmail = "contact@test.com";

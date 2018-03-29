@@ -63,7 +63,7 @@ public class CountryServiceTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
                 .summary(summary)
-                .country(new Country(countryId, "Argentina"))
+                .country(new Country(countryId, "Argentina", "AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -110,7 +110,7 @@ public class CountryServiceTest {
         String countryId = "IND";
         CountrySummary countrySummary = CountrySummary.builder()
                 .countryId(countryId)
-                .country(new Country("IND", "India"))
+                .country(new Country("IND", "India", "IN"))
                 .summary("summary")
                 .contactName("contactName")
                 .contactDesignation("contact designation")
