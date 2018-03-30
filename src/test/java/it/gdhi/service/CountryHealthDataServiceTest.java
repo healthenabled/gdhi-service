@@ -25,6 +25,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,6 +97,42 @@ public class CountryHealthDataServiceTest {
         countryHealthDataService.save(gdhiQuestionnaire);
 
         verify(mailerService).send(country, feeder, feederRole, contactEmail);
+    }
+
+    @Test
+    public void shouldSaveAsNewStatus() throws Exception {
+
+
+
+        String countryId = "BGD";
+
+        String status1 = null;
+        String expectedMessage1 = "URL Generated Successfully";
+        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status1);
+        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+
+        assertEquals(expectedMessage1 , actualMessage1);
+
+        String status2 = "NEW";
+        String expectedMessage2 = "URL Already Generated";
+        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status2);
+        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        assertEquals(expectedMessage2 , actualMessage2);
+
+
+        String status3 = "DRAFT";
+        String expectedMessage3 = "Form is currently in DRAFT status";
+        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status3);
+        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        assertEquals(expectedMessage3 , actualMessage3);
+
+        String status4 = "REVIEW PENDING";
+        String expectedMessage4 = "Form is currently in REVIEW PENDING status";
+        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status4);
+        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        assertEquals(expectedMessage4 , actualMessage4);
+
+
     }
 
 

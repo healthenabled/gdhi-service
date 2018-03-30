@@ -135,4 +135,16 @@ public class CountryControllerTest {
         countryController.exportCountryDetails(request, response, "IND");
         verify(countryHealthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
     }
+
+
+    @Test
+    public void shouldSaveCountrySummaryAsNewStatus() {
+        String countryId = "IND";
+        String expectedMessage = "URL Generated Successfully";
+        when(countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId)).thenReturn(expectedMessage);
+        String actualMessage = countryController.saveUrlGenerationStatus(countryId);
+        verify(countryHealthDataService).saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        assertEquals(expectedMessage, actualMessage);
+    }
+
  }

@@ -91,4 +91,20 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
+    public String saveCountrySummaryAsNewStatusWhileGeneratingURL(String countryId) {
+        String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(countryId);
+        if(currentStatus==null){
+            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, "NEW"),
+                    new CountrySummaryDto());
+        iCountrySummaryRepository.save(countrySummary);
+        return "URL Generated Successfully";
+        }
+        else if (currentStatus.equalsIgnoreCase("NEW")){
+            return "URL Already Generated";
+        }
+        else{
+            return "Form is currently in " + currentStatus + " status";
+        }
+    }
+
 }
