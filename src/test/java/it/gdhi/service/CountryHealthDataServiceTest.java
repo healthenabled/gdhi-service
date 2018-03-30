@@ -57,7 +57,7 @@ public class CountryHealthDataServiceTest {
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
 
-        countryHealthDataService.save(gdhiQuestionnaire);
+        countryHealthDataService.save(gdhiQuestionnaire, false);
 
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<CountryHealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(CountryHealthIndicator.class);
@@ -73,7 +73,7 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldSendEmailOnSuccessfulSaveOfCountryDetailsAndIndicators() throws Exception {
+    public void shouldSendEmailOnSuccessfulSubmitOfCountryDetailsAndIndicators() throws Exception {
         String countryId = "ARG";
         Country country = new Country(countryId, "Argentina",UUID.randomUUID(), "AR");
         List<String> resourceLinks = asList("Res 1");
@@ -95,7 +95,7 @@ public class CountryHealthDataServiceTest {
         when(iCountryHealthIndicatorRepository.save(any(CountryHealthIndicator.class))).thenReturn(CountryHealthIndicator.builder().build());
         when(countryDetailRepository.find(countryId)).thenReturn(country);
 
-        countryHealthDataService.save(gdhiQuestionnaire);
+        countryHealthDataService.save(gdhiQuestionnaire, true);
 
         verify(mailerService).send(country, feeder, feederRole, contactEmail);
     }

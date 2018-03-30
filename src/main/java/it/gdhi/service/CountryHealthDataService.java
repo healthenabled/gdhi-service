@@ -42,18 +42,24 @@ public class CountryHealthDataService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Transactional
-    public void save(GdhiQuestionnaire gdhiQuestionnaire) {
+    public void save(GdhiQuestionnaire gdhiQuestionnaire, boolean isSubmit) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
         String newStatus = getNextStatus(currentStatus);
         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(),
                 newStatus, gdhiQuestionnaire.getCountrySummary());
         saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
                 newStatus, gdhiQuestionnaire.getHealthIndicators());
-        String feederName = gdhiQuestionnaire.getDataFeederName();
-        String feederRole = gdhiQuestionnaire.getDataFeederRole();
-        String contactEmail = gdhiQuestionnaire.getContactEmail();
-        Country country = iCountryRepository.find(gdhiQuestionnaire.getCountryId());
+        if (isSubmit) {
+            sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
+                    gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
+        }
+    }
+
+
+    public void sendMail(String feederName, String feederRole, String contactEmail, String countryId) {
+        Country country = iCountryRepository.find(countryId);
         mailerService.send(country, feederName, feederRole, contactEmail);
+
     }
 
     private void saveCountryContactInfo(String countryId, String status ,
