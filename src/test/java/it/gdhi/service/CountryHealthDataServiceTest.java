@@ -109,27 +109,27 @@ public class CountryHealthDataServiceTest {
         String status1 = null;
         String expectedMessage1 = "URL Generated Successfully";
         when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status1);
-        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNew(countryId);
 
         assertEquals(expectedMessage1 , actualMessage1);
 
         String status2 = "NEW";
         String expectedMessage2 = "URL Already Generated";
         when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status2);
-        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNew(countryId);
         assertEquals(expectedMessage2 , actualMessage2);
 
 
         String status3 = "DRAFT";
         String expectedMessage3 = "Form is currently in DRAFT status";
         when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status3);
-        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNew(countryId);
         assertEquals(expectedMessage3 , actualMessage3);
 
         String status4 = "REVIEW PENDING";
         String expectedMessage4 = "Form is currently in REVIEW PENDING status";
         when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status4);
-        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNew(countryId);
         assertEquals(expectedMessage4 , actualMessage4);
 
 

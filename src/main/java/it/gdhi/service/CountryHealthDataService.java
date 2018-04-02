@@ -91,7 +91,7 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
-    public String saveCountrySummaryAsNewStatusWhileGeneratingURL(String countryId) {
+    public String saveCountrySummaryAsNew(String countryId) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(countryId);
         if(currentStatus==null){
             CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, "NEW"),

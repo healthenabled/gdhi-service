@@ -141,9 +141,9 @@ public class CountryControllerTest {
     public void shouldSaveCountrySummaryAsNewStatus() {
         String countryId = "IND";
         String expectedMessage = "URL Generated Successfully";
-        when(countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId)).thenReturn(expectedMessage);
+        when(countryHealthDataService.saveCountrySummaryAsNew(countryId)).thenReturn(expectedMessage);
         String actualMessage = countryController.saveUrlGenerationStatus(countryId);
-        verify(countryHealthDataService).saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        verify(countryHealthDataService).saveCountrySummaryAsNew(countryId);
         assertEquals(expectedMessage, actualMessage);
     }
 

@@ -105,6 +105,6 @@ public class CountryController {
 
     @RequestMapping(value = "/country/{id}/url_gen_status", method = RequestMethod.POST)
     public String saveUrlGenerationStatus(@PathVariable("id") String countryId) {
-        return countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        return countryHealthDataService.saveCountrySummaryAsNew(countryId);
     }
 }
