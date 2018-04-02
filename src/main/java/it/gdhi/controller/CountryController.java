@@ -103,7 +103,7 @@ public class CountryController {
         return countryService.fetchCountryFromUUID(countryUUID);
     }
 
-    @RequestMapping(value = "/country/url_gen_status/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/country/{id}/url_gen_status", method = RequestMethod.POST)
     public String saveUrlGenerationStatus(@PathVariable("id") String countryId) {
         return countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
     }
