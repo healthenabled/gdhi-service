@@ -118,7 +118,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "PUBLISHED";
         String alpha2code = "IN";
-        UUID countryUUID = UUID.fromString("F1BC0DEC-6921-4CF3-893F-ED759A7DF3B8");
+        UUID countryUUID = COUNTRY_UUID;
 
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
@@ -141,7 +141,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "DRAFT";
         String alpha2code = "IN";
-        UUID countryUUID = UUID.fromString("F1BC0DEC-6921-4CF3-893F-ED759A7DF3B8");
+        UUID countryUUID = COUNTRY_UUID;
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
@@ -171,7 +171,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries/F1BC0DEC-6921-4CF3-893F-ED759A7DF3B8");
+                .get("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString());
 
         assertResponse(response.asString(), "country_body.json");
     }
@@ -193,7 +193,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries/F1BC0DEC-6921-4CF3-893F-ED759A7DF3B8");
+                .get("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString());
 
         assertResponse(response.asString(), "country_body.json");
 
@@ -208,7 +208,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries/F1BC0DEC-6921-4CF3-893F-ED759A7DF3B8");
+                .get("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString());
 
         assertResponse(response.asString(), "country_body_edit.json");
     }
