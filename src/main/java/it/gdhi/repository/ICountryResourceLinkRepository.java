@@ -13,6 +13,7 @@ public interface ICountryResourceLinkRepository extends Repository<CountryResour
     List<CountryResourceLink> findAllBy(String countryId);
 
     @Modifying
-    @Query("DELETE FROM CountryResourceLink c WHERE c.countryResourceLinkId.countryId = UPPER(?1)")
-    void deleteResources(String countryId);
+    @Query("DELETE FROM CountryResourceLink c WHERE c.countryResourceLinkId.countryId = UPPER(?1)" +
+            " AND c.countryResourceLinkId.status = ?2")
+    void deleteResources(String countryId, String currentStatus);
 }

@@ -47,7 +47,9 @@ public class CountryService {
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
-    public GdhiQuestionnaire getDetails(String countryId) {
+    public GdhiQuestionnaire getDetails(UUID countryUUID) {
+
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
 
         GdhiQuestionnaire gdhiQuestionnaire = null;
 

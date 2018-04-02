@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.Date;
@@ -112,9 +113,11 @@ public class CountryServiceTest {
     public void shouldGetGlobalHealthScoreDto() throws Exception {
         String countryId = "IND";
         String statusValue = "PUBLISHED";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "India", countryUUID, "IN");
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, statusValue))
-                .country(new Country("Ind", "India",UUID.randomUUID(),"IN"))
+                .country(country)
                 .summary("summary")
                 .contactName("contactName")
                 .contactDesignation("contact designation")
@@ -131,6 +134,7 @@ public class CountryServiceTest {
                 .build();
 
         when(iCountrySummaryRepository.findAll(countryId)).thenReturn(asList(countrySummary));
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
         CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2, statusValue))
                 .score(5)
@@ -142,7 +146,7 @@ public class CountryServiceTest {
         List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
         when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, statusValue)).thenReturn(countryHealthIndicators);
 
-        GdhiQuestionnaire details = countryService.getDetails(countryId);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
 
         assertSummary(countrySummary, details.getCountrySummary());
         assertIndicators(countryHealthIndicators, details.getHealthIndicators());
@@ -151,12 +155,15 @@ public class CountryServiceTest {
     @Test
     public void shouldHandleCountriesNotAvailable() throws Exception {
         String countryId = "IND";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "India", countryUUID, "IN");
 
         when(iCountrySummaryRepository.findAll(countryId)).thenReturn(null);
 
         when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, null)).thenReturn(Collections.emptyList());
 
-        GdhiQuestionnaire details = countryService.getDetails(countryId);
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
 
         assertNull(details);
     }

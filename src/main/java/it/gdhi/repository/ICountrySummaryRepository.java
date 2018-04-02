@@ -1,6 +1,7 @@
 package it.gdhi.repository;
 
 import it.gdhi.model.CountrySummary;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
@@ -24,6 +25,11 @@ public interface ICountrySummaryRepository extends Repository<CountrySummary, St
             " c.countrySummaryId.status <> 'PUBLISHED' and " +
             "c.countrySummaryId.countryId = UPPER(?1)")
     String getCountrySummaryStatus(String countryId);
+
+    @Modifying
+    @Query("DELETE FROM CountrySummary c where c.countrySummaryId.countryId = UPPER(?1) " +
+            "and c.countrySummaryId.status = ?2")
+    void removeCountrySummary(String countryId, String currentStatus);
 
     @Query("SELECT c.countrySummaryId.status from CountrySummary c where " +
             "c.countrySummaryId.countryId = UPPER(?1)")

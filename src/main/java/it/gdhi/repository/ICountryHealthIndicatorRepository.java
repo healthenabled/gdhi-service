@@ -1,6 +1,7 @@
 package it.gdhi.repository;
 
 import it.gdhi.model.CountryHealthIndicator;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
@@ -25,5 +26,9 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
     @Query("SELECT h FROM CountryHealthIndicator h WHERE (?1 is null or h.category.id = ?1)")
     List<CountryHealthIndicator> find(Integer categoryId);
 
+    @Modifying
+    @Query("DELETE FROM CountryHealthIndicator h WHERE " +
+            "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
+    void removeHealthIndicators(String countryId, String currentStatus);
 }
 

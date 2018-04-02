@@ -121,15 +121,6 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldGetCountryDetails() throws Exception {
-        String countryId = "IND";
-
-        countryController.getCountryDetails(countryId);
-
-        verify(countryService).getDetails(countryId);
-    }
-
-    @Test
     public void shouldExportGlobalData() throws Exception {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);

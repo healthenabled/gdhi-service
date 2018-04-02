@@ -80,9 +80,9 @@ public class CountryController {
         countryHealthDataService.save(gdhiQuestionnaire, true);
     }
 
-    @RequestMapping(value = "/countries/{id}", method = RequestMethod.GET)
-    public GdhiQuestionnaire getCountryDetails(@PathVariable("id") String countryId) {
-        return countryService.getDetails(countryId);
+    @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
+    public GdhiQuestionnaire getQuestionnaireForCountry(@PathVariable("uuid") UUID countryUIID) {
+        return countryService.getDetails(countryUIID);
     }
 
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)
@@ -96,11 +96,6 @@ public class CountryController {
     public void exportCountryDetails(HttpServletRequest request,
                                 HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
-    }
-
-    @RequestMapping(value = "/country_info/{uuid}", method = RequestMethod.GET)
-        public Country getCountryDetails(@PathVariable("uuid") UUID countryUUID) {
-        return countryService.fetchCountryFromUUID(countryUUID);
     }
 
     @RequestMapping(value = "/country/{id}/url_gen_status", method = RequestMethod.POST)

@@ -92,7 +92,7 @@ public class ICountryResourceLinkRepositoryTest {
         entityManager.persist(countryResourceLink3);
         entityManager.flush();
         entityManager.clear();
-        iCountryResourceLinkRepository.deleteResources("NZL");
+        iCountryResourceLinkRepository.deleteResources("NZL", "PUBLISHED");
         List<CountryResourceLink> actual1 = iCountryResourceLinkRepository.findAllBy("NZL");
         List<CountryResourceLink> actual2 = iCountryResourceLinkRepository.findAllBy("AUS");
         assertThat(actual1.size(), is(0));
