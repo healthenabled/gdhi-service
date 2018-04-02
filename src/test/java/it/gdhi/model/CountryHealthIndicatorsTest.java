@@ -13,21 +13,25 @@ import static org.junit.Assert.assertEquals;
 public class CountryHealthIndicatorsTest {
 
     private List<CountryHealthIndicator> countryHealthIndicators;
+    String countryName = "india";
+    String countryAlpha2Code = "IN";
 
     @Before
     public void setUp() throws Exception {
         String india = "IND";
         String status = "PUBLISHED";
+        Country country = new Country(india, countryName, UUID.randomUUID(), "IN");
+
         CountryHealthIndicator countryHealthIndicator = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
-                .country(new Country(india, "india",UUID.randomUUID(), "IN"))
+                .country(country)
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
                 .score(5)
                 .build();
 
         CountryHealthIndicator countryHealthIndicator1 = CountryHealthIndicator.builder()
-                .country(new Country(india, "india",UUID.randomUUID(), "IN"))
+                .country(country)
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(2).build())
@@ -35,51 +39,50 @@ public class CountryHealthIndicatorsTest {
                 .build();
 
 
-        String japan = "JAP";
-        CountryHealthIndicator countryHealthIndicatorJap = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 1, status))
-                .country(new Country(japan, "japan",UUID.randomUUID(),"JP"))
+        CountryHealthIndicator countryHealthIndicator3 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
+                .country(country)
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
                 .score(2)
                 .build();
 
-        CountryHealthIndicator countryHealthIndicator1Jap = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(japan, 1, 2, status))
-                .country(new Country(japan, "japan",UUID.randomUUID(),"JP"))
+        CountryHealthIndicator countryHealthIndicator2 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
+                .country(country)
                 .category(Category.builder().id(2).build())
                 .indicator(Indicator.builder().indicatorId(3).build())
                 .score(null)
                 .build();
 
-        String uk = "UK";
-        CountryHealthIndicator countryHealthIndicatorUK = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 1, status))
-                .country(new Country(uk, "uk",UUID.randomUUID(),"UK"))
+        CountryHealthIndicator countryHealthIndicator4 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
+                .country(country)
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
                 .score(null)
                 .build();
 
-        CountryHealthIndicator countryHealthIndicator1UK = CountryHealthIndicator.builder()
-                .country(new Country(uk, "uk",UUID.randomUUID(),"UK"))
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(uk, 1, 2, status))
+        CountryHealthIndicator countryHealthIndicator5 = CountryHealthIndicator.builder()
+                .country(country)
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
                 .category(Category.builder().id(2).build())
                 .indicator(Indicator.builder().indicatorId(3).build())
                 .score(null)
                 .build();
 
-        this.countryHealthIndicators = asList(countryHealthIndicator, countryHealthIndicator1, countryHealthIndicator1Jap, countryHealthIndicatorJap, countryHealthIndicatorUK, countryHealthIndicator1UK);
+        this.countryHealthIndicators = asList(countryHealthIndicator, countryHealthIndicator1, countryHealthIndicator2,
+                countryHealthIndicator3, countryHealthIndicator4, countryHealthIndicator5);
 
     }
 
     @Test
-    public void shouldReturnCountOfCountriesWithAlteastOneIndicatorScore() throws Exception {
-        assertEquals(2, new CountryHealthIndicators(countryHealthIndicators).getCountOfCountriesWithAlteastOneScore().intValue());
+    public void shouldGetCountryName() throws Exception {
+        assertEquals(countryName, new CountryHealthIndicators(countryHealthIndicators).getCountryName());
     }
 
     @Test
-    public void shouldGetTotalScore() throws Exception {
-        assertEquals(3.33, new CountryHealthIndicators(countryHealthIndicators).getTotalScore(), 0.01);
+    public void shouldGetCountryAlpha2Code() throws Exception {
+        assertEquals(countryAlpha2Code, new CountryHealthIndicators(countryHealthIndicators).getCountryAlpha2Code());
     }
 }

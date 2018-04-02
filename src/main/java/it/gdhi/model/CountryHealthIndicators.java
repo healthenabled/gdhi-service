@@ -1,6 +1,5 @@
 package it.gdhi.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,12 +12,21 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class CountryHealthIndicators {
 
+    private Country country;
+
     private List<CountryHealthIndicator> countryHealthIndicators;
+
+    public CountryHealthIndicators(List<CountryHealthIndicator> countryHealthIndicators) {
+        this.countryHealthIndicators = countryHealthIndicators;
+        this.country = Optional.ofNullable(countryHealthIndicators)
+                .filter(indicators -> indicators.size() > 0)
+                .map(indicators -> indicators.get(0).getCountry())
+                .orElse(null);
+    }
 
     public Map<Integer, Double> groupByCategoryIdWithNotNullScores() {
         return excludingNullScores()
@@ -36,26 +44,19 @@ public class CountryHealthIndicators {
     }
 
     public String getCountryName() {
-        return Optional.ofNullable(countryHealthIndicators)
-                .filter(indicators -> indicators.size() > 0)
-                .map(indicators -> indicators.get(0).getCountry().getName())
+        return Optional.ofNullable(country)
+                .map(Country::getName)
                 .orElse(null);
     }
 
-    public Double getTotalScore() {
-        return groupByCategoryIdWithNotNullScores()
-                .values().stream().mapToDouble(d ->d).sum();
+    public String getCountryAlpha2Code() {
+        return Optional.ofNullable(country)
+                .map(Country::getAlpha2Code)
+                .orElse(null);
     }
-
 
     public Map<Category, List<CountryHealthIndicator>> groupByCategory() {
         return this.countryHealthIndicators.stream().collect(groupingBy(CountryHealthIndicator::getCategory));
-    }
-
-    public Integer getCountOfCountriesWithAlteastOneScore() {
-        return excludingNullScores()
-                .collect(groupingBy(indicators -> indicators.getCountry().getId()))
-                .size();
     }
 
     private Stream<CountryHealthIndicator> excludingNullScores() {
@@ -63,7 +64,4 @@ public class CountryHealthIndicators {
                 .filter(healthIndicator -> healthIndicator.getScore() != null);
     }
 
-    public Map<String, List<CountryHealthIndicator>> groupByCountry() {
-        return this.countryHealthIndicators.stream().collect(groupingBy(CountryHealthIndicator::getCountryId));
-    }
 }

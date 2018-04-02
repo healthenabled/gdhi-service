@@ -121,8 +121,10 @@ public class CountryHealthIndicatorServiceTest {
 
         String countryId1 = "IND";
         String countryName = "India";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, status);
-        Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,
+                indicatorId1, status);
+        String countryAlpha2Code = "IN";
+        Country country1 = new Country(countryId, countryName, UUID.randomUUID(), countryAlpha2Code);
         Category category1 = new Category(categoryId1, categoryName);
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  null, null);
@@ -137,12 +139,14 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
-        assertSet4(healthScoreForACountry, countryId, countryName);
+        assertSet4(healthScoreForACountry, countryId, countryName, countryAlpha2Code);
     }
 
-    private void assertSet4(CountryHealthScoreDto healthScoreForACountry, String countryId, String  countryName){
+    private void assertSet4(CountryHealthScoreDto healthScoreForACountry, String countryId, String  countryName,
+                            String countryAlpha2Code){
         assertThat(healthScoreForACountry.getCountryId(), is(countryId));
         assertThat(healthScoreForACountry.getCountryName(), is(countryName));
+        assertThat(healthScoreForACountry.getCountryAlpha2Code(), is(countryAlpha2Code));
         assertThat(healthScoreForACountry.getCategories().size(), is(1));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));
@@ -331,9 +335,6 @@ public class CountryHealthIndicatorServiceTest {
 
     @Test
     public void shouldFetchGlobalHealthScores() {
-        String USA = "USA";
-        String India = "IND";
-
         Category category1 = Category.builder().id(9).name("Category 1").build();
         Country country1 = new Country("IND", "India",UUID.randomUUID(), "IN");
         Indicator indicator1 = Indicator.builder().indicatorId(1).build();

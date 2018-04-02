@@ -3,6 +3,7 @@
     {
       "countryId": "IND",
       "countryName": "India",
+      "countryAlpha2Code": "IN",
       "overallScore": 2.5,
       "categories": [
         {
@@ -83,6 +84,7 @@
     {
       "countryId": "GBR",
       "countryName": "United Kingdom",
+      "countryAlpha2Code": "GB",
       "overallScore": 3.0,
       "categories": [
         {

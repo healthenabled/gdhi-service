@@ -52,10 +52,10 @@ public class CountryHealthIndicatorService {
 
     @Transactional
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase) {
-        CountryHealthIndicators countryHealthIndicators =
-                new CountryHealthIndicators(iCountryHealthIndicatorRepository.find(categoryId));
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.find(categoryId);
 
-        Map<String, List<CountryHealthIndicator>> groupByCountry = countryHealthIndicators.groupByCountry();
+        Map<String, List<CountryHealthIndicator>> groupByCountry = countryHealthIndicators.stream()
+                .collect(groupingBy(CountryHealthIndicator::getCountryId));
         List<CountryHealthScoreDto> globalHealthScores = groupByCountry
                 .entrySet()
                 .stream()
@@ -125,6 +125,7 @@ public class CountryHealthIndicatorService {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
         Double overallScore = countryHealthIndicators.getOverallScore();
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
+                countryHealthIndicators.getCountryAlpha2Code(),
                 overallScore, categoryDtos, convertScoreToPhase(overallScore));
     }
 

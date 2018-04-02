@@ -111,7 +111,8 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndHealthScoresWhenCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, emptyList(), 4));
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
+                4.0, emptyList(), 4));
         List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
@@ -142,7 +143,9 @@ public class ExcelUtilServiceTest {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
         IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "Ind 1", "Ind Def 1", 4, "S", "S1");
         CategoryHealthScoreDto categoryHealthScoreDto = new CategoryHealthScoreDto(1, "Cat 1", 4.0, 4,  asList(indicatorScoreDto));
-        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, asList(categoryHealthScoreDto), 4));
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
+                4.0, asList(categoryHealthScoreDto),
+                4));
         Map<String, String> headerDef = new LinkedHashMap<>();
         headerDef.put("Country Name", "Country Name");
         headerDef.put("Indicator 1", "Ind 1");

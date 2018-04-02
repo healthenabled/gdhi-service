@@ -16,6 +16,8 @@ public class CountryHealthScoreDto {
 
     private String countryName;
 
+    private String countryAlpha2Code;
+
     private Double overallScore;
 
     private List<CategoryHealthScoreDto> categories;
@@ -26,5 +28,4 @@ public class CountryHealthScoreDto {
     public boolean hasCategories() {
         return this.getCategories().size() > 0;
     }
-
 }
