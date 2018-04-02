@@ -29,6 +29,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static it.gdhi.utils.Constants.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryHealthDataServiceTest {
@@ -100,37 +101,42 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldSaveAsNewStatus() throws Exception {
+    public void shouldSaveAsNewStatusWhenLiveDataNotPresentAlready() throws Exception {
 
 
 
         String countryId = "BGD";
 
-        String status1 = null;
-        String expectedMessage1 = "URL Generated Successfully";
-        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status1);
-        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
-
+        List status1 = asList(COUNTRY_DATA_NOT_PRESENT);
+        String expectedMessage1 = URL_GENERATED_SUCCESSFULLY_MESSAGE;
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status1);
+        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId).getMsg();
         assertEquals(expectedMessage1 , actualMessage1);
 
-        String status2 = "NEW";
-        String expectedMessage2 = "URL Already Generated";
-        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status2);
-        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        List status2 = asList(NEW_STATUS);
+        String expectedMessage2 = AWAITING_SUBMISSION_MESSAGE;
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status2);
+        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId).getMsg();
         assertEquals(expectedMessage2 , actualMessage2);
 
 
-        String status3 = "DRAFT";
-        String expectedMessage3 = "Form is currently in DRAFT status";
-        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status3);
-        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        List status3 = asList(DRAFT_STATUS);
+        String expectedMessage3 = AWAITING_SUBMISSION_MESSAGE;
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status3);
+        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId).getMsg();
         assertEquals(expectedMessage3 , actualMessage3);
 
-        String status4 = "REVIEW PENDING";
-        String expectedMessage4 = "Form is currently in REVIEW PENDING status";
-        when(iCountrySummaryRepository.getCountrySummaryStatus(anyString())).thenReturn(status4);
-        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
+        List status4 = asList(REVIEW_PENDING_STATUS);
+        String expectedMessage4 = PENDING_REVIEW_MESSAGE;
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status4);
+        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId).getMsg();
         assertEquals(expectedMessage4 , actualMessage4);
+
+        List status5 = asList(PUBLISHED_STATUS);
+        String expectedMessage5 = ALREADY_PUBLISHED_MESSAGE;
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status5);
+        String actualMessage5 = countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId).getMsg();
+        assertEquals(expectedMessage5 , actualMessage5);
 
 
     }

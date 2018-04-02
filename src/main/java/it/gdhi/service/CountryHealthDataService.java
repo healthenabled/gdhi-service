@@ -1,6 +1,7 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.CountryUrlGenerationStatusDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
+import static it.gdhi.utils.Constants.*;
 
 @Service
 public class CountryHealthDataService {
@@ -91,19 +94,48 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
-    public String saveCountrySummaryAsNewStatusWhileGeneratingURL(String countryId) {
-        String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(countryId);
-        if(currentStatus==null){
-            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, "NEW"),
-                    new CountrySummaryDto());
-        iCountrySummaryRepository.save(countrySummary);
-        return "URL Generated Successfully";
+    public CountryUrlGenerationStatusDto saveCountrySummaryAsNewStatusWhileGeneratingURL
+            (String countryId) throws Exception{
+
+        List<String> list = iCountrySummaryRepository.getAllStatus(countryId);
+
+        Optional<String> statusOptional = null;
+        String currentStatus =  null ;
+
+        if(list != null && !list.isEmpty()) {
+            statusOptional = list.size() > 1 ?
+                    list.stream()
+                            .filter(el  -> !el.equalsIgnoreCase(PUBLISHED_STATUS)).findFirst() :
+                    Optional.ofNullable(list.get(0));
         }
-        else if (currentStatus.equalsIgnoreCase("NEW")){
-            return "URL Already Generated";
+
+        if(statusOptional!=null && statusOptional.isPresent()){
+            currentStatus =  statusOptional.get();
+        }
+
+        if(currentStatus==COUNTRY_DATA_NOT_PRESENT){
+            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW_STATUS),
+                    new CountrySummaryDto());
+            iCountrySummaryRepository.save(countrySummary);
+            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(
+                    countryId,URL_GENERATED_SUCCESSFULLY_MESSAGE);
+            return dto;
+        }
+        else if (currentStatus.equalsIgnoreCase(NEW_STATUS) || currentStatus.equalsIgnoreCase(DRAFT_STATUS)){
+            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(
+                    countryId,AWAITING_SUBMISSION_MESSAGE);
+            return dto;
+        }
+        else if (currentStatus.equalsIgnoreCase(REVIEW_PENDING_STATUS)){
+            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId,PENDING_REVIEW_MESSAGE);
+            return dto;
+        }
+        else if (currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
+            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId,ALREADY_PUBLISHED_MESSAGE);
+            return dto;
         }
         else{
-            return "Form is currently in " + currentStatus + " status";
+            throw new Exception();
         }
     }
 

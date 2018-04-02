@@ -104,7 +104,8 @@ public class CountryControllerTest {
 
         when(developmentIndicatorService.fetchCountryDevelopmentScores(countryId)).thenReturn(developmentIndicator);
 
-        DevelopmentIndicator actualDevelopmentIndicator = countryController.getDevelopmentIndicatorForGivenCountryCode(countryId);
+        DevelopmentIndicator actualDevelopmentIndicator = countryController.
+                getDevelopmentIndicatorForGivenCountryCode(countryId);
 
         verify(developmentIndicatorService).fetchCountryDevelopmentScores(countryId);
 
@@ -138,11 +139,12 @@ public class CountryControllerTest {
 
 
     @Test
-    public void shouldSaveCountrySummaryAsNewStatus() {
+    public void shouldSaveCountrySummaryAsNewStatus() throws Exception {
         String countryId = "IND";
         String expectedMessage = "URL Generated Successfully";
-        when(countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId)).thenReturn(expectedMessage);
-        String actualMessage = countryController.saveUrlGenerationStatus(countryId);
+        CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId ,expectedMessage );
+        when(countryHealthDataService.saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId)).thenReturn(dto);
+        String actualMessage = countryController.saveUrlGenerationStatus(countryId).getMsg();
         verify(countryHealthDataService).saveCountrySummaryAsNewStatusWhileGeneratingURL(countryId);
         assertEquals(expectedMessage, actualMessage);
     }
