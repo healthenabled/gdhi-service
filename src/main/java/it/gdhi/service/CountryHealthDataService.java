@@ -94,7 +94,7 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
-    public CountryUrlGenerationStatusDto saveCountrySummaryAsNewStatusWhileGeneratingURL
+    public CountryUrlGenerationStatusDto saveCountrySummaryAsNew
             (String countryId) throws Exception{
 
         List<String> list = iCountrySummaryRepository.getAllStatus(countryId);
