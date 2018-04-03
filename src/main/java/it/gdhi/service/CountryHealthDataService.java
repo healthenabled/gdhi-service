@@ -13,6 +13,7 @@ import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,8 @@ public class CountryHealthDataService {
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire, boolean isSubmit) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
-        String newStatus = getNextStatus(currentStatus);
-        if(!newStatus.equals(currentStatus)) {
+            String newStatus = getNextStatus(currentStatus, isSubmit);
+            if(!newStatus.equals(currentStatus)) {
             removeEntriesWithStatus(gdhiQuestionnaire.getCountryId(), currentStatus);
         }
         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(),
@@ -59,8 +60,10 @@ public class CountryHealthDataService {
     }
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
-//        iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
-//       iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
+        if (currentStatus.equals(FormStatus.DRAFT.name())){
+            iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
+            iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
+        }
         iCountrySummaryRepository.removeCountrySummary(countryId, currentStatus);
     }
 
@@ -79,9 +82,11 @@ public class CountryHealthDataService {
         iCountrySummaryRepository.save(countrySummary);
     }
 
-    private String getNextStatus(String currentStatus) {
-        if (currentStatus.equals("NEW") || currentStatus.equals("DRAFT")) {
-            return "DRAFT";
+    private String getNextStatus(String currentStatus, boolean isSubmit) {
+        if(isSubmit)
+            return FormStatus.REVIEW_PENDING.name();
+        if (currentStatus.equals(FormStatus.NEW.name()) || currentStatus.equals(FormStatus.DRAFT.name())) {
+            return FormStatus.DRAFT.name();
         }
         return currentStatus;
     }
