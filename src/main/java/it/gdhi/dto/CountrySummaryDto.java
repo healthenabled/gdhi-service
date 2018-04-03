@@ -34,7 +34,7 @@ public class CountrySummaryDto {
     private String dataCollectorName;
     private String dataCollectorRole;
     private String dataCollectorEmail;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date collectedDate;
 
     private List<String> resources;
