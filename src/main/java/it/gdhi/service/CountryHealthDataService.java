@@ -62,8 +62,8 @@ public class CountryHealthDataService {
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
         if (currentStatus.equals(FormStatus.DRAFT.name())) {
             iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
-            iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
         }
+        iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
         iCountrySummaryRepository.removeCountrySummary(countryId, currentStatus);
     }
 
