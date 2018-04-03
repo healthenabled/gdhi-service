@@ -109,10 +109,13 @@ public class CountryHealthDataService {
     public CountryUrlGenerationStatusDto saveCountrySummaryAsNew
             (String countryId) throws Exception{
 
+
+
         List<String> list = iCountrySummaryRepository.getAllStatus(countryId);
 
         Optional<String> statusOptional = null;
         String currentStatus =  null ;
+        CountryUrlGenerationStatusDto dto =  null;
 
         if(list != null && !list.isEmpty()) {
             statusOptional = list.size() > 1 ?
@@ -125,30 +128,33 @@ public class CountryHealthDataService {
             currentStatus =  statusOptional.get();
         }
 
-        if(currentStatus==COUNTRY_DATA_NOT_PRESENT){
+        if(currentStatus==COUNTRY_DATA_NOT_PRESENT || currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
             CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW_STATUS),
                     new CountrySummaryDto());
             iCountrySummaryRepository.save(countrySummary);
-            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(
-                    countryId,URL_GENERATED_SUCCESSFULLY_MESSAGE);
-            return dto;
+
+            if (currentStatus != null && currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
+                 dto = new CountryUrlGenerationStatusDto(countryId,ALREADY_PUBLISHED_MESSAGE);
+            }
+            else{
+                 dto = new CountryUrlGenerationStatusDto(
+                        countryId,URL_GENERATED_SUCCESSFULLY_MESSAGE);
+            }
+
         }
         else if (currentStatus.equalsIgnoreCase(NEW_STATUS) || currentStatus.equalsIgnoreCase(DRAFT_STATUS)){
-            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(
+            dto = new CountryUrlGenerationStatusDto(
                     countryId,AWAITING_SUBMISSION_MESSAGE);
-            return dto;
         }
         else if (currentStatus.equalsIgnoreCase(REVIEW_PENDING_STATUS)){
-            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId,PENDING_REVIEW_MESSAGE);
-            return dto;
+            dto = new CountryUrlGenerationStatusDto(countryId,PENDING_REVIEW_MESSAGE);
+
         }
-        else if (currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
-            CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId,ALREADY_PUBLISHED_MESSAGE);
-            return dto;
-        }
+
         else{
             throw new Exception();
         }
+        return dto;
     }
 
 }
