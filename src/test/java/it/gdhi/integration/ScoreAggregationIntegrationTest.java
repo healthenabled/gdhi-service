@@ -32,7 +32,6 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
 
-
     private void addCountrySummary(String countryId, String countryName, String alpha2code) {
         String status = "PUBLISHED";
         CountrySummary countrySummary = CountrySummary.builder()

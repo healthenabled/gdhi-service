@@ -141,7 +141,7 @@ public class ExcelUtilServiceTest {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(WORKSHEET_NAME);
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "Ind 1", "Ind Def 1", 4, "S", "S1");
+        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "1", "Ind 1", "Ind Def 1", 4, "S", "S1");
         CategoryHealthScoreDto categoryHealthScoreDto = new CategoryHealthScoreDto(1, "Cat 1", 4.0, 4,  asList(indicatorScoreDto));
         countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
                 4.0, asList(categoryHealthScoreDto),

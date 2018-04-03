@@ -19,6 +19,8 @@ public class IndicatorDto {
 
     private Integer indicatorId;
 
+    private String indicatorCode;
+
     private String indicatorName;
 
     private String indicatorDefinition;
@@ -27,6 +29,7 @@ public class IndicatorDto {
 
     public IndicatorDto(Indicator indicator) {
         this.indicatorId = indicator.getIndicatorId();
+        this.indicatorCode = indicator.getCode();
         this.indicatorName = indicator.getName();
         this.indicatorDefinition = indicator.getDefinition();
         this.scores = getScores(indicator);

@@ -10,14 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class IndicatorScoreDto {
     private Integer id;
+    private String code;
     private String name;
     private String indicatorDescription;
     private Integer score;
     private String supportingText;
     private String scoreDescription;
 
-    public IndicatorScoreDto(CountryHealthIndicator countryHealthIndicator) {
+    IndicatorScoreDto(CountryHealthIndicator countryHealthIndicator) {
         this.id = countryHealthIndicator.getIndicatorId();
+        this.code = countryHealthIndicator.getIndicatorCode();
         this.name = countryHealthIndicator.getIndicatorName();
         this.indicatorDescription = countryHealthIndicator.getIndicatorDescription();
         this.score = countryHealthIndicator.getScore();

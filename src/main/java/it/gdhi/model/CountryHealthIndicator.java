@@ -74,6 +74,10 @@ public class CountryHealthIndicator {
         return this.indicator.getIndicatorId();
     }
 
+    public String getIndicatorCode() {
+        return this.indicator.getCode();
+    }
+
     public String getIndicatorDescription() {
         return this.indicator.getDefinition();
     }

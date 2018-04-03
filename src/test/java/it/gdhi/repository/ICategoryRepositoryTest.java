@@ -31,8 +31,10 @@ public class ICategoryRepositoryTest {
 
     @Test
     public void shouldFetchAllCategoriesWithAssociation() throws Exception {
-        Indicator indicator21 = Indicator.builder().indicatorId(21).name("indicator 21").definition("this is indicator 21").build();
-        Indicator indicator20 = Indicator.builder().indicatorId(20).name("indicator 20").definition("this is indicator 20").build();
+        Indicator indicator21 = Indicator.builder().indicatorId(21).code("21")
+                .name("indicator 21").definition("this is indicator 21").build();
+        Indicator indicator20 = Indicator.builder().indicatorId(20).code("20")
+                .name("indicator 20").definition("this is indicator 20").build();
         entityManager.persist(indicator21);
         entityManager.persist(indicator20);
         Category category9 = Category.builder().id(9).name("categort 9").build();
