@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -136,16 +137,14 @@ public class CountryControllerTest {
         verify(countryHealthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
     }
 
-
     @Test
     public void shouldSaveCountrySummaryAsNewStatus() throws Exception {
         String countryId = "IND";
-        String expectedMessage = "URL Generated Successfully";
-        CountryUrlGenerationStatusDto dto = new CountryUrlGenerationStatusDto(countryId ,expectedMessage );
-        when(countryHealthDataService.saveCountrySummaryAsNew(countryId)).thenReturn(dto);
-        String actualMessage = countryController.saveUrlGenerationStatus(countryId).getMsg();
-        verify(countryHealthDataService).saveCountrySummaryAsNew(countryId);
-        assertEquals(expectedMessage, actualMessage);
-    }
+        CountryUrlGenerationStatusDto expected = new CountryUrlGenerationStatusDto(countryId, true, null);
+        when(countryHealthDataService.saveCountrySummaryAsNew(countryId)).thenReturn(expected);
 
+        CountryUrlGenerationStatusDto actualResponse = countryController.saveUrlGenerationStatus(countryId);
+
+        assertSame(actualResponse, expected);
+    }
  }

@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
+import static it.gdhi.utils.FormStatus.*;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
-import static it.gdhi.utils.Constants.*;
 
 @Service
 public class CountryHealthDataService {
@@ -34,7 +34,7 @@ public class CountryHealthDataService {
     private ICountryRepository iCountryRepository;
 
     @Autowired
-    private  MailerService mailerService;
+    private MailerService mailerService;
 
     @Autowired
     private ICountryResourceLinkRepository iCountryResourceLinkRepository;
@@ -45,8 +45,8 @@ public class CountryHealthDataService {
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire, boolean isSubmit) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
-            String newStatus = getNextStatus(currentStatus, isSubmit);
-            if(!newStatus.equals(currentStatus)) {
+        String newStatus = getNextStatus(currentStatus, isSubmit);
+        if (!newStatus.equals(currentStatus)) {
             removeEntriesWithStatus(gdhiQuestionnaire.getCountryId(), currentStatus);
         }
         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(),
@@ -60,7 +60,7 @@ public class CountryHealthDataService {
     }
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
-        if (currentStatus.equals(FormStatus.DRAFT.name())){
+        if (currentStatus.equals(FormStatus.DRAFT.name())) {
             iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
             iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
         }
@@ -74,7 +74,7 @@ public class CountryHealthDataService {
 
     }
 
-    private void saveCountryContactInfo(String countryId, String status ,
+    private void saveCountryContactInfo(String countryId, String status,
                                         CountrySummaryDto countrySummaryDetailDto) {
         CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, status),
                 countrySummaryDetailDto);
@@ -83,9 +83,9 @@ public class CountryHealthDataService {
     }
 
     private String getNextStatus(String currentStatus, boolean isSubmit) {
-        if(isSubmit)
-            return FormStatus.REVIEW_PENDING.name();
-        if (currentStatus.equals(FormStatus.NEW.name()) || currentStatus.equals(FormStatus.DRAFT.name())) {
+        if (isSubmit)
+            return REVIEW_PENDING.name();
+        if (currentStatus.equals(NEW.name()) || currentStatus.equals(FormStatus.DRAFT.name())) {
             return FormStatus.DRAFT.name();
         }
         return currentStatus;
@@ -95,7 +95,7 @@ public class CountryHealthDataService {
                                       List<HealthIndicatorDto> healthIndicatorDto) {
         List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId, status,
                 healthIndicatorDto);
-        if(countryHealthIndicators != null) {
+        if (countryHealthIndicators != null) {
             countryHealthIndicators.forEach(health ->
                     iCountryHealthIndicatorRepository.save(health));
         }
@@ -111,55 +111,33 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
-    public CountryUrlGenerationStatusDto saveCountrySummaryAsNew
-            (String countryId) throws Exception{
+    public CountryUrlGenerationStatusDto saveCountrySummaryAsNew(String countryId) throws Exception {
+        CountryUrlGenerationStatusDto statusDto;
 
+        String currentStatus = getStatusOfCountrySummary(countryId);
 
-
-        List<String> list = iCountrySummaryRepository.getAllStatus(countryId);
-
-        Optional<String> statusOptional = null;
-        String currentStatus =  null ;
-        CountryUrlGenerationStatusDto dto =  null;
-
-        if(list != null && !list.isEmpty()) {
-            statusOptional = list.size() > 1 ?
-                    list.stream()
-                            .filter(el  -> !el.equalsIgnoreCase(PUBLISHED_STATUS)).findFirst() :
-                    Optional.ofNullable(list.get(0));
-        }
-
-        if(statusOptional!=null && statusOptional.isPresent()){
-            currentStatus =  statusOptional.get();
-        }
-
-        if(currentStatus==COUNTRY_DATA_NOT_PRESENT || currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
-            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW_STATUS),
+        if (isNull(currentStatus) || currentStatus.equalsIgnoreCase(PUBLISHED.toString())) {
+            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW.toString()),
                     new CountrySummaryDto());
             iCountrySummaryRepository.save(countrySummary);
-
-            if (currentStatus != null && currentStatus.equalsIgnoreCase(PUBLISHED_STATUS)){
-                 dto = new CountryUrlGenerationStatusDto(countryId,ALREADY_PUBLISHED_MESSAGE);
-            }
-            else{
-                 dto = new CountryUrlGenerationStatusDto(
-                        countryId,URL_GENERATED_SUCCESSFULLY_MESSAGE);
-            }
-
+            statusDto = new CountryUrlGenerationStatusDto(countryId, true, isNull(currentStatus) ? null :
+                    FormStatus.valueOf(currentStatus));
+        } else {
+            statusDto = new CountryUrlGenerationStatusDto(countryId, false, FormStatus.valueOf(currentStatus));
         }
-        else if (currentStatus.equalsIgnoreCase(NEW_STATUS) || currentStatus.equalsIgnoreCase(DRAFT_STATUS)){
-            dto = new CountryUrlGenerationStatusDto(
-                    countryId,AWAITING_SUBMISSION_MESSAGE);
-        }
-        else if (currentStatus.equalsIgnoreCase(REVIEW_PENDING_STATUS)){
-            dto = new CountryUrlGenerationStatusDto(countryId,PENDING_REVIEW_MESSAGE);
+        return statusDto;
+    }
 
+    private String getStatusOfCountrySummary(String countryId) {
+        String currentStatus = null;
+        List<String> countrySummaryStatuses = iCountrySummaryRepository.getAllStatus(countryId);
+        if (!countrySummaryStatuses.isEmpty()) {
+            currentStatus = countrySummaryStatuses.size() > 1 ?
+                    countrySummaryStatuses.stream()
+                            .filter(el -> !el.equalsIgnoreCase(PUBLISHED.toString())).findFirst().get() :
+                    countrySummaryStatuses.get(0);
         }
-
-        else{
-            throw new Exception();
-        }
-        return dto;
+        return currentStatus;
     }
 
 }

@@ -1,6 +1,7 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.CountryUrlGenerationStatusDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
@@ -21,15 +22,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 import java.util.UUID;
 
+import static it.gdhi.utils.Constants.NEW_STATUS;
+import static it.gdhi.utils.FormStatus.*;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static it.gdhi.utils.Constants.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryHealthDataServiceTest {
@@ -104,87 +104,184 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldSaveAsNewStatusWhenLiveDataNotPresentAlready() throws Exception {
-
-
-
+    public void shouldSaveAsNewStatusWhenCountryDoesNotHaveLiveData() throws Exception {
         String countryId = "BGD";
+        ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
 
-        List status1 = asList(COUNTRY_DATA_NOT_PRESENT);
-        String expectedMessage1 = URL_GENERATED_SUCCESSFULLY_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status1);
-        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage1 , actualMessage1);
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(emptyList());
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assert(countryUrlGenerationStatusDto.isSuccess());
+        assertNull(countryUrlGenerationStatusDto.getExistingStatus());
 
-        List status2 = asList(NEW_STATUS);
-        String expectedMessage2 = AWAITING_SUBMISSION_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status2);
-        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage2 , actualMessage2);
-
-
-        List status3 = asList(DRAFT_STATUS);
-        String expectedMessage3 = AWAITING_SUBMISSION_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status3);
-        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage3 , actualMessage3);
-
-        List status4 = asList(REVIEW_PENDING_STATUS);
-        String expectedMessage4 = PENDING_REVIEW_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status4);
-        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage4 , actualMessage4);
-
-        List status5 = asList(PUBLISHED_STATUS);
-        String expectedMessage5 = ALREADY_PUBLISHED_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status5);
-        String actualMessage5 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage5 , actualMessage5);
-
-
+        verify(iCountrySummaryRepository).save(summaryCaptor.capture());
+        CountrySummary summaryCaptorValue = summaryCaptor.getValue();
+        assertEquals(countryId, summaryCaptorValue.getCountrySummaryId().getCountryId());
+        assertEquals(NEW_STATUS, summaryCaptorValue.getCountrySummaryId().getStatus());
     }
 
     @Test
-    public void shouldSaveAsNewStatusWhenLiveDataPresentAlready() throws Exception {
+    public void shouldSaveAsNewStatusWhenCountryHasPublishedData() throws Exception {
+        String countryId = "BGD";
+        ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
 
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(PUBLISHED.toString()));
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assert(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(PUBLISHED, countryUrlGenerationStatusDto.getExistingStatus());
 
-
-        String countryId = "IND";
-
-        List status1 = asList(COUNTRY_DATA_NOT_PRESENT);
-        String expectedMessage1 = URL_GENERATED_SUCCESSFULLY_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status1);
-        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage1 , actualMessage1);
-
-        List status2 = asList(NEW_STATUS,PUBLISHED_STATUS);
-        String expectedMessage2 = AWAITING_SUBMISSION_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status2);
-        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage2 , actualMessage2);
-
-
-        List status3 = asList(DRAFT_STATUS,PUBLISHED_STATUS);
-        String expectedMessage3 = AWAITING_SUBMISSION_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status3);
-        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage3 , actualMessage3);
-
-        List status4 = asList(REVIEW_PENDING_STATUS,PUBLISHED_STATUS);
-        String expectedMessage4 = PENDING_REVIEW_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status4);
-        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage4 , actualMessage4);
-
-        List status5 = asList(PUBLISHED_STATUS);
-        String expectedMessage5 = ALREADY_PUBLISHED_MESSAGE;
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status5);
-        String actualMessage5 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
-        assertEquals(expectedMessage5 , actualMessage5);
-
-
+        verify(iCountrySummaryRepository).save(summaryCaptor.capture());
+        CountrySummary summaryCaptorValue = summaryCaptor.getValue();
+        assertEquals(countryId, summaryCaptorValue.getCountrySummaryId().getCountryId());
+        assertEquals(NEW_STATUS, summaryCaptorValue.getCountrySummaryId().getStatus());
     }
 
+    @Test
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasNewData() throws Exception {
+        String countryId = "BGD";
+
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(NEW_STATUS));
+
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assertFalse(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(NEW, countryUrlGenerationStatusDto.getExistingStatus());
+
+        verify(iCountrySummaryRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasDraftData() throws Exception {
+        String countryId = "BGD";
+
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(DRAFT.toString()));
+
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assertFalse(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(DRAFT, countryUrlGenerationStatusDto.getExistingStatus());
+
+        verify(iCountrySummaryRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasReviewPendingData() throws Exception {
+        String countryId = "BGD";
+
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(REVIEW_PENDING.toString()));
+
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assertFalse(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(REVIEW_PENDING, countryUrlGenerationStatusDto.getExistingStatus());
+
+        verify(iCountrySummaryRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasBothPublishedAndDraftData() throws Exception {
+        String countryId = "BGD";
+
+        when(iCountrySummaryRepository.getAllStatus(anyString()))
+                .thenReturn(asList(PUBLISHED.toString(), DRAFT.toString()));
+
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assertFalse(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(DRAFT, countryUrlGenerationStatusDto.getExistingStatus());
+
+        verify(iCountrySummaryRepository, never()).save(any());
+    }
+
+    @Test
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasBothPublishedAndNewData() throws Exception {
+        String countryId = "BGD";
+
+        when(iCountrySummaryRepository.getAllStatus(anyString()))
+                .thenReturn(asList(PUBLISHED.toString(), NEW.toString()));
+
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        assertFalse(countryUrlGenerationStatusDto.isSuccess());
+        assertEquals(NEW, countryUrlGenerationStatusDto.getExistingStatus());
+
+        verify(iCountrySummaryRepository, never()).save(any());
+    }
+
+//    @Test
+//    public void shouldSaveAsNewStatusWhenLiveDataNotPresentAlready() throws Exception {
+//
+//        String countryId = "BGD";
+//
+//        List status1 = asList(COUNTRY_DATA_NOT_PRESENT);
+//        String expectedMessage1 = URL_GENERATED_SUCCESSFULLY_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status1);
+//        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage1 , actualMessage1);
+//
+//        List status2 = asList(NEW_STATUS);
+//        String expectedMessage2 = AWAITING_SUBMISSION_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status2);
+//        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage2 , actualMessage2);
+//
+//
+//        List status3 = asList(DRAFT_STATUS);
+//        String expectedMessage3 = AWAITING_SUBMISSION_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status3);
+//        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage3 , actualMessage3);
+//
+//        List status4 = asList(REVIEW_PENDING_STATUS);
+//        String expectedMessage4 = PENDING_REVIEW_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status4);
+//        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage4 , actualMessage4);
+//
+//        List status5 = asList(PUBLISHED_STATUS);
+//        String expectedMessage5 = ALREADY_PUBLISHED_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status5);
+//        String actualMessage5 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage5 , actualMessage5);
+//
+//
+//    }
+//
+//    @Test
+//    public void shouldSaveAsNewStatusWhenLiveDataPresentAlready() throws Exception {
+//
+//
+//
+//        String countryId = "IND";
+//
+//        List status1 = asList(COUNTRY_DATA_NOT_PRESENT);
+//        String expectedMessage1 = URL_GENERATED_SUCCESSFULLY_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status1);
+//        String actualMessage1 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage1 , actualMessage1);
+//
+//        List status2 = asList(NEW_STATUS,PUBLISHED_STATUS);
+//        String expectedMessage2 = AWAITING_SUBMISSION_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status2);
+//        String actualMessage2 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage2 , actualMessage2);
+//
+//
+//        List status3 = asList(DRAFT_STATUS,PUBLISHED_STATUS);
+//        String expectedMessage3 = AWAITING_SUBMISSION_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status3);
+//        String actualMessage3 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage3 , actualMessage3);
+//
+//        List status4 = asList(REVIEW_PENDING_STATUS,PUBLISHED_STATUS);
+//        String expectedMessage4 = PENDING_REVIEW_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status4);
+//        String actualMessage4 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage4 , actualMessage4);
+//
+//        List status5 = asList(PUBLISHED_STATUS);
+//        String expectedMessage5 = ALREADY_PUBLISHED_MESSAGE;
+//        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(status5);
+//        String actualMessage5 = countryHealthDataService.saveCountrySummaryAsNew(countryId).getMsg();
+//        assertEquals(expectedMessage5 , actualMessage5);
+//
+//
+//    }
+//
 
 
 
