@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class CountryUrlGenerationStatusDto {
 
     private String countryId;
-//    private String msg;
 
     private boolean success;
     private FormStatus existingStatus;

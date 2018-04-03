@@ -10,18 +10,7 @@ public class Constants {
     public static final String INDICATOR = "Indicator ";
     public static final String OVERALL_PHASE = "Overall Phase";
 
-    public static final String COUNTRY_DATA_NOT_PRESENT = null;
     public static final String NEW_STATUS = "NEW";
-    public static final String DRAFT_STATUS = "DRAFT";
-    public static final String REVIEW_PENDING_STATUS = "REVIEW PENDING";
-    public static final String PUBLISHED_STATUS = "PUBLISHED";
-
-    public static final String URL_GENERATED_SUCCESSFULLY_MESSAGE = "URL Generated Successfully";
-    public static final String AWAITING_SUBMISSION_MESSAGE = "Awaiting Submission";
-    public static final String PENDING_REVIEW_MESSAGE = "Pending Review";
-    public static final String ALREADY_PUBLISHED_MESSAGE = "Already published";
-
-
 
     public static class Mail {
         public static final String SUBJECT = "GDHI has a new response from %s";
