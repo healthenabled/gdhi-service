@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.*;
 import static java.util.Objects.isNull;
@@ -111,7 +112,9 @@ public class CountryHealthDataService {
         }).collect(toList());
     }
 
-    public CountryUrlGenerationStatusDto saveCountrySummaryAsNew(String countryId) throws Exception {
+    public CountryUrlGenerationStatusDto saveNewCountrySummary(UUID countryUUID) throws Exception {
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
+
         CountryUrlGenerationStatusDto statusDto;
 
         String currentStatus = getStatusOfCountrySummary(countryId);

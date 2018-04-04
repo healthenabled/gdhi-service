@@ -37,10 +37,6 @@ public class CountryService {
         return iCountryRepository.findAll();
     }
 
-    public Country fetchCountryFromUUID(UUID countryUUID) {
-        return iCountryRepository.findByUUID(countryUUID);
-    }
-
     @Transactional
     public CountrySummaryDto fetchCountrySummary(String countryId) {
         CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, "PUBLISHED");

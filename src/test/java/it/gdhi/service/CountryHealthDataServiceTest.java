@@ -78,7 +78,7 @@ public class CountryHealthDataServiceTest {
     @Test
     public void shouldSendEmailOnSuccessfulSubmitOfCountryDetailsAndIndicators() throws Exception {
         String countryId = "ARG";
-        Country country = new Country(countryId, "Argentina",UUID.randomUUID(), "AR");
+        Country country = new Country(countryId, "Argentina", UUID.randomUUID(), "AR");
         List<String> resourceLinks = asList("Res 1");
         String feeder = "feeder";
         String feederRole = "feeder role";
@@ -89,7 +89,7 @@ public class CountryHealthDataServiceTest {
                 .contactEmail(contactEmail)
                 .resources(resourceLinks).build();
 
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1,"PUBLISHED", 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, "Text"));
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
@@ -104,13 +104,17 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldSaveAsNewStatusWhenCountryDoesNotHaveLiveData() throws Exception {
-        String countryId = "BGD";
+    public void shouldSaveAsNewStatusWhenCountryDoesNotHavePublishedData() throws Exception {
+        String countryId = "ARG";
+        UUID countryUUID = UUID.randomUUID();
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
 
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
         when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(emptyList());
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
-        assert(countryUrlGenerationStatusDto.isSuccess());
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
+                .saveNewCountrySummary(countryUUID);
+        assert (countryUrlGenerationStatusDto.isSuccess());
         assertNull(countryUrlGenerationStatusDto.getExistingStatus());
 
         verify(iCountrySummaryRepository).save(summaryCaptor.capture());
@@ -121,12 +125,17 @@ public class CountryHealthDataServiceTest {
 
     @Test
     public void shouldSaveAsNewStatusWhenCountryHasPublishedData() throws Exception {
-        String countryId = "BGD";
+        String countryId = "ARG";
+        UUID countryUUID = UUID.randomUUID();
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
+
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
         when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(PUBLISHED.toString()));
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
-        assert(countryUrlGenerationStatusDto.isSuccess());
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
+                .saveNewCountrySummary(countryUUID);
+        assert (countryUrlGenerationStatusDto.isSuccess());
         assertEquals(PUBLISHED, countryUrlGenerationStatusDto.getExistingStatus());
 
         verify(iCountrySummaryRepository).save(summaryCaptor.capture());
@@ -136,12 +145,17 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasNewData() throws Exception {
-        String countryId = "BGD";
+    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasUnpublishedData() throws Exception {
+        String countryId = "ARG";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
+
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
         when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(NEW_STATUS));
 
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
+                .saveNewCountrySummary(countryUUID);
         assertFalse(countryUrlGenerationStatusDto.isSuccess());
         assertEquals(NEW, countryUrlGenerationStatusDto.getExistingStatus());
 
@@ -149,39 +163,18 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasDraftData() throws Exception {
-        String countryId = "BGD";
-
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(DRAFT.toString()));
-
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
-        assertFalse(countryUrlGenerationStatusDto.isSuccess());
-        assertEquals(DRAFT, countryUrlGenerationStatusDto.getExistingStatus());
-
-        verify(iCountrySummaryRepository, never()).save(any());
-    }
-
-    @Test
-    public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasReviewPendingData() throws Exception {
-        String countryId = "BGD";
-
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(REVIEW_PENDING.toString()));
-
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
-        assertFalse(countryUrlGenerationStatusDto.isSuccess());
-        assertEquals(REVIEW_PENDING, countryUrlGenerationStatusDto.getExistingStatus());
-
-        verify(iCountrySummaryRepository, never()).save(any());
-    }
-
-    @Test
     public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasBothPublishedAndDraftData() throws Exception {
-        String countryId = "BGD";
+        String countryId = "ARG";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
+
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
         when(iCountrySummaryRepository.getAllStatus(anyString()))
                 .thenReturn(asList(PUBLISHED.toString(), DRAFT.toString()));
 
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
+                .saveNewCountrySummary(countryUUID);
         assertFalse(countryUrlGenerationStatusDto.isSuccess());
         assertEquals(DRAFT, countryUrlGenerationStatusDto.getExistingStatus());
 
@@ -190,12 +183,17 @@ public class CountryHealthDataServiceTest {
 
     @Test
     public void shouldNotSaveNewCountrySummaryWhenItAlreadyHasBothPublishedAndNewData() throws Exception {
-        String countryId = "BGD";
+        String countryId = "ARG";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
+
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
         when(iCountrySummaryRepository.getAllStatus(anyString()))
                 .thenReturn(asList(PUBLISHED.toString(), NEW.toString()));
 
-        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService.saveCountrySummaryAsNew(countryId);
+        CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
+                .saveNewCountrySummary(countryUUID);
         assertFalse(countryUrlGenerationStatusDto.isSuccess());
         assertEquals(NEW, countryUrlGenerationStatusDto.getExistingStatus());
 

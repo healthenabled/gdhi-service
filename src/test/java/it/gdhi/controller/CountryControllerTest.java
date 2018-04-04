@@ -14,12 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -140,10 +139,11 @@ public class CountryControllerTest {
     @Test
     public void shouldSaveCountrySummaryAsNewStatus() throws Exception {
         String countryId = "IND";
+        UUID countryUUID = UUID.randomUUID();
         CountryUrlGenerationStatusDto expected = new CountryUrlGenerationStatusDto(countryId, true, null);
-        when(countryHealthDataService.saveCountrySummaryAsNew(countryId)).thenReturn(expected);
+        when(countryHealthDataService.saveNewCountrySummary(countryUUID)).thenReturn(expected);
 
-        CountryUrlGenerationStatusDto actualResponse = countryController.saveUrlGenerationStatus(countryId);
+        CountryUrlGenerationStatusDto actualResponse = countryController.saveUrlGenerationStatus(countryUUID);
 
         assertSame(actualResponse, expected);
     }
