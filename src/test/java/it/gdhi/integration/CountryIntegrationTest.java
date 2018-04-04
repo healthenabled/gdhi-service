@@ -176,9 +176,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         assertResponse(response.asString(), "country_body.json");
     }
 
-    @Ignore
     @Test
     public void shouldSaveAndEditCountryDetails() throws Exception {
+        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), new ArrayList<>());
         mailerService = mock(MailerService.class);
         doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
 
@@ -211,5 +211,27 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .get("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString());
 
         assertResponse(response.asString(), "country_body_edit.json");
+    }
+
+    @Test
+    public void shouldSubmitCountryDetails() throws Exception {
+        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), new ArrayList<>());
+        mailerService = mock(MailerService.class);
+        doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
+
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .body(expectedResponseJson("country_body_edit.json"))
+                .post("http://localhost:" + port + "/countries/submit");
+
+        assertEquals(200, response.getStatusCode());
+
+        response = given()
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString());
+
+        assertResponse(response.asString(), "country_body_review_pending.json");
     }
 }
