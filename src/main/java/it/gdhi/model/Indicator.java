@@ -25,6 +25,8 @@ public class Indicator {
 
     private String code;
 
+    private Integer rank;
+
     @OneToMany
     @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
     @OrderBy("score")

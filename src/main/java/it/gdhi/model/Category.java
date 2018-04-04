@@ -25,7 +25,7 @@ public class Category {
     @JoinTable(schema = "master", name="categories_indicators",
             joinColumns=@JoinColumn(name="category_id"),
             inverseJoinColumns=@JoinColumn(name="indicator_id"))
-    @OrderBy
+    @OrderBy("rank")
     private List<Indicator> indicators;
 
     public Category(Integer categoryId, String name) {
