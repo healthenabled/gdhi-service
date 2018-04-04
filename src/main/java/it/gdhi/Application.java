@@ -113,6 +113,7 @@ public class Application {
         jpaProperties.put("hibernate.physical_naming_strategy", physicalNamingStrategy);
         jpaProperties.put("hibernate.show_sql", showSql);
         jpaProperties.put("hibernate.format_sql", formatSql);
+        jpaProperties.put("hibernate.event.merge.entity_copy_observer", "allow");
         return jpaProperties;
     }
 
