@@ -49,6 +49,6 @@ public class MailerService {
     }
 
     private String constructHealthIndicatorPath(Country country) {
-        return format(HEALTH_INDICATOR_PATH, frontEndURL, country.getUnique_id());
+        return format(HEALTH_INDICATOR_PATH, frontEndURL, country.getUniqueId());
     }
 }

@@ -15,6 +15,6 @@ public interface ICountryRepository extends Repository<Country, Long> {
     Country find(String id);
 
     Country save(Country country);
-    @Query("SELECT c from Country c WHERE c.unique_id = ?1")
+    @Query("SELECT c from Country c WHERE c.uniqueId = ?1")
     Country findByUUID(UUID countryUUID);
 }

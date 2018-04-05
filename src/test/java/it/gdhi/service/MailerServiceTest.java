@@ -38,8 +38,8 @@ public class MailerServiceTest {
         String email2 = "test2@test.com";
         String name1 = "test1";
         String name2 = "test2";
-        UUID unique_id = UUID.randomUUID();
-        Country country = new Country("Ind", "India", unique_id,"IN");
+        UUID uniqueId = UUID.randomUUID();
+        Country country = new Country("Ind", "India", uniqueId,"IN");
         String feeder = "feeder";
         String feederRole = "feeder role";
         String contactEmail = "contact@test.com";
@@ -54,7 +54,7 @@ public class MailerServiceTest {
         verify(mailer).send(email1, format(Mail.SUBJECT, country.getName()), constructBody(name1, country, feeder, feederRole, contactEmail, "http://test"));
     }
     private String constructBody(String name, Country country, String feeder, String feederRole, String contactEmail, String path) {
-        return format(Mail.BODY, name,feeder, feederRole,  country.getName(), contactEmail, format(Mail.HEALTH_INDICATOR_PATH, path, country.getUnique_id()));
+        return format(Mail.BODY, name,feeder, feederRole,  country.getName(), contactEmail, format(Mail.HEALTH_INDICATOR_PATH, path, country.getUniqueId()));
     }
 
 }

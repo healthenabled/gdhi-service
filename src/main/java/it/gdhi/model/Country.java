@@ -18,7 +18,8 @@ public class Country {
     @Id
     private String id;
     private String name;
-    private UUID unique_id;
+    @Column(name = "unique_id")
+    private UUID uniqueId;
     @Column(name = "alpha_2_code")
     private String alpha2Code;
 

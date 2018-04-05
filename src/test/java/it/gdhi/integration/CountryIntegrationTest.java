@@ -11,7 +11,6 @@ import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.MailerService;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.IdClass;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +70,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .build();
         countrySummaryRepository.save(countrySummary);
 
-        COUNTRY_UUID = iCountryRepository.find("IND").getUnique_id();
+        COUNTRY_UUID = iCountryRepository.find("IND").getUniqueId();
     }
 
     @Test
