@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import static it.gdhi.utils.FormStatus.*;
+
 @RestController
 @Slf4j
 public class CountryController {
@@ -72,12 +74,12 @@ public class CountryController {
 
     @RequestMapping(value = "/countries/save", method = RequestMethod.POST)
     public void saveHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.save(gdhiQuestionnaire, false);
+        countryHealthDataService.save(gdhiQuestionnaire, DRAFT.name());
     }
 
     @RequestMapping(value = "/countries/submit", method = RequestMethod.POST)
     public void submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.save(gdhiQuestionnaire, true);
+        countryHealthDataService.save(gdhiQuestionnaire, REVIEW_PENDING.name());
     }
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)

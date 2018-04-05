@@ -20,6 +20,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static it.gdhi.utils.FormStatus.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryControllerTest {
@@ -83,17 +84,17 @@ public class CountryControllerTest {
     @Test
     public void shouldSubmitHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
-        doNothing().when(countryHealthDataService).save(mock, true);
+        doNothing().when(countryHealthDataService).save(mock, REVIEW_PENDING.name());
         countryController.submitHealthIndicatorsFor(mock);
-        verify(countryHealthDataService).save(mock, true);
+        verify(countryHealthDataService).save(mock, REVIEW_PENDING.name());
     }
 
     @Test
     public void shouldSavHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
-        doNothing().when(countryHealthDataService).save(mock, false);
+        doNothing().when(countryHealthDataService).save(mock, DRAFT.name());
         countryController.saveHealthIndicatorsFor(mock);
-        verify(countryHealthDataService).save(mock, false);
+        verify(countryHealthDataService).save(mock, DRAFT.name());
     }
 
     @Test

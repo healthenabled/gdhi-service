@@ -44,9 +44,8 @@ public class CountryHealthDataService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Transactional
-    public void save(GdhiQuestionnaire gdhiQuestionnaire, boolean isSubmit) {
+    public void save(GdhiQuestionnaire gdhiQuestionnaire, String  nextStatus) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
-        String nextStatus = getNextStatus(currentStatus, isSubmit);
         if (!nextStatus.equals(currentStatus)) {
             removeEntriesWithStatus(gdhiQuestionnaire.getCountryId(), currentStatus);
         }
@@ -54,16 +53,17 @@ public class CountryHealthDataService {
                 nextStatus, gdhiQuestionnaire.getCountrySummary());
         saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
                 nextStatus, gdhiQuestionnaire.getHealthIndicators());
-        if (isSubmit) {
+        if (nextStatus.equals(REVIEW_PENDING.name())) {
             sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
                     gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
         }
     }
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
-        if (currentStatus.equals(FormStatus.DRAFT.name())) {
+        if (currentStatus.equals(DRAFT.name())) {
             iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
         }
+        iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
         iCountrySummaryRepository.removeCountrySummary(countryId, currentStatus);
     }
 
@@ -80,15 +80,6 @@ public class CountryHealthDataService {
                 countrySummaryDetailDto);
         iCountryResourceLinkRepository.deleteResources(countryId, status);
         iCountrySummaryRepository.save(countrySummary);
-    }
-
-    private String getNextStatus(String currentStatus, boolean isSubmit) {
-        if (isSubmit)
-            return REVIEW_PENDING.name();
-        if (currentStatus.equals(NEW.name()) || currentStatus.equals(FormStatus.DRAFT.name())) {
-            return FormStatus.DRAFT.name();
-        }
-        return currentStatus;
     }
 
     private void saveHealthIndicators(String countryId, String status,
