@@ -99,9 +99,9 @@ public class CountryControllerTest {
     @Test
     public void shouldPublishHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
-        doNothing().when(countryHealthDataService).save(mock, PUBLISHED.name());
+        doNothing().when(countryHealthDataService).publish(mock);
         countryController.publishHealthIndicatorsFor(mock);
-        verify(countryHealthDataService).save(mock, PUBLISHED.name());
+        verify(countryHealthDataService).publish(mock);
     }
 
     @Test

@@ -132,4 +132,8 @@ public class CountryHealthDataService {
         return currentStatus;
     }
 
+    @Transactional
+    public void publish(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, PUBLISHED.name());
+    }
 }

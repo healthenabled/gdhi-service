@@ -60,7 +60,7 @@ public class CountryHealthDataServiceTest {
                 .healthIndicators(healthIndicatorDtos).build();
 
         when(iCountrySummaryRepository.getCountrySummaryStatus(countryId)).thenReturn(status);
-        countryHealthDataService.save(gdhiQuestionnaire, status);
+        countryHealthDataService.publish(gdhiQuestionnaire);
 
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<CountryHealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(CountryHealthIndicator.class);
