@@ -7,7 +7,10 @@ import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.Category;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountryHealthIndicators;
+import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
+import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -33,6 +37,9 @@ public class CountryHealthIndicatorService {
 
     @Autowired
     private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+
+    @Autowired
+    private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Autowired
     private ExcelUtilService excelUtilService;
@@ -124,10 +131,14 @@ public class CountryHealthIndicatorService {
                                                               Predicate<? super CategoryHealthScoreDto> phaseFilter) {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
         Double overallScore = countryHealthIndicators.getOverallScore();
+        CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, FormStatus.PUBLISHED.toString());
+        String collectedDateStr = countrySummary!=null ? new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
-                overallScore, categoryDtos, convertScoreToPhase(overallScore));
+                overallScore, categoryDtos, convertScoreToPhase(overallScore),collectedDateStr);
     }
+
+
 
     private List<CategoryHealthScoreDto> getCategoriesWithIndicators(CountryHealthIndicators countryHealthIndicators,
                                                                      Predicate<? super CategoryHealthScoreDto>

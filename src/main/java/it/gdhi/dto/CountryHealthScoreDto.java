@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -23,6 +24,8 @@ public class CountryHealthScoreDto {
     private List<CategoryHealthScoreDto> categories;
 
     private Integer countryPhase;
+
+    private String collectedDate;
 
     @JsonIgnore
     public boolean hasCategories() {
