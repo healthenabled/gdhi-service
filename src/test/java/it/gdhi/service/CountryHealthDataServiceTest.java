@@ -47,21 +47,20 @@ public class CountryHealthDataServiceTest {
     @Mock
     ICountryRepository countryDetailRepository;
 
-    @Ignore
     @Test
     public void shouldSaveDetailsForACountry() throws Exception {
         List<String> resourceLinks = asList("Res 1");
         CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
                 .resources(resourceLinks).build();
-        String status = "PUBLISHED";
+        String status = PUBLISHED.name();
         List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, status, 2, "Text"));
         String countryId = "ARG";
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
 
-        when(iCountrySummaryRepository.getCountrySummaryStatus(countryId)).thenReturn("PUBLISHED");
-        countryHealthDataService.save(gdhiQuestionnaire, DRAFT.name());
+        when(iCountrySummaryRepository.getCountrySummaryStatus(countryId)).thenReturn(status);
+        countryHealthDataService.save(gdhiQuestionnaire, status);
 
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<CountryHealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(CountryHealthIndicator.class);

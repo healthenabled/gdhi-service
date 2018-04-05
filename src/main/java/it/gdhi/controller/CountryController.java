@@ -82,6 +82,11 @@ public class CountryController {
         countryHealthDataService.save(gdhiQuestionnaire, REVIEW_PENDING.name());
     }
 
+    @RequestMapping(value = "/countries/publish", method = RequestMethod.POST)
+    public void publishHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        countryHealthDataService.save(gdhiQuestionnaire, PUBLISHED.name());
+    }
+
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
     public GdhiQuestionnaire getQuestionnaireForCountry(@PathVariable("uuid") UUID countryUIID) {
         return countryService.getDetails(countryUIID);

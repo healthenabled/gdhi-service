@@ -90,11 +90,18 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldSavHealthIndicators() {
+    public void shouldSaveHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
         doNothing().when(countryHealthDataService).save(mock, DRAFT.name());
         countryController.saveHealthIndicatorsFor(mock);
         verify(countryHealthDataService).save(mock, DRAFT.name());
+    }
+    @Test
+    public void shouldPublishHealthIndicators() {
+        GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
+        doNothing().when(countryHealthDataService).save(mock, PUBLISHED.name());
+        countryController.publishHealthIndicatorsFor(mock);
+        verify(countryHealthDataService).save(mock, PUBLISHED.name());
     }
 
     @Test
