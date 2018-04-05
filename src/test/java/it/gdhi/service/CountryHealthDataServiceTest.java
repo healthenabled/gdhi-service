@@ -23,7 +23,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 import java.util.UUID;
 
-import static it.gdhi.utils.Constants.NEW_STATUS;
 import static it.gdhi.utils.FormStatus.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -154,7 +153,7 @@ public class CountryHealthDataServiceTest {
 
         when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
-        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(NEW_STATUS));
+        when(iCountrySummaryRepository.getAllStatus(anyString())).thenReturn(asList(NEW.toString()));
 
         CountryUrlGenerationStatusDto countryUrlGenerationStatusDto = countryHealthDataService
                 .saveNewCountrySummary(countryUUID);

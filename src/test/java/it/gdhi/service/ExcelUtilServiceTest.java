@@ -25,9 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-import static it.gdhi.service.ExcelUtilService.WORKSHEET_NAME;
-import static it.gdhi.utils.Constants.HEADER_KEY;
-import static it.gdhi.utils.Constants.MIME_TYPE;
+import static it.gdhi.service.ExcelUtilService.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -80,8 +78,8 @@ public class ExcelUtilServiceTest {
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
 
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService, times(0)).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();
@@ -100,8 +98,8 @@ public class ExcelUtilServiceTest {
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService, times(0)).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();
@@ -122,8 +120,8 @@ public class ExcelUtilServiceTest {
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();

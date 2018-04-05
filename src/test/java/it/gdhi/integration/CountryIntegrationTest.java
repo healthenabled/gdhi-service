@@ -110,7 +110,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         assertResponse(response.asString(), "health_indicators.json");
     }
 
-
     @Test
     public void shouldGetCountrySummary() throws Exception {
         String countryId = "IND";

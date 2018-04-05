@@ -21,7 +21,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,64 +31,40 @@ import static it.gdhi.utils.Constants.*;
 @Service
 public class ExcelUtilService {
 
-    private static final List<String> FIXED_HEADERS = new ArrayList<String>() {{
-        add("Indicator 1");
-        add("Indicator 2");
-        add("Category 1");
-        add("Indicator 3");
-        add("Indicator 4");
-        add("Category 2");
-        add("Indicator 5");
-        add("Indicator 6");
-        add("Indicator 7");
-        add("Indicator 8");
-        add("Category 3");
-        add("Indicator 9");
-        add("Indicator 10");
-        add("Indicator 11");
-        add("Indicator 12");
-        add("Category 4");
-        add("Indicator 13");
-        add("Indicator 14");
-        add("Category 5");
-        add("Indicator 15");
-        add("Indicator 16");
-        add("Category 6");
-        add("Indicator 17");
-        add("Indicator 18");
-        add("Indicator 19");
-        add("Category 7");
-    }};
-
+    static final String MIME_TYPE = "application/octet-stream";
+    static final String HEADER_KEY = "Content-Disposition";
+    static final String WORKSHEET_NAME = "Global Health Data";
+    private static final String COUNTRY_NAME = "Country Name";
+    private static final String PHASE = "Phase ";
+    private static final String CATEGORY = "Category ";
+    private static final String INDICATOR = "Indicator ";
+    private static final String OVERALL_PHASE = "Overall Phase";
     private static final int BUFFER_SIZE = 4096;
-
     private static final String HEADER_FORMAT = "attachment; filename=\'%s\'";
 
     @Value("${excelFileLocation}")
     @Getter
     private String fileWithPath;
 
-    protected static final String WORKSHEET_NAME = "Global Health Data";
-
-    private static final Integer NO_OF_COLUMNS = 28;
-    
     @Autowired
     private ICategoryRepository iCategoryRepository;
 
-    public void convertListToExcel(List<CountryHealthScoreDto> countryHealthScoreDtos) {
+    void convertListToExcel(List<CountryHealthScoreDto> countryHealthScoreDtos) {
+        List<Category> categories = iCategoryRepository.findAll();
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet(WORKSHEET_NAME);
 
             int rownum = 0;
-            populateHeaderNames(workbook, sheet, rownum++);
-            Map<String, String> headerDefinitions = populateHeaderDefinitions(workbook, sheet, rownum++);
+            int noOfColumns = populateHeaderNames(workbook, sheet, rownum++, categories);
+
+            Map<String, String> headerDefinitions = populateHeaderDefinitions(workbook, sheet, rownum++, categories);
             if (countryHealthScoreDtos != null && !countryHealthScoreDtos.isEmpty()) {
                 populateHealthIndicatorsWithDefinitionsAndScores(sheet, countryHealthScoreDtos,
                                                                  headerDefinitions, rownum);
             }
-            for(int i = 0; i<= NO_OF_COLUMNS; i++) {
+            for(int i = 0; i<= noOfColumns; i++) {
                 sheet.autoSizeColumn(i);
             }
             FileOutputStream fileOutputStream = new FileOutputStream(new File(this.getFileWithPath()));
@@ -101,39 +76,27 @@ public class ExcelUtilService {
         }
     }
 
-    protected void populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
+    int populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum,
+                            List<Category> categories) {
+        Map<String, String> headerDef = new LinkedHashMap<>();
+        headerDef.put("Blank Cell", "");
+
+        categories.forEach(category -> {
+            category.getIndicators().forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
+                    INDICATOR + indicator.getCode()));
+            headerDef.put(CATEGORY + category.getId(), CATEGORY + category.getId());
+        });
         Row row = sheet.createRow(rownum);
-        int cellnum = 0;
-        XSSFCellStyle fontStyle = getFontStyle(workBook);
-        Cell firstCell = row.createCell(cellnum++);
-        firstCell.setCellStyle(fontStyle);
-        firstCell.setCellValue("");
-        for (String header : FIXED_HEADERS) {
-            Cell cell = row.createCell(cellnum++);
-            cell.setCellStyle(fontStyle);
-            cell.setCellValue(header);
-        }
+        addRow(headerDef, row, getFontStyle(workBook));
+
+        return headerDef.size();
     }
 
-    private XSSFCellStyle getFontStyle(XSSFWorkbook wb) {
-        XSSFCellStyle style = wb.createCellStyle();
-
-        XSSFFont font= wb.createFont();
-        font.setFontHeightInPoints((short)10);
-        font.setFontName("Arial");
-        font.setBold(true);
-        font.setItalic(false);
-
-        style.setAlignment(CellStyle.ALIGN_CENTER);
-        style.setFont(font);
-        return style;
-    }
-
-    protected Map<String, String> populateHeaderDefinitions(XSSFWorkbook workBook, XSSFSheet sheet, int rownum) {
-        List<Category> categoryList = iCategoryRepository.findAll();
+    Map<String, String> populateHeaderDefinitions(XSSFWorkbook workBook, XSSFSheet sheet, int rownum,
+                                                  List<Category> categories) {
         Map<String, String> headerDef = new LinkedHashMap<>();
         headerDef.put(COUNTRY_NAME, COUNTRY_NAME);
-        categoryList.forEach(category -> {
+        categories.forEach(category -> {
             category.getIndicators().forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
                     indicator.getName()));
             headerDef.put(CATEGORY + category.getId(), category.getName());
@@ -144,10 +107,10 @@ public class ExcelUtilService {
         return headerDef;
     }
 
-    protected void populateHealthIndicatorsWithDefinitionsAndScores(XSSFSheet sheet,
-                                                                  List<CountryHealthScoreDto> countryHealthScoreDtos,
-                                                                  Map<String, String> headerDef,
-                                                                  int rownum) {
+    void populateHealthIndicatorsWithDefinitionsAndScores(XSSFSheet sheet,
+                                                          List<CountryHealthScoreDto> countryHealthScoreDtos,
+                                                          Map<String, String> headerDef,
+                                                          int rownum) {
         Row row;
         for (CountryHealthScoreDto countryHealthScoreDto : countryHealthScoreDtos) {
             row = sheet.createRow(rownum++);
@@ -173,7 +136,7 @@ public class ExcelUtilService {
         }
     }
 
-    public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         File fileToDownload = new File(this.getFileWithPath());
         FileInputStream inputStream = new FileInputStream(fileToDownload);
@@ -198,9 +161,8 @@ public class ExcelUtilService {
         outStream.close();
     }
 
-    protected void addRow(Map<String, String> headerDef, Row row, XSSFCellStyle fontStyle) {
-        int cellnum;
-        cellnum = 0;
+    void addRow(Map<String, String> headerDef, Row row, XSSFCellStyle fontStyle) {
+        int cellnum = 0;
         for (String header : headerDef.keySet()) {
             Cell cell = row.createCell(cellnum++);
             if(fontStyle != null) {
@@ -208,5 +170,19 @@ public class ExcelUtilService {
             }
             cell.setCellValue(headerDef.get(header));
         }
+    }
+
+    private XSSFCellStyle getFontStyle(XSSFWorkbook wb) {
+        XSSFCellStyle style = wb.createCellStyle();
+
+        XSSFFont font= wb.createFont();
+        font.setFontHeightInPoints((short)10);
+        font.setFontName("Arial");
+        font.setBold(true);
+        font.setItalic(false);
+
+        style.setAlignment(CellStyle.ALIGN_CENTER);
+        style.setFont(font);
+        return style;
     }
 }
