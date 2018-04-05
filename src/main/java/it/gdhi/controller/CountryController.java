@@ -79,7 +79,12 @@ public class CountryController {
 
     @RequestMapping(value = "/countries/submit", method = RequestMethod.POST)
     public void submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.save(gdhiQuestionnaire, REVIEW_PENDING.name());
+        countryHealthDataService.submit(gdhiQuestionnaire);
+    }
+
+    @RequestMapping(value = "/countries/saveCorrection", method = RequestMethod.POST)
+    public void saveCorrectionsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire){
+        countryHealthDataService.saveCorrection(gdhiQuestionnaire);
     }
 
     @RequestMapping(value = "/countries/publish", method = RequestMethod.POST)

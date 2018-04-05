@@ -98,7 +98,7 @@ public class CountryHealthDataServiceTest {
         when(iCountryHealthIndicatorRepository.save(any(CountryHealthIndicator.class))).thenReturn(CountryHealthIndicator.builder().build());
         when(countryDetailRepository.find(countryId)).thenReturn(country);
         when(iCountrySummaryRepository.getCountrySummaryStatus(countryId)).thenReturn("DRAFT");
-        countryHealthDataService.save(gdhiQuestionnaire, REVIEW_PENDING.name());
+        countryHealthDataService.submit(gdhiQuestionnaire);
 
         verify(mailerService).send(country, feeder, feederRole, contactEmail);
     }

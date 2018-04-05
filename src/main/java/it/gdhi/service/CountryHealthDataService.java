@@ -53,10 +53,6 @@ public class CountryHealthDataService {
                 nextStatus, gdhiQuestionnaire.getCountrySummary());
         saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
                 nextStatus, gdhiQuestionnaire.getHealthIndicators());
-        if (nextStatus.equals(REVIEW_PENDING.name())) {
-            sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
-                    gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
-        }
     }
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
@@ -135,5 +131,17 @@ public class CountryHealthDataService {
     @Transactional
     public void publish(GdhiQuestionnaire gdhiQuestionnaire) {
         save(gdhiQuestionnaire, PUBLISHED.name());
+    }
+
+    @Transactional
+    public void submit(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, REVIEW_PENDING.name());
+        sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
+                gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
+    }
+
+    @Transactional
+    public void saveCorrection(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, REVIEW_PENDING.name());
     }
 }
