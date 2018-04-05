@@ -19,7 +19,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +52,10 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     public UUID COUNTRY_UUID = null;
 
-    private void addCountrySummary(String countryId, String countryName, String status, String alpha2Code, UUID countryUUID, List<CountryResourceLink> countryResourceLinks)  {
+    private void addCountrySummary(String countryId, String countryName, String status, String alpha2Code, UUID countryUUID, String collectedDate,
+                                   List<CountryResourceLink> countryResourceLinks) throws Exception {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = fmt.parse(collectedDate);
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary("summary")
@@ -66,6 +71,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
+                .collectedDate(date)
                 .countryResourceLinks(countryResourceLinks)
                 .build();
         countrySummaryRepository.save(countrySummary);
@@ -90,7 +96,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
-        addCountrySummary(countryId, "India", status, alpha2Code, countryUUID, new ArrayList<>());
+        addCountrySummary(countryId, "India", status, alpha2Code, countryUUID, "2018-04-04",new ArrayList<>());
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -123,7 +129,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, countryResourceLinks);
+        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "2018-04-04" ,countryResourceLinks);
 
         Response response = given()
                 .contentType("application/json")
@@ -153,7 +159,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, countryResourceLinks);
+        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "2018-04-04", countryResourceLinks);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -175,7 +181,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveAndEditCountryDetails() throws Exception {
-        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), new ArrayList<>());
+        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), "2018-04-04", new ArrayList<>());
         mailerService = mock(MailerService.class);
         doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
 
@@ -212,7 +218,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void shouldSubmitCountryDetails() throws Exception {
-        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), new ArrayList<>());
+        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(),  "2018-04-04", new ArrayList<>());
         mailerService = mock(MailerService.class);
         doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
 

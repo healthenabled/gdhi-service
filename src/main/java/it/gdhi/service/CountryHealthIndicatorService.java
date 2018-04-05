@@ -131,8 +131,10 @@ public class CountryHealthIndicatorService {
                                                               Predicate<? super CategoryHealthScoreDto> phaseFilter) {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
         Double overallScore = countryHealthIndicators.getOverallScore();
-        CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, FormStatus.PUBLISHED.toString());
-        String collectedDateStr = countrySummary!=null ? new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
+        CountrySummary countrySummary = iCountrySummaryRepository.
+                findByCountryAndStatus(countryId, FormStatus.PUBLISHED.toString());
+        String collectedDateStr = countrySummary!=null && countrySummary.getCollectedDate()!=null ?
+                new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
                 overallScore, categoryDtos, convertScoreToPhase(overallScore),collectedDateStr);

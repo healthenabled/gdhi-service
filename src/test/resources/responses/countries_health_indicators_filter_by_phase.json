@@ -85,7 +85,8 @@
           ]
         }
       ],
-      "countryPhase": 3
+      "countryPhase": 3,
+      "collectedDate": "April 2018"
     },
     {
       "countryId": "GBR",
@@ -172,7 +173,8 @@
           ]
         }
       ],
-      "countryPhase": 3
+      "countryPhase": 3,
+      "collectedDate": "April 2018"
     }
   ]
 }

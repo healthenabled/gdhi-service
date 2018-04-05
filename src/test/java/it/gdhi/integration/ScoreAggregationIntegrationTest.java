@@ -15,7 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +34,10 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
 
-    private void addCountrySummary(String countryId, String countryName, String alpha2code) {
+    private void addCountrySummary(String countryId, String countryName, String alpha2code) throws  Exception{
         String status = "PUBLISHED";
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = fmt.parse("2018-04-04");
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary("summary")
@@ -49,6 +53,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 .dataCollectorRole("coll role")
                 .dataFeederRole("coll role")
                 .dataCollectorEmail("coll email")
+                .collectedDate(date)
                 .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummary);

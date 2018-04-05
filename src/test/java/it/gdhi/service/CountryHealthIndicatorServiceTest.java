@@ -4,6 +4,7 @@ import it.gdhi.dto.*;
 import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
+import it.gdhi.repository.ICountrySummaryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,8 +35,12 @@ public class CountryHealthIndicatorServiceTest {
     @Mock
     ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
+
     @Mock
     private ExcelUtilService excelUtilService;
+
+    @Mock
+    private ICountrySummaryRepository iCountrySummaryRepository;
 
     private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
         Integer score1 = 3;
@@ -334,7 +340,7 @@ public class CountryHealthIndicatorServiceTest {
     }
 
     @Test
-    public void shouldFetchGlobalHealthScores() {
+    public void shouldFetchGlobalHealthScores() throws Exception {
         Category category1 = Category.builder().id(9).name("Category 1").build();
         Country country1 = new Country("IND", "India",UUID.randomUUID(), "IN");
         Indicator indicator1 = Indicator.builder().indicatorId(1).build();
@@ -353,6 +359,9 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iCountryHealthIndicatorRepository.find(null)).thenReturn(asList(mock1, mock2, mock3, mock4));
 
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
+
         CountriesHealthScoreDto countriesHealthScoreDto = countryHealthIndicatorService.fetchCountriesHealthScores(null, null);
 
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(2));
@@ -369,7 +378,7 @@ public class CountryHealthIndicatorServiceTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenPhaseForGivenCategoryIsNotPresentWhileFetchingGlobalHealthScores() {
+    public void shouldReturnEmptyListWhenPhaseForGivenCategoryIsNotPresentWhileFetchingGlobalHealthScores() throws Exception {
         String USA = "USA";
         String India = "IND";
 
@@ -384,6 +393,10 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock2 = CountryHealthIndicator.builder().country(country2).category(category2).indicator(indicator2).score(2).build();
 
         when(iCountryHealthIndicatorRepository.find(1)).thenReturn(asList(mock1, mock2));
+
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
+
 
         CountriesHealthScoreDto countriesHealthScoreDto = countryHealthIndicatorService.fetchCountriesHealthScores(1, 5);
 
@@ -405,6 +418,10 @@ public class CountryHealthIndicatorServiceTest {
         Indicator indicator4 = Indicator.builder().indicatorId(4).build();
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iCountryHealthIndicatorRepository.find(3)).thenReturn(asList(mock1, mock3, mock4));
+
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
+
 
         CountriesHealthScoreDto countriesHealthScoreDto = countryHealthIndicatorService.fetchCountriesHealthScores(3, 4);
 
@@ -431,6 +448,10 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock3 = CountryHealthIndicator.builder().country(country2).category(category3).indicator(indicator3).score(3).build();
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category2).indicator(indicator5).score(5).build();
         when(iCountryHealthIndicatorRepository.find(null)).thenReturn(asList(mock1, mock2, mock3, mock4));
+
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
+
 
         CountriesHealthScoreDto countriesHealthScoreDto = countryHealthIndicatorService.fetchCountriesHealthScores(null, 4);
 
