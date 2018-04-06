@@ -1,7 +1,7 @@
 package it.gdhi.utils;
 
 public class Constants {
-    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Missing or Not Applicable";
+    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available or Not Applicable";
 
     public static class Mail {
         public static final String SUBJECT = "GDHI has a new response from %s";

@@ -55,7 +55,7 @@
               "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
               "score": null,
               "supportingText": "sp13",
-              "scoreDescription": "Missing or Not Applicable"
+              "scoreDescription": "Not Available or Not Applicable"
             },
             {
               "id": 2,
@@ -64,7 +64,7 @@
               "indicatorDescription": "Is digital health included and budgeted for in national health or relevant national strategies and/or plan(s)?",
               "score": null,
               "supportingText": "sp14",
-              "scoreDescription": "Missing or Not Applicable"
+              "scoreDescription": "Not Available or Not Applicable"
             }
           ]
         }
