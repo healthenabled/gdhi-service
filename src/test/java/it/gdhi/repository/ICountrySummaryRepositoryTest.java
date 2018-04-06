@@ -51,10 +51,10 @@ public class ICountrySummaryRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
                 .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverEmail("coll email")
                 .countryResourceLinks(countryResourceLinkList)
                 .build();
         iCountrySummaryRepository.save(countrySummary);
@@ -105,10 +105,10 @@ public class ICountrySummaryRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
                 .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverEmail("coll email")
                 .countryResourceLinks(asList(countryResourceLinkList))
                 .build();
 
@@ -132,10 +132,10 @@ public class ICountrySummaryRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
                 .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverEmail("coll email")
                 .countryResourceLinks(asList(countryResourceLinkList))
                 .build();
         iCountrySummaryRepository.save(countrySummary2);

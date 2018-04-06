@@ -32,9 +32,9 @@ public class CountrySummaryDto {
     private String dataFeederName;
     private String dataFeederRole;
     private String dataFeederEmail;
-    private String dataCollectorName;
-    private String dataCollectorRole;
-    private String dataCollectorEmail;
+    private String dataApproverName;
+    private String dataApproverRole;
+    private String dataApproverEmail;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date collectedDate;
 
@@ -53,9 +53,9 @@ public class CountrySummaryDto {
         this.dataFeederName = countrySummary.getDataFeederName();
         this.dataFeederRole = countrySummary.getDataFeederRole();
         this.dataFeederEmail = countrySummary.getDataFeederEmail();
-        this.dataCollectorName = countrySummary.getDataCollectorName();
-        this.dataCollectorRole = countrySummary.getDataCollectorRole();
-        this.dataCollectorEmail = countrySummary.getDataCollectorEmail();
+        this.dataApproverName = countrySummary.getDataApproverName();
+        this.dataApproverRole = countrySummary.getDataApproverRole();
+        this.dataApproverEmail = countrySummary.getDataApproverEmail();
         this.collectedDate = countrySummary.getCollectedDate();
         this.resources = transformResourceLinks(countrySummary);
     }

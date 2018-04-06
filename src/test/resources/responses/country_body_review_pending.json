@@ -13,9 +13,9 @@
     "dataFeederName": "feeder name new",
     "dataFeederRole": "coll role new",
     "dataFeederEmail": "email new",
-    "dataCollectorName": "coll name new",
-    "dataCollectorRole": "coll role new",
-    "dataCollectorEmail": "coll email new",
+    "dataApproverName": "coll name new",
+    "dataApproverRole": "coll role new",
+    "dataApproverEmail": "coll email new",
     "collectedDate": null,
     "resources": [
       "link1 new"

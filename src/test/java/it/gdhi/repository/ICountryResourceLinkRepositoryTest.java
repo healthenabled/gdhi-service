@@ -52,10 +52,10 @@ public class ICountryResourceLinkRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
                 .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverEmail("coll email")
                 .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummary);

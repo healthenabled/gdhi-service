@@ -10,9 +10,9 @@
   "dataFeederName": "feeder name",
   "dataFeederRole": "coll role",
   "dataFeederEmail": "email",
-  "dataCollectorName": "coll name",
-  "dataCollectorRole": "coll role",
-  "dataCollectorEmail": "coll email",
+  "dataApproverName": "coll name",
+  "dataApproverRole": "coll role",
+  "dataApproverEmail": "coll email",
   "collectedDate": "2018-04-04",
   "resources": [
     "link1",

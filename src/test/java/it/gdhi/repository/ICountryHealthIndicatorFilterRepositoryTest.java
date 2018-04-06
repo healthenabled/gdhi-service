@@ -56,10 +56,9 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
+                .dataApproverRole("coll email")
                 .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummaryIndia);
@@ -76,10 +75,7 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverName("coll name")
                 .build();
         countrySummaryRepository.save(countrySummaryARG);
 

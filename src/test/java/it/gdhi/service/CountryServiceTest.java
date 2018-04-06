@@ -76,9 +76,9 @@ public class CountryServiceTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
+                .dataApproverEmail("coll email")
                 .collectedDate(new Date())
                 .countryResourceLinks(countryResourceLinks)
                 .build();
@@ -94,9 +94,9 @@ public class CountryServiceTest {
         assertThat(countrySummaryDto.getDataFeederName(), is(countrySummary.getDataFeederName()));
         assertThat(countrySummaryDto.getDataFeederRole(), is(countrySummary.getDataFeederRole()));
         assertThat(countrySummaryDto.getDataFeederEmail(), is(countrySummary.getDataFeederEmail()));
-        assertThat(countrySummaryDto.getDataCollectorName(), is(countrySummary.getDataCollectorName()));
-        assertThat(countrySummaryDto.getDataCollectorRole(), is(countrySummary.getDataCollectorRole()));
-        assertThat(countrySummaryDto.getDataCollectorEmail(), is(countrySummary.getDataCollectorEmail()));
+        assertThat(countrySummaryDto.getDataApproverName(), is(countrySummary.getDataApproverName()));
+        assertThat(countrySummaryDto.getDataApproverRole(), is(countrySummary.getDataApproverRole()));
+        assertThat(countrySummaryDto.getDataApproverEmail(), is(countrySummary.getDataApproverEmail()));
         assertThat(countrySummaryDto.getCollectedDate(), is(countrySummary.getCollectedDate()));
         assertThat(countrySummaryDto.getSummary(), is(summary));
         assertThat(countrySummaryDto.getResources(), Matchers.containsInAnyOrder(link1, link2));
@@ -127,9 +127,9 @@ public class CountryServiceTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("feeder email")
-                .dataCollectorName("collector name")
-                .dataCollectorRole("collector role")
-                .dataCollectorEmail("collector email")
+                .dataApproverName("collector name")
+                .dataApproverRole("collector role")
+                .dataApproverRole("collector email")
                 .collectedDate(new Date())
                 .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link",
                         statusValue), new Date(), null)))
@@ -193,8 +193,8 @@ public class CountryServiceTest {
         assertEquals(expectedCountrySummary.getDataFeederName(), actualCountrySummary.getDataFeederName());
         assertEquals(expectedCountrySummary.getDataFeederRole(), actualCountrySummary.getDataFeederRole());
         assertEquals(expectedCountrySummary.getDataFeederEmail(), actualCountrySummary.getDataFeederEmail());
-        assertEquals(expectedCountrySummary.getDataCollectorName(), actualCountrySummary.getDataCollectorName());
-        assertEquals(expectedCountrySummary.getDataCollectorEmail(), actualCountrySummary.getDataCollectorEmail());
+        assertEquals(expectedCountrySummary.getDataApproverName(), actualCountrySummary.getDataApproverName());
+        assertEquals(expectedCountrySummary.getDataApproverEmail(), actualCountrySummary.getDataApproverEmail());
         assertEquals(expectedCountrySummary.getCollectedDate(), actualCountrySummary.getCollectedDate());
         assertEquals(expectedCountrySummary.getCountryResourceLinks().stream().map(CountryResourceLink::getLink).collect(Collectors.toList()),
                 actualCountrySummary.getResources());

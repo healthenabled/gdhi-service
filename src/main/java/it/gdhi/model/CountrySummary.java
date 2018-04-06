@@ -40,9 +40,12 @@ public class CountrySummary implements Serializable {
     private String dataFeederName;
     private String dataFeederRole;
     private String dataFeederEmail;
-    private String dataCollectorName;
-    private String dataCollectorRole;
-    private String dataCollectorEmail;
+    @Column(name = "data_collector_name")
+    private String dataApproverName;
+    @Column(name = "data_collector_role")
+    private String dataApproverRole;
+    @Column(name = "data_collector_email")
+    private String dataApproverEmail;
     private Date collectedDate;
     @Column(insertable = false, updatable = false)
     @Generated(GenerationTime.ALWAYS)
@@ -64,9 +67,9 @@ public class CountrySummary implements Serializable {
         this.dataFeederName = countrySummaryDetailDto.getDataFeederName();
         this.dataFeederRole = countrySummaryDetailDto.getDataFeederRole();
         this.dataFeederEmail = countrySummaryDetailDto.getDataFeederEmail();
-        this.dataCollectorName = countrySummaryDetailDto.getDataCollectorName();
-        this.dataCollectorRole = countrySummaryDetailDto.getDataCollectorRole();
-        this.dataCollectorEmail = countrySummaryDetailDto.getDataCollectorEmail();
+        this.dataApproverName = countrySummaryDetailDto.getDataApproverName();
+        this.dataApproverRole = countrySummaryDetailDto.getDataApproverRole();
+        this.dataApproverEmail = countrySummaryDetailDto.getDataApproverEmail();
         this.collectedDate = countrySummaryDetailDto.getCollectedDate();
         this.countryResourceLinks = transformToResourceLinks(countrySummaryId.getCountryId(),
                 countrySummaryId.getStatus(), countrySummaryDetailDto);

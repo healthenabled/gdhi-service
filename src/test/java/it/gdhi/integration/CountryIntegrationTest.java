@@ -67,10 +67,10 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataCollectorRole("coll role")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
                 .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverEmail("coll email")
                 .collectedDate(date)
                 .countryResourceLinks(countryResourceLinks)
                 .build();
