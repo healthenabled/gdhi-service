@@ -362,6 +362,7 @@ public class CountryHealthIndicatorServiceTest {
         CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
         when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
 
+
         CountriesHealthScoreDto countriesHealthScoreDto = countryHealthIndicatorService.fetchCountriesHealthScores(null, null);
 
         assertThat(countriesHealthScoreDto.getCountryHealthScores().size(), is(2));
@@ -375,6 +376,7 @@ public class CountryHealthIndicatorServiceTest {
         assertThat(actualCategory3.getIndicators().size(), is(2));
         CategoryHealthScoreDto actualCategory2 = actualUSA.getCategories().stream().filter(c -> c.getId().equals(category2.getId())).findFirst().get();
         assertThat(actualCategory2.getOverallScore(), is(2.0));
+        assertThat(actualInd.getCollectedDate(), is("April 2018"));
     }
 
     @Test
@@ -615,5 +617,7 @@ public class CountryHealthIndicatorServiceTest {
         verify(excelUtilService).convertListToExcel(anyList());
         verify(excelUtilService).downloadFile(request, response);
     }
+
+
 
 }
