@@ -36,9 +36,6 @@ public class ICountryResourceLinkRepositoryTest {
     private EntityManager entityManager;
 
     @Autowired
-    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
-
-    @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
 
     private void addCountrySummary(String countryId, String countryName, String alpha2code) {

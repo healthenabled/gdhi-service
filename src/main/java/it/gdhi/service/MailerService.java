@@ -22,7 +22,7 @@ public class MailerService {
     private Mailer mailer;
 
     @Autowired
-    MailAddresses mailAddresses;
+    private MailAddresses mailAddresses;
 
     @Value("${frontEndURL}")
     private String frontEndURL;

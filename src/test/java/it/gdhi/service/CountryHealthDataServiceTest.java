@@ -11,7 +11,6 @@ import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

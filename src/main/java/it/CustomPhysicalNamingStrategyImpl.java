@@ -21,7 +21,7 @@ public class CustomPhysicalNamingStrategyImpl extends PhysicalNamingStrategyStan
         return new Identifier(addUnderscores(name.getText()), name.isQuoted());
     }
 
-    protected static String addUnderscores(String name) {
+    private static String addUnderscores(String name) {
         StringBuilder buf = new StringBuilder(name.replace('.', '_'));
 
         for(int i = 1; i < buf.length() - 1; ++i) {

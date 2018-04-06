@@ -63,7 +63,7 @@ public class CountryHealthDataService {
         iCountrySummaryRepository.removeCountrySummary(countryId, currentStatus);
     }
 
-    public void sendMail(String feederName, String feederRole, String contactEmail, String countryId) {
+    private void sendMail(String feederName, String feederRole, String contactEmail, String countryId) {
         Country country = iCountryRepository.find(countryId);
         mailerService.send(country, feederName, feederRole, contactEmail);
 
