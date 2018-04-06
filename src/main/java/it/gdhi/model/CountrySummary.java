@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
@@ -17,18 +19,18 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Entity
-@Table(schema ="country_health_data", name="country_summary")
+@Table(schema = "country_health_data", name = "country_summary")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-public class CountrySummary implements Serializable{
+public class CountrySummary implements Serializable {
 
     @EmbeddedId
     CountrySummaryId countrySummaryId;
 
     @OneToOne
-    @JoinColumn(name="country_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "country_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Country country;
     private String summary;
     private String contactName;
@@ -42,7 +44,11 @@ public class CountrySummary implements Serializable{
     private String dataCollectorRole;
     private String dataCollectorEmail;
     private Date collectedDate;
-
+    @Column(insertable = false, updatable = false)
+    @Generated(GenerationTime.ALWAYS)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    private Date updatedAt;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id", referencedColumnName = "country_id", insertable = false, updatable = false)
@@ -63,7 +69,7 @@ public class CountrySummary implements Serializable{
         this.dataCollectorEmail = countrySummaryDetailDto.getDataCollectorEmail();
         this.collectedDate = countrySummaryDetailDto.getCollectedDate();
         this.countryResourceLinks = transformToResourceLinks(countrySummaryId.getCountryId(),
-                countrySummaryId.getStatus() , countrySummaryDetailDto);
+                countrySummaryId.getStatus(), countrySummaryDetailDto);
     }
 
     private List<CountryResourceLink> transformToResourceLinks(String countryId,
@@ -72,8 +78,13 @@ public class CountrySummary implements Serializable{
         List<String> resourceLinks = countrySummaryDetailDto.getResources();
         return ObjectUtils.isEmpty(resourceLinks) ? null : resourceLinks.stream().map(
                 link ->
-                new CountryResourceLink(
-                        new CountryResourceLinkId(countryId, link, status))).collect(toList());
+                        new CountryResourceLink(new CountryResourceLinkId(countryId, link, status), new Date(), null))
+                .collect(toList());
     }
 
+    @PreUpdate
+    @PrePersist
+    public void updateTimeStamps() {
+        updatedAt = new Date();
+    }
 }

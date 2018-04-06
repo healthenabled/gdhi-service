@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,7 +54,8 @@ public class CountryHealthIndicatorServiceTest {
         Category category1 = new Category(categoryId1, "Leadership and Governance");
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition1");
         IndicatorScore indicatorScore1 = IndicatorScore.builder().id(1L).indicatorId(indicatorId2).score(score2).definition("score 1").build();
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, indicatorScore1, score1,  "st1");
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1,
+                category1, indicator1, indicatorScore1, score1,  "st1", new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId2,indicatorId2 , status);
         Category category2 = new Category(categoryId2, "Category2");
@@ -61,9 +63,11 @@ public class CountryHealthIndicatorServiceTest {
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition3");
 
         IndicatorScore indicatorScore2 = IndicatorScore.builder().id(1L).indicatorId(indicatorId2).score(score2).definition("score 2").build();
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category2, indicator2, indicatorScore2,  score2, "st2" );
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category2, indicator2, indicatorScore2,  score2, "st2" ,new Date(), null);
         IndicatorScore indicatorScore3 = IndicatorScore.builder().id(2L).indicatorId(indicatorId3).score(score3).definition("score 3").build();
-        CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category2, indicator3, indicatorScore3,  score3, "st3" );
+        CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category2, indicator3, indicatorScore3,  score3, "st3", new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator3, countryHealthIndicator2, countryHealthIndicator1);
 
@@ -133,12 +137,14 @@ public class CountryHealthIndicatorServiceTest {
         Country country1 = new Country(countryId, countryName, UUID.randomUUID(), countryAlpha2Code);
         Category category1 = new Category(categoryId1, categoryName);
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  null, null);
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
+                country1, category1, indicator1, IndicatorScore.builder().build(),  null, null, new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition");
         Integer indicatorScore = 2;
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore, "st1");
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore, "st1",new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
@@ -177,11 +183,13 @@ public class CountryHealthIndicatorServiceTest {
         Category category1 = new Category(categoryId1, categoryName );
         Category category2 = new Category(categoryId2, categoryName2 );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  null, "st1");
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
+                country1, category1, indicator1, IndicatorScore.builder().build(),  null, "st1", new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category2, indicator2, IndicatorScore.builder().build(),  2, "st2");
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category2, indicator2, IndicatorScore.builder().build(),  2, "st2", new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
@@ -220,11 +228,13 @@ public class CountryHealthIndicatorServiceTest {
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  null, null );
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
+                country1, category1, indicator1, IndicatorScore.builder().build(),  null, null , new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category1, indicator2, IndicatorScore.builder().build(),  null, null );
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category1, indicator2, IndicatorScore.builder().build(),  null, null , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
@@ -262,11 +272,13 @@ public class CountryHealthIndicatorServiceTest {
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" );
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
+                country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" , new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" );
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
@@ -308,15 +320,18 @@ public class CountryHealthIndicatorServiceTest {
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" );
+        CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
+                country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" , new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2, status);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2, country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" );
+        CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
+                country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" , new Date(), null);
 
         CountryHealthIndicatorId countryHealthIndicatorId3 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId3, status);
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 1", "Definition");
-        CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId3, country1, category1, indicator3, IndicatorScore.builder().build(),  indicatorScore3, "st3" );
+        CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId3,
+                country1, category1, indicator3, IndicatorScore.builder().build(),  indicatorScore3, "st3" , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2, countryHealthIndicator3);
 

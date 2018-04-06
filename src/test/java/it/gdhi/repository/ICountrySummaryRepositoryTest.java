@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,7 +92,7 @@ public class ICountrySummaryRepositoryTest {
         String countryName = "New Zealand";
         String alpha2code = "NZ";
         CountryResourceLink countryResourceLinkList = new CountryResourceLink(new CountryResourceLinkId(countryId, "www.google.com",
-                PUBLISHED.toString()));
+                PUBLISHED.toString()), new Date(), null);
 
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))

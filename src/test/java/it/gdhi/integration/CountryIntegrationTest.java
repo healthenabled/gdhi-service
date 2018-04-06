@@ -124,8 +124,10 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         UUID countryUUID = COUNTRY_UUID;
 
 
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link1",status), new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link2",status), new Date(), null);
 
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
@@ -146,8 +148,10 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String alpha2code = "IN";
         UUID countryUUID = COUNTRY_UUID;
 
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link1",status));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId, "link2",status));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link1",status), new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link2",status), new Date(), null);
         Integer categoryId1 = 1;
         Integer categoryId2 = 2;
         Integer categoryId3 = 3;

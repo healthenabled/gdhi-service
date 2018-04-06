@@ -5,16 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Optional;
 
 import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 
 @Entity
-@Table(schema = "country_health_data", name="health_indicators")
+@Table(schema = "country_health_data", name = "health_indicators")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -48,11 +51,17 @@ public class CountryHealthIndicator {
                     insertable = false, updatable = false)})
     private IndicatorScore indicatorScore;
 
-    @Column(name="indicator_score")
+    @Column(name = "indicator_score")
     private Integer score;
 
     @Column(name = "supporting_text")
     private String supportingText;
+
+    @Column(insertable = false, updatable = false)
+    @Generated(GenerationTime.ALWAYS)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    private Date updatedAt;
 
     public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore) {
         this.countryHealthIndicatorId = countryHealthIndicatorId;
@@ -90,5 +99,11 @@ public class CountryHealthIndicator {
         return Optional.ofNullable(indicatorScore)
                 .map(IndicatorScore::getDefinition)
                 .orElse(SCORE_DESCRIPTION_NOT_AVAILABLE);
+    }
+
+    @PreUpdate
+    @PrePersist
+    public void updateTimeStamps() {
+        updatedAt = new Date();
     }
 }

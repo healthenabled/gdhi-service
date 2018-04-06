@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,9 +65,12 @@ public class ICountryResourceLinkRepositoryTest {
     public void shouldFetchCountryResourceLinks() {
         addCountrySummary("NZL", "New Zealand", "NZ");
         addCountrySummary("AUS", "Australia", "AU");
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1","PUBLISHED"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2","PUBLISHED"));
-        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3","PUBLISHED"));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res " +
+                "1","PUBLISHED"),new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res " +
+                "2","PUBLISHED"),new Date(), null);
+        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res " +
+                "3","PUBLISHED"),new Date(), null);
         entityManager.persist(countryResourceLink1);
         entityManager.persist(countryResourceLink2);
         entityManager.persist(countryResourceLink3);
@@ -81,9 +85,12 @@ public class ICountryResourceLinkRepositoryTest {
     public void shouldDeleteCountryResourceLinksForAGivenCountry() {
         addCountrySummary("NZL", "New Zealand", "NZ");
         addCountrySummary("AUS", "Australia", "AU");
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 1","PUBLISHED"));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res 2","PUBLISHED"));
-        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res 3","PUBLISHED"));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res " +
+                "1","PUBLISHED"),new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("AUS", "Res " +
+                "2","PUBLISHED"),new Date(), null);
+        CountryResourceLink countryResourceLink3 = new CountryResourceLink(new CountryResourceLinkId("NZL", "Res " +
+                "3","PUBLISHED"),new Date(), null);
         entityManager.persist(countryResourceLink1);
         entityManager.persist(countryResourceLink2);
         entityManager.persist(countryResourceLink3);

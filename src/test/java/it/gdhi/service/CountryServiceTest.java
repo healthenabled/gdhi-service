@@ -60,13 +60,15 @@ public class CountryServiceTest {
         String link1 = "Link 1";
         String link2 = "Link 2";
         String status = "PUBLISHED";
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1, status));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2, status));
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1,
+                status), new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2,
+                status), new Date(), null);
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary(summary)
-                .country(new Country(countryId, "Argentina", UUID.randomUUID(),"AR"))
+                .country(new Country(countryId, "Argentina", UUID.randomUUID(), "AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -129,7 +131,8 @@ public class CountryServiceTest {
                 .dataCollectorRole("collector role")
                 .dataCollectorEmail("collector email")
                 .collectedDate(new Date())
-                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link", statusValue))))
+                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link",
+                        statusValue), new Date(), null)))
                 .build();
 
         when(iCountrySummaryRepository.findAll(countryId)).thenReturn(asList(countrySummary));
