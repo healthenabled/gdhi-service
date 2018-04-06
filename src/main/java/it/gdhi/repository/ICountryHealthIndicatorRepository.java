@@ -23,8 +23,9 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     CountryHealthIndicator save(CountryHealthIndicator countryHealthIndicatorSetupData);
 
-    @Query("SELECT h FROM CountryHealthIndicator h WHERE (?1 is null or h.category.id = ?1)")
-    List<CountryHealthIndicator> find(Integer categoryId);
+    @Query("SELECT h FROM CountryHealthIndicator h WHERE (?1 is null or h.category.id = ?1) "+
+            "and h.countryHealthIndicatorId.status=?2")
+    List<CountryHealthIndicator> findByStatus(Integer categoryId, String currentStatus);
 
     @Modifying
     @Query("DELETE FROM CountryHealthIndicator h WHERE " +

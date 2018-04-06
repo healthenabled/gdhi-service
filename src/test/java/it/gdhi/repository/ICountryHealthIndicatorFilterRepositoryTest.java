@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static it.gdhi.utils.FormStatus.PUBLISHED;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -110,20 +111,23 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
     }
 
     @Test
-    public void shouldFilterHealthRepositoryBasedOnCategoryAndPhase() throws Exception {
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.find(categoryId1);
+    public void shouldFilterHealthRepositoryBasedOnCategoryAndPhaseAndByStatus() throws Exception {
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
+                .findByStatus(categoryId1, PUBLISHED.name());
         assertEquals(3, countryHealthIndicators.size());
     }
 
     @Test
     public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.find(null);
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
+                .findByStatus(null, PUBLISHED.name());
         assertEquals(4, countryHealthIndicators.size());
     }
 
     @Test
     public void shouldReturnEmptyListWhenGivenCategoryHasNoHealthIndicatorPresent() throws Exception {
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.find(7);
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
+                .findByStatus(7, PUBLISHED.name());
         assertEquals(0, countryHealthIndicators.size());
     }
 }

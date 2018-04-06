@@ -10,7 +10,6 @@ import it.gdhi.model.CountryHealthIndicators;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,7 @@ import java.util.function.Predicate;
 
 import static it.gdhi.controller.strategy.FilterStrategy.getCategoryPhaseFilter;
 import static it.gdhi.controller.strategy.FilterStrategy.getCountryPhaseFilter;
+import static it.gdhi.utils.FormStatus.*;
 import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
@@ -59,7 +59,8 @@ public class CountryHealthIndicatorService {
 
     @Transactional
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase) {
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.find(categoryId);
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
+                .findByStatus(categoryId,PUBLISHED.name());
 
         Map<String, List<CountryHealthIndicator>> groupByCountry = countryHealthIndicators.stream()
                 .collect(groupingBy(CountryHealthIndicator::getCountryId));
@@ -132,7 +133,7 @@ public class CountryHealthIndicatorService {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
         Double overallScore = countryHealthIndicators.getOverallScore();
         CountrySummary countrySummary = iCountrySummaryRepository.
-                findByCountryAndStatus(countryId, FormStatus.PUBLISHED.toString());
+                findByCountryAndStatus(countryId, PUBLISHED.name());
         String collectedDateStr = countrySummary!=null && countrySummary.getCollectedDate()!=null ?
                 new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
