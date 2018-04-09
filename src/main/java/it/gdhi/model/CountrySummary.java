@@ -40,11 +40,8 @@ public class CountrySummary implements Serializable {
     private String dataFeederName;
     private String dataFeederRole;
     private String dataFeederEmail;
-    @Column(name = "data_collector_name")
     private String dataApproverName;
-    @Column(name = "data_collector_role")
     private String dataApproverRole;
-    @Column(name = "data_collector_email")
     private String dataApproverEmail;
     private Date collectedDate;
     @Column(insertable = false, updatable = false)
