@@ -30,6 +30,6 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
     @Modifying
     @Query("DELETE FROM CountryHealthIndicator h WHERE " +
             "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
-    void removeHealthIndicators(String countryId, String currentStatus);
+    void removeHealthIndicatorsBy(String countryId, String currentStatus);
 }
 

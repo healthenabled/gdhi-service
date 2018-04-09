@@ -115,4 +115,8 @@ public class CountryController {
             throws Exception {
         return countryHealthDataService.saveNewCountrySummary(countryUIID);
     }
+    @RequestMapping(value = "/countries/delete", method = RequestMethod.POST)
+    public void deleteCountryData(@RequestBody CountrySummaryDto summaryDto) {
+        countryHealthDataService.deleteCountryData(summaryDto.getCountryId());
+    }
 }

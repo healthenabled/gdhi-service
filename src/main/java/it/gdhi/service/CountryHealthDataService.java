@@ -57,7 +57,7 @@ public class CountryHealthDataService {
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
         if (!currentStatus.equals(NEW.name())) {
-            iCountryHealthIndicatorRepository.removeHealthIndicators(countryId, currentStatus);
+            iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, currentStatus);
         }
         iCountryResourceLinkRepository.deleteResources(countryId, currentStatus);
         iCountrySummaryRepository.removeCountrySummary(countryId, currentStatus);
@@ -144,4 +144,12 @@ public class CountryHealthDataService {
     public void saveCorrection(GdhiQuestionnaire gdhiQuestionnaire) {
         save(gdhiQuestionnaire, REVIEW_PENDING.name());
     }
+
+    @Transactional
+    public void deleteCountryData(String  countryId) {
+        iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, REVIEW_PENDING.name());
+        iCountryResourceLinkRepository.deleteResources(countryId, REVIEW_PENDING.name());
+        iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
+    }
+
 }
