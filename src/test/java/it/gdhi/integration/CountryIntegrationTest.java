@@ -241,4 +241,48 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         assertResponse(response.asString(), "country_body_review_pending.json");
     }
+
+    @Test
+    public void shouldDeleteCountryData() throws Exception {
+        String countryId = "IND";
+        String status = "REVIEW_PENDING";
+        String alpha2code = "IN";
+        UUID countryUUID = COUNTRY_UUID;
+
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link1",status), new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId,
+                "link2",status), new Date(), null);
+        Integer categoryId1 = 1;
+        Integer categoryId2 = 2;
+        Integer categoryId3 = 3;
+        Integer indicatorId1_1 = 1;
+        Integer indicatorId1_2 = 2;
+        Integer indicatorId2_1 = 3;
+        Integer indicatorId2_2 = 4;
+        Integer indicatorId3_1 = 5;
+        Integer indicatorId3_2 = 6;
+        List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
+
+        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "2018-04-04", countryResourceLinks);
+
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
+
+        setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
+
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .body("{\"countryId\":\"IND\"}")
+                .post("http://localhost:" + port + "/countries/delete");
+
+        assertEquals(200, response.getStatusCode());
+    }
+
 }
