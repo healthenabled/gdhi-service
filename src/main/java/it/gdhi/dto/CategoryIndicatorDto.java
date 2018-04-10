@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 @Getter
@@ -30,6 +31,7 @@ public class CategoryIndicatorDto {
         List<Indicator> indicators = category.getIndicators();
 
         return indicators != null  ? indicators.stream().map(IndicatorDto::new)
+                .sorted(comparing(IndicatorDto::getIndicatorRank))
                 .collect(toList()) : emptyList();
     }
 

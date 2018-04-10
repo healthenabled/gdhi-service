@@ -68,7 +68,7 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndNotHealthScoresWhenEmptyCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -89,7 +89,7 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndNotHealthScoresWhenNullCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = null;
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -111,7 +111,7 @@ public class ExcelUtilServiceTest {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
         countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
                 4.0, emptyList(), 4,null));
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -139,7 +139,7 @@ public class ExcelUtilServiceTest {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(WORKSHEET_NAME);
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "1", "Ind 1", "Ind Def 1", 4, "S", "S1");
+        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "1", "Ind 1", "Ind Def 1", 1, 4, "S", "S1");
         CategoryHealthScoreDto categoryHealthScoreDto = new CategoryHealthScoreDto(1, "Cat 1", 4.0, 4,  asList(indicatorScoreDto));
         countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
                 4.0, asList(categoryHealthScoreDto),
