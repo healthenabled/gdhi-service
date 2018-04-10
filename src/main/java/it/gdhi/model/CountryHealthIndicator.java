@@ -91,6 +91,8 @@ public class CountryHealthIndicator {
         return this.indicator.getDefinition();
     }
 
+    public Integer getIndicatorRank() { return this.indicator.getRank(); }
+
     public String getCountryId() {
         return this.country.getId();
     }
@@ -106,4 +108,5 @@ public class CountryHealthIndicator {
     public void updateTimeStamps() {
         updatedAt = new Date();
     }
+
 }

@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.gdhi.model.Indicator;
 import it.gdhi.model.IndicatorScore;
@@ -25,6 +26,9 @@ public class IndicatorDto {
 
     private String indicatorDefinition;
 
+    @JsonIgnore
+    private Integer indicatorRank;
+
     private List<ScoreDto> scores;
 
     public IndicatorDto(Indicator indicator) {
@@ -32,6 +36,7 @@ public class IndicatorDto {
         this.indicatorCode = indicator.getCode();
         this.indicatorName = indicator.getName();
         this.indicatorDefinition = indicator.getDefinition();
+        this.indicatorRank = indicator.getRank();
         this.scores = getScores(indicator);
     }
 

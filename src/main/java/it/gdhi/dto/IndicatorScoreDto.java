@@ -1,5 +1,6 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.gdhi.model.CountryHealthIndicator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,8 @@ public class IndicatorScoreDto {
     private String code;
     private String name;
     private String indicatorDescription;
+    @JsonIgnore
+    private Integer rank;
     private Integer score;
     private String supportingText;
     private String scoreDescription;
@@ -25,5 +28,6 @@ public class IndicatorScoreDto {
         this.score = countryHealthIndicator.getScore();
         this.supportingText = countryHealthIndicator.getSupportingText();
         this.scoreDescription = countryHealthIndicator.getScoreDescription();
+        this.rank = countryHealthIndicator.getIndicatorRank();
     }
 }

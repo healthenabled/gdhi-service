@@ -39,7 +39,7 @@ public class CategoryHealthScoreDto {
     private List<IndicatorScoreDto> transformAndSort(List<CountryHealthIndicator> countryHealthIndicators) {
         return countryHealthIndicators.stream()
                 .map(IndicatorScoreDto::new)
-                .sorted(comparing(IndicatorScoreDto::getId))
+                .sorted(comparing(IndicatorScoreDto::getRank))
                 .collect(Collectors.toList());
     }
 
