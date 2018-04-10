@@ -163,4 +163,14 @@ public class CountryControllerTest {
 
         assertSame(actualResponse, expected);
     }
+
+    @Test
+    public void shouldDeleteCountryData() {
+        CountrySummaryDto countrySummaryDto = CountrySummaryDto.builder().countryId("IND").build();
+        doNothing().when(countryHealthDataService).deleteCountryData(countrySummaryDto.getCountryId());
+
+        countryController.deleteCountryData(countrySummaryDto);
+
+        verify(countryHealthDataService).deleteCountryData(countrySummaryDto.getCountryId());
+    }
  }

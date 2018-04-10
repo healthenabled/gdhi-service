@@ -198,4 +198,16 @@ public class CountryHealthDataServiceTest {
 
         verify(iCountrySummaryRepository, never()).save(any());
     }
+
+    @Test
+    public void shouldDeleteCountryData() {
+        String countryId = "AFG";
+        String status = REVIEW_PENDING.name();
+
+        countryHealthDataService.deleteCountryData(countryId);
+
+        verify(iCountrySummaryRepository).removeCountrySummary(countryId, status);
+        verify(iCountryHealthIndicatorRepository).removeHealthIndicatorsBy(countryId, status);
+        verify(iCountryResourceLinkRepository).deleteResources(countryId, status);
+    }
 }
