@@ -11,7 +11,8 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     List<CountryHealthIndicator> findAll();
 
-    @Query("SELECT h FROM CountryHealthIndicator h WHERE h.countryHealthIndicatorId.countryId = ?1")
+    @Query("SELECT h FROM CountryHealthIndicator h WHERE h.countryHealthIndicatorId.countryId = ?1 " +
+            "and h.countryHealthIndicatorId.status = 'PUBLISHED'")
     List<CountryHealthIndicator> findHealthIndicatorsFor(String countryId);
 
     @Query("SELECT h FROM CountryHealthIndicator h WHERE " +
