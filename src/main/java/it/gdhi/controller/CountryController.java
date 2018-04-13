@@ -8,6 +8,7 @@ import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.service.CountryHealthIndicatorService;
+import it.gdhi.utils.FormStatus;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static it.gdhi.utils.FormStatus.*;
 
@@ -119,4 +119,30 @@ public class CountryController {
     public void deleteCountryData(@RequestBody CountrySummaryDto summaryDto) {
         countryHealthDataService.deleteCountryData(summaryDto.getCountryId());
     }
+
+    @RequestMapping("/admin/view_form_details")
+    public Map<String , List<AdminViewFormDetailsDto>> getAdminViewFormDetails() {
+        /*
+        HashMap map = new HashMap();
+
+
+        ArrayList list = new ArrayList();
+        list.add(new AdminViewFormDetailsDto("INDIA", FormStatus.NEW.name(),"d","d@d.com"));
+
+        map.put("UrlGeneratedCountries",list);
+
+        ArrayList list1 = new ArrayList();
+        list1.add(new AdminViewFormDetailsDto("USA", FormStatus.REVIEW_PENDING.name(),"R","R@R.com"));
+
+        map.put("ReviewPendingCountries",list1);
+
+        ArrayList list2 = new ArrayList();
+        list2.add(new AdminViewFormDetailsDto("AFG", FormStatus.PUBLISHED.name(),"A","A@A.com"));
+
+        map.put("PublishedCountries",list2);
+        */
+
+        return countryHealthDataService.getAdminViewFormDetails();
+    }
+
 }

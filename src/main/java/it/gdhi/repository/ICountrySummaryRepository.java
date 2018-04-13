@@ -34,4 +34,8 @@ public interface ICountrySummaryRepository extends Repository<CountrySummary, St
     @Query("SELECT c.countrySummaryId.status from CountrySummary c where " +
             "c.countrySummaryId.countryId = UPPER(?1)")
     List<String> getAllStatus(String countryId);
+
+    @Query("select c from CountrySummary c order by c.updatedAt desc")
+    List<CountrySummary> getAll();
+
 }
