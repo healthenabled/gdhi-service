@@ -122,26 +122,6 @@ public class CountryController {
 
     @RequestMapping("/admin/view_form_details")
     public Map<String , List<AdminViewFormDetailsDto>> getAdminViewFormDetails() {
-        /*
-        HashMap map = new HashMap();
-
-
-        ArrayList list = new ArrayList();
-        list.add(new AdminViewFormDetailsDto("INDIA", FormStatus.NEW.name(),"d","d@d.com"));
-
-        map.put("UrlGeneratedCountries",list);
-
-        ArrayList list1 = new ArrayList();
-        list1.add(new AdminViewFormDetailsDto("USA", FormStatus.REVIEW_PENDING.name(),"R","R@R.com"));
-
-        map.put("ReviewPendingCountries",list1);
-
-        ArrayList list2 = new ArrayList();
-        list2.add(new AdminViewFormDetailsDto("AFG", FormStatus.PUBLISHED.name(),"A","A@A.com"));
-
-        map.put("PublishedCountries",list2);
-        */
-
         return countryHealthDataService.getAdminViewFormDetails();
     }
 
