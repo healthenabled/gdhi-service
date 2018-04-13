@@ -61,7 +61,7 @@ public class ExcelUtilServiceTest {
 
         verify(request).getServletContext();
         verify(response).setContentType(MIME_TYPE);
-        verify(response).setHeader(HEADER_KEY, "attachment; filename='Digital Health Data.xlsx'");
+        verify(response).setHeader(HEADER_KEY, "attachment; filename=Digital Health Data.xlsx");
         verify(outputStream).close();
     }
 

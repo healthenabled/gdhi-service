@@ -40,7 +40,7 @@ public class ExcelUtilService {
     private static final String INDICATOR = "Indicator ";
     private static final String OVERALL_PHASE = "Overall Phase";
     private static final int BUFFER_SIZE = 4096;
-    private static final String HEADER_FORMAT = "attachment; filename=\'%s\'";
+    private static final String HEADER_FORMAT = "attachment; filename=%s";
 
     @Value("${excelFileLocation}")
     @Getter
