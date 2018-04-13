@@ -1,9 +1,6 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CountrySummaryDto;
-import it.gdhi.dto.CountryUrlGenerationStatusDto;
-import it.gdhi.dto.GdhiQuestionnaire;
-import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
@@ -19,10 +16,13 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.*;
+import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -150,6 +150,27 @@ public class CountryHealthDataService {
         iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, REVIEW_PENDING.name());
         iCountryResourceLinkRepository.deleteResources(countryId, REVIEW_PENDING.name());
         iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
+    }
+
+    public Map<String, List<AdminViewFormDetailsDto>> getAdminViewFormDetails(){
+        List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
+
+        List<AdminViewFormDetailsDto> adminViewFormDetailsDtoList = countrySummaries
+                .stream()
+                .map(dto -> {
+                    return new AdminViewFormDetailsDto(
+                            dto.getCountry().getName(),
+                            dto.getCountry().getUniqueId(),
+                            dto.getCountrySummaryId().getStatus(),
+                            dto.getContactName(),
+                            dto.getContactEmail()
+                            );
+                })
+                .collect(toList());
+
+
+        return adminViewFormDetailsDtoList.stream()
+                .collect(groupingBy(AdminViewFormDetailsDto::getStatus));
     }
 
 }
