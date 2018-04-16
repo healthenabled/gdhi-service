@@ -1,8 +1,10 @@
 package it.gdhi.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.utils.JsonDateDeserializer;
 import it.gdhi.utils.JsonDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +37,9 @@ public class CountrySummaryDto {
     private String dataApproverName;
     private String dataApproverRole;
     private String dataApproverEmail;
+
     @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonDeserialize(using = JsonDateDeserializer.class)
     private Date collectedDate;
 
     private List<String> resources;

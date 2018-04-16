@@ -375,7 +375,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iCountryHealthIndicatorRepository.findByStatus(null,PUBLISHED.name())).thenReturn(asList(mock1, mock2, mock3, mock4));
 
-        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("dd-MM-yyyy").parse("04-04-2018")).build();
         when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
 
 
@@ -412,7 +412,7 @@ public class CountryHealthIndicatorServiceTest {
 
         when(iCountryHealthIndicatorRepository.findByStatus(1,PUBLISHED.name())).thenReturn(asList(mock1, mock2));
 
-        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("dd-MM-yyyy").parse("04-04-2018")).build();
         when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
 
 
@@ -437,7 +437,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category3).indicator(indicator4).score(4).build();
         when(iCountryHealthIndicatorRepository.findByStatus(3,PUBLISHED.name())).thenReturn(asList(mock1, mock3, mock4));
 
-        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("dd-MM-yyyy").parse("04-04-2018")).build();
         when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
 
 
@@ -467,7 +467,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator mock4 = CountryHealthIndicator.builder().country(country2).category(category2).indicator(indicator5).score(5).build();
         when(iCountryHealthIndicatorRepository.findByStatus(null, PUBLISHED.name())).thenReturn(asList(mock1, mock2, mock3, mock4));
 
-        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("yyyy-MM-dd").parse("2018-04-04")).build();
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("dd-MM-yyyy").parse("04-04-2018")).build();
         when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
 
 
