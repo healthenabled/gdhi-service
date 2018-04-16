@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -172,5 +173,12 @@ public class CountryControllerTest {
         countryController.deleteCountryData(countrySummaryDto);
 
         verify(countryHealthDataService).deleteCountryData(countrySummaryDto.getCountryId());
+    }
+
+    @Test
+    public void shouldGetAdminViewFormDetails() {
+        when(countryHealthDataService.getAdminViewFormDetails()).thenReturn(emptyMap());
+        countryController.getAdminViewFormDetails();
+        verify(countryHealthDataService).getAdminViewFormDetails();
     }
  }

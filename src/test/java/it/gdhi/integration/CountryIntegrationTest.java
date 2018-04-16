@@ -20,13 +20,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -283,6 +281,26 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .post("http://localhost:" + port + "/countries/delete");
 
         assertEquals(200, response.getStatusCode());
+    }
+
+
+    @Test
+    public void shouldGetAllCountrySummary() throws Exception {
+
+        UUID countryUUID = COUNTRY_UUID;
+        addCountrySummary("AUS", "AUSTRALIA", "NEW", "AU", countryUUID, "2018-04-04" , emptyList());
+        addCountrySummary("AUS", "AUSTRALIA", "DRAFT", "AU", countryUUID, "2018-04-04" , emptyList());
+        addCountrySummary("AUS", "AUSTRALIA", "REVIEW_PENDING", "AU", countryUUID, "2018-04-04" , emptyList());
+        addCountrySummary("AUS", "AUSTRALIA", "PUBLISHED", "AU", countryUUID, "2018-04-04" , emptyList());
+        addCountrySummary("IND", "INDIA", "NEW", "IN", countryUUID, "2018-04-04" , emptyList());
+
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:" + port + "/admin/view_form_details");
+
+
+        assertResponse(response.asString(), "admin_view_form_details.json");
     }
 
 }

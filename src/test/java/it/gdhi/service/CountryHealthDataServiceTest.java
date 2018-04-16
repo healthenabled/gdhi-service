@@ -1,12 +1,12 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CountrySummaryDto;
-import it.gdhi.dto.CountryUrlGenerationStatusDto;
-import it.gdhi.dto.GdhiQuestionnaire;
-import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
+import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.model.id.CountryResourceLinkId;
+import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
@@ -19,7 +19,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.*;
@@ -209,5 +211,42 @@ public class CountryHealthDataServiceTest {
         verify(iCountrySummaryRepository).removeCountrySummary(countryId, status);
         verify(iCountryHealthIndicatorRepository).removeHealthIndicatorsBy(countryId, status);
         verify(iCountryResourceLinkRepository).deleteResources(countryId, status);
+    }
+
+    @Test
+    public void shouldGetAdminViewFormDetails() {
+        CountrySummary countrySummaryIND = getCountrySummary("IND","PUBLISHED","INDIA",
+                "IN","Contact Name 1","con1@gdhi.com");
+        CountrySummary countrySummaryARG = getCountrySummary("ARG","REVIEW_PENDING",
+                "ARGENTINA", "AR","Contact Name 1","con1@gdhi.com");
+        CountrySummary countrySummaryALG = getCountrySummary("ALG","NEW","ALGERIA",
+                "AL","Contact Name 2","con2@gdhi.com");
+        CountrySummary countrySummaryINDNEW = getCountrySummary("IND","NEW","INDIA",
+                "IN","Contact Name 1","con1@gdhi.com");
+
+        when(iCountrySummaryRepository.getAll()).thenReturn(asList(countrySummaryIND,countrySummaryARG,
+                countrySummaryALG,countrySummaryINDNEW));
+        Map<String, List<AdminViewFormDetailsDto>> adminViewFormDetails = countryHealthDataService.getAdminViewFormDetails();
+        assertEquals(adminViewFormDetails.get("NEW").size(), 2);
+        assertEquals(adminViewFormDetails.get("REVIEW_PENDING").size(), 1);
+
+        AdminViewFormDetailsDto adminViewFormDetailsDto = adminViewFormDetails.get("REVIEW_PENDING").stream().findFirst().get();
+
+        assertEquals(adminViewFormDetailsDto.getContactName(), "Contact Name 1");
+        assertEquals(adminViewFormDetailsDto.getContactEmail(), "con1@gdhi.com");
+        assertEquals(adminViewFormDetailsDto.getCountryName(), "ARGENTINA");
+    }
+
+    private CountrySummary getCountrySummary(String countryId , String statusValue , String countryName ,
+                                             String alpha2code, String contactName  , String contactEmail) {
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, countryName, countryUUID, alpha2code);
+        return CountrySummary.builder()
+                .countrySummaryId(new CountrySummaryId(countryId, statusValue))
+                .country(country)
+                .contactName(contactName)
+                .contactEmail(contactEmail)
+                .countryResourceLinks(emptyList())
+                .build();
     }
 }
