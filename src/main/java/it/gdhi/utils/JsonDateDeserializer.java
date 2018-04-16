@@ -17,6 +17,9 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String date = jsonparser.getText();
+
+        if(date.isEmpty()) return null;
+        
         try {
             return format.parse(date);
         } catch (ParseException e) {
