@@ -144,7 +144,8 @@ public class CountryHealthIndicatorService {
     private List<CategoryHealthScoreDto> getCategoriesWithIndicators(CountryHealthIndicators countryHealthIndicators,
                                                                      Predicate<? super CategoryHealthScoreDto>
                                                                              phaseFilter) {
-        Map<Integer, Double> nonNullCategoryScore = countryHealthIndicators.groupByCategoryIdWithNotNullScores();
+        Map<Integer, Double> nonNullCategoryScore = countryHealthIndicators
+                .groupByCategoryIdWithoutNullAndNegativeScores();
         return countryHealthIndicators.groupByCategory()
                 .entrySet()
                 .stream()
