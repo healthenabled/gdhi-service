@@ -199,6 +199,21 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldSaveCountryDetailsWhenNullResourceIsProvided() throws Exception {
+        addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), "04-04-2018", new ArrayList<>());
+        mailerService = mock(MailerService.class);
+        doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
+
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .body(expectedResponseJson("country_body_null_resource.json"))
+                .post("http://localhost:" + port + "/countries/save");
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test
     public void shouldSaveAndEditCountryDetails() throws Exception {
         addCountrySummary("IND", "India", "NEW", "IN", UUID.randomUUID(), "04-04-2018", new ArrayList<>());
         mailerService = mock(MailerService.class);
