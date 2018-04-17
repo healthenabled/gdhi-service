@@ -148,7 +148,7 @@ public class CountryServiceTest {
         List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
         when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, statusValue)).thenReturn(countryHealthIndicators);
 
-        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID,false);
 
         assertSummary(countrySummary, details.getCountrySummary());
         assertIndicators(countryHealthIndicators, details.getHealthIndicators());
@@ -165,7 +165,7 @@ public class CountryServiceTest {
         when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, null)).thenReturn(Collections.emptyList());
 
         when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
-        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID,false);
 
         assertNull(details);
     }

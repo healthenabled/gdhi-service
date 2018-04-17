@@ -95,7 +95,12 @@ public class CountryController {
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
     public GdhiQuestionnaire getQuestionnaireForCountry(@PathVariable("uuid") UUID countryUIID) {
-        return countryService.getDetails(countryUIID);
+        return countryService.getDetails(countryUIID,false);
+    }
+
+    @RequestMapping(value = "/countries/viewPublish/{uuid}", method = RequestMethod.GET)
+    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(@PathVariable("uuid") UUID countryUIID) {
+        return countryService.getDetails(countryUIID,true);
     }
 
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)

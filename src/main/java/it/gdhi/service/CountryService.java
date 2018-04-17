@@ -9,14 +9,17 @@ import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 
@@ -43,14 +46,17 @@ public class CountryService {
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
-    public GdhiQuestionnaire getDetails(UUID countryUUID) {
+    public GdhiQuestionnaire getDetails(UUID countryUUID,boolean isPublishOnly) {
 
         String countryId = iCountryRepository.findByUUID(countryUUID).getId();
 
         GdhiQuestionnaire gdhiQuestionnaire = null;
 
-        List<CountrySummary> countrySummaries = iCountrySummaryRepository.findAll(countryId);
+        List<CountrySummary> countrySummaries = emptyList();
 
+        if(!isPublishOnly)countrySummaries = iCountrySummaryRepository.findAll(countryId);
+        else countrySummaries = Arrays.asList(iCountrySummaryRepository.findByCountryAndStatus(countryId,
+                FormStatus.PUBLISHED.name()));
 
         if(countrySummaries != null) {
             CountrySummary countrySummary = countrySummaries.size() > 1 ?
