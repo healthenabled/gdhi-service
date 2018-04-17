@@ -181,4 +181,13 @@ public class CountryControllerTest {
         countryController.getAdminViewFormDetails();
         verify(countryHealthDataService).getAdminViewFormDetails();
     }
+
+    @Test
+    public void shouldGetQuestionnaireForPublishedCountry() {
+        UUID countryUUID = UUID.randomUUID();
+        GdhiQuestionnaire gdhiQuestionnaire = mock(GdhiQuestionnaire.class);
+        when(countryService.getDetails(countryUUID,true)).thenReturn(gdhiQuestionnaire);
+        countryController.getQuestionnaireForPublishedCountry(countryUUID);
+        verify(countryService).getDetails(countryUUID,true);
+    }
  }
