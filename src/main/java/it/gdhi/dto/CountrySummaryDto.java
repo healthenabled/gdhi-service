@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
 @Getter
@@ -66,10 +67,14 @@ public class CountrySummaryDto {
 
     private List<String> transformResourceLinks(CountrySummary countrySummary) {
         return Optional.ofNullable(countrySummary.getCountryResourceLinks())
-                .map(list -> list.stream()
-                        .map(CountryResourceLink::getLink)
-                        .collect(toList()))
+                .map(list -> list.stream().map(CountryResourceLink::getLink).collect(toList()))
                 .orElse(null);
 
+    }
+
+    public List<String> getResources(){
+        return Optional.ofNullable(resources)
+                .map(list -> list.stream().filter(item -> !isNull(item) && !item.isEmpty()).collect(toList()))
+                .orElse(null);
     }
 }
