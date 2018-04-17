@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -58,7 +56,6 @@ public class CountryHealthIndicator {
     private String supportingText;
 
     @Column(insertable = false, updatable = false)
-    @Generated(GenerationTime.ALWAYS)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     private Date updatedAt;
