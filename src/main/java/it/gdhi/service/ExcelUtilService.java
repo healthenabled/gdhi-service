@@ -123,7 +123,8 @@ public class ExcelUtilService {
             for (CategoryHealthScoreDto category : categories) {
                 List<IndicatorScoreDto> indicators = category.getIndicators();
                 for (IndicatorScoreDto indicator : indicators) {
-                    content.put(INDICATOR + indicator.getId(), indicator.getScore() != null ?
+                    content.put(INDICATOR + indicator.getId(),
+                            indicator.getScore() != null && indicator.getScore() >=0 ?
                             PHASE + indicator.getScore() : SCORE_DESCRIPTION_NOT_AVAILABLE);
 
                 }
