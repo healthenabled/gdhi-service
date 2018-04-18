@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class HealthIndicatorId implements Serializable {
+public class CountryHealthIndicatorId implements Serializable {
 
     @Column(name = "country_id")
     private String countryId;
@@ -22,5 +22,8 @@ public class HealthIndicatorId implements Serializable {
 
     @Column(name = "indicator_id")
     private Integer indicatorId;
+
+    @Column(name = "status")
+    private String status;
 
 }

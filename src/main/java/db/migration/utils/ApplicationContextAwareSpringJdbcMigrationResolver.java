@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 @Component
@@ -51,7 +50,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver implements Migra
             resolvedMigrations.add(resolvedMigration);
         }
 
-        Collections.sort(resolvedMigrations, new ResolvedMigrationComparator());
+        resolvedMigrations.sort(new ResolvedMigrationComparator());
         return resolvedMigrations;
     }
 

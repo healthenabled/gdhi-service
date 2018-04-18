@@ -1,7 +1,7 @@
 package it.gdhi.dto;
 
 import it.gdhi.model.Category;
-import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.CountryHealthIndicator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,18 +27,19 @@ public class CategoryHealthScoreDto {
 
     private List<IndicatorScoreDto> indicators;
 
-    public CategoryHealthScoreDto(Category category, Double categoryScore, List<HealthIndicator> healthIndicators) {
+    public CategoryHealthScoreDto(Category category, Double categoryScore,
+                                  List<CountryHealthIndicator> countryHealthIndicators) {
         this.id = category.getId();
         this.name = category.getName();
         this.overallScore = categoryScore;
         this.phase = convertScoreToPhase(overallScore);
-        this.indicators = transformAndSort(healthIndicators);
+        this.indicators = transformAndSort(countryHealthIndicators);
     }
 
-    private List<IndicatorScoreDto> transformAndSort(List<HealthIndicator> healthIndicators) {
-        return healthIndicators.stream()
+    private List<IndicatorScoreDto> transformAndSort(List<CountryHealthIndicator> countryHealthIndicators) {
+        return countryHealthIndicators.stream()
                 .map(IndicatorScoreDto::new)
-                .sorted(comparing(IndicatorScoreDto::getId))
+                .sorted(comparing(IndicatorScoreDto::getRank))
                 .collect(Collectors.toList());
     }
 

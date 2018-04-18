@@ -25,10 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-import static it.gdhi.service.ExcelUtilService.WORKSHEET_NAME;
-import static it.gdhi.utils.Constants.HEADER_KEY;
-import static it.gdhi.utils.Constants.MIME_TYPE;
+import static it.gdhi.service.ExcelUtilService.*;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -62,14 +61,14 @@ public class ExcelUtilServiceTest {
 
         verify(request).getServletContext();
         verify(response).setContentType(MIME_TYPE);
-        verify(response).setHeader(HEADER_KEY, "attachment; filename='Digital Health Data.xlsx'");
+        verify(response).setHeader(HEADER_KEY, "attachment; filename=Digital Health Data.xlsx");
         verify(outputStream).close();
     }
 
     @Test
     public void shouldPopulateHeaderDefinitionAndNotHealthScoresWhenEmptyCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -79,8 +78,8 @@ public class ExcelUtilServiceTest {
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
 
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService, times(0)).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();
@@ -90,7 +89,7 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndNotHealthScoresWhenNullCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = null;
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -99,8 +98,8 @@ public class ExcelUtilServiceTest {
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService, times(0)).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();
@@ -110,8 +109,9 @@ public class ExcelUtilServiceTest {
     @Test
     public void shouldPopulateHeaderDefinitionAndHealthScoresWhenCountryScoresPresent() throws IOException {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, asList(), 4));
-        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1"));
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
+                4.0, emptyList(), 4,null));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
         List<Category> categories = singletonList(new Category(1, "Cat 1",
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -120,8 +120,8 @@ public class ExcelUtilServiceTest {
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0));
-        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1));
+        verify(excelUtilService).populateHeaderNames(any(), sheetArgumentCaptor.capture(), eq(0), eq(categories));
+        verify(excelUtilService).populateHeaderDefinitions(any(), sheetArgumentCaptor.capture(), eq(1), eq(categories));
         verify(excelUtilService).populateHealthIndicatorsWithDefinitionsAndScores(sheetArgumentCaptor.capture(),
                 eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
         XSSFSheet sheet = sheetArgumentCaptor.getValue();
@@ -139,9 +139,11 @@ public class ExcelUtilServiceTest {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(WORKSHEET_NAME);
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
-        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "Ind 1", "Ind Def 1", 4, "S", "S1");
+        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, "1", "Ind 1", "Ind Def 1", 1, 4, "S", "S1");
         CategoryHealthScoreDto categoryHealthScoreDto = new CategoryHealthScoreDto(1, "Cat 1", 4.0, 4,  asList(indicatorScoreDto));
-        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", 4.0, asList(categoryHealthScoreDto), 4));
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN",
+                4.0, asList(categoryHealthScoreDto),
+                4,null));
         Map<String, String> headerDef = new LinkedHashMap<>();
         headerDef.put("Country Name", "Country Name");
         headerDef.put("Indicator 1", "Ind 1");

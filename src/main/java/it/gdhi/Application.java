@@ -113,20 +113,9 @@ public class Application {
         jpaProperties.put("hibernate.physical_naming_strategy", physicalNamingStrategy);
         jpaProperties.put("hibernate.show_sql", showSql);
         jpaProperties.put("hibernate.format_sql", formatSql);
+        jpaProperties.put("hibernate.event.merge.entity_copy_observer", "allow");
         return jpaProperties;
     }
-
-//    @Bean
-//    LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
-//                                                                Environment env) {
-//        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-//        entityManagerFactoryBean.setDataSource(dataSource);
-//        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-//
-
-//
-//        return entityManagerFactoryBean;
-//    }
 
     @Bean
     public PlatformTransactionManager transactionManager() {

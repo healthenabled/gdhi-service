@@ -23,6 +23,10 @@ public class Indicator {
 
     private String name;
 
+    private String code;
+
+    private Integer rank;
+
     @OneToMany
     @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
     @OrderBy("score")
@@ -30,9 +34,10 @@ public class Indicator {
 
     private String definition;
 
-    public Indicator(Integer id, String name, String definition) {
+    public Indicator(Integer id, String name, String definition, Integer rank) {
         this.indicatorId = id;
         this.name = name;
         this.definition = definition;
+        this.rank = rank;
     }
 }

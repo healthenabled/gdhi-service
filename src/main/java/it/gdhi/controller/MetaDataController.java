@@ -12,7 +12,7 @@ import java.util.List;
 public class MetaDataController {
 
     @Autowired
-    CategoryIndicatorService categoryIndicatorService;
+    private CategoryIndicatorService categoryIndicatorService;
 
     @RequestMapping("/health_indicator_options")
     public List<CategoryIndicatorDto> getHealthIndicatorOptions() {

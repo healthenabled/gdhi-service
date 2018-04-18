@@ -3,14 +3,23 @@ package it.gdhi.integration;
 import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.model.Country;
+import it.gdhi.model.CountrySummary;
+import it.gdhi.model.id.CountrySummaryId;
+import it.gdhi.repository.ICountrySummaryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -21,6 +30,34 @@ import static java.util.Arrays.asList;
 public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @LocalServerPort
     private int port;
+
+    @Autowired
+    private ICountrySummaryRepository countrySummaryRepository;
+
+    private void addCountrySummary(String countryId, String countryName, String alpha2code) throws  Exception{
+        String status = "PUBLISHED";
+        SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = fmt.parse("04-04-2018");
+        CountrySummary countrySummary = CountrySummary.builder()
+                .countrySummaryId(new CountrySummaryId(countryId, status))
+                .summary("summary")
+                .country(new Country(countryId, countryName, UUID.randomUUID(), alpha2code))
+                .contactName("contactName")
+                .contactDesignation("contactDesignation")
+                .contactOrganization("contactOrganization")
+                .contactEmail("email")
+                .dataFeederName("feeder name")
+                .dataFeederRole("feeder role")
+                .dataFeederEmail("email")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
+                .dataFeederRole("coll role")
+                .dataApproverEmail("coll email")
+                .collectedDate(date)
+                .countryResourceLinks(new ArrayList<>())
+                .build();
+        countrySummaryRepository.save(countrySummary);
+    }
 
     @Test
     public void shouldGetOverAllGlobalScore() throws Exception {
@@ -39,36 +76,41 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         Integer indicatorId4_1 = 7;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(2).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp19").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(4).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(4).supportingText("sp12").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp20").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(4).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(4).supportingText("sp12").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp21").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -98,36 +140,41 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         Integer indicatorId4_1 = 7;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp19").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).status(status).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(4).supportingText("sp12").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp20").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(4).supportingText("sp12").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp21").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -157,36 +204,41 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         Integer indicatorId4_1 = 7;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp19").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(4).supportingText("sp12").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp20").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(4).supportingText("sp12").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp21").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -216,36 +268,41 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         Integer indicatorId4_1 = 7;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp19").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(4).supportingText("sp12").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp20").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(4).supportingText("sp12").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).score(null).supportingText("sp21").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -273,33 +330,38 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(2).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(4).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp12").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(4).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -326,33 +388,38 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp12").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -379,33 +446,38 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(5).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp12").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 
@@ -432,33 +504,39 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(1).supportingText("sp2").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(3).supportingText("sp3").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp4").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp5").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp6").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(1).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(1).supportingText("sp7").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(0).supportingText("sp8").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(5).supportingText("sp9").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp10").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp11").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp12").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null)
+                        .supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(5).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
 
         healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).score(null).supportingText("sp13").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).score(null).supportingText("sp14").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).score(null).supportingText("sp15").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).score(null).supportingText("sp16").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).score(null).supportingText("sp17").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).score(null).supportingText("sp18").build());
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
 

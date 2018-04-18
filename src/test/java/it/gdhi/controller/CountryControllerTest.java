@@ -1,13 +1,11 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.CountriesHealthScoreDto;
-import it.gdhi.dto.CountryHealthScoreDto;
-import it.gdhi.dto.GdhiQuestionnaire;
-import it.gdhi.dto.GlobalHealthScoreDto;
+import it.gdhi.dto.*;
 import it.gdhi.model.DevelopmentIndicator;
+import it.gdhi.service.CountryHealthDataService;
+import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.service.HealthIndicatorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,12 +14,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static it.gdhi.utils.FormStatus.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryControllerTest {
@@ -33,10 +32,13 @@ public class CountryControllerTest {
     private CountryService countryService;
 
     @Mock
+    private CountryHealthDataService countryHealthDataService;
+
+    @Mock
     private DevelopmentIndicatorService developmentIndicatorService;
 
     @Mock
-    private HealthIndicatorService healthIndicatorService;
+    private CountryHealthIndicatorService countryHealthIndicatorService;
 
     @Test
     public void shouldListCountries() {
@@ -48,10 +50,10 @@ public class CountryControllerTest {
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
-        when(healthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
         CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(countryId);
         assertThat(healthIndicatorForGivenCountryCode, is(countryHealthScoreMock));
-        verify(healthIndicatorService).fetchCountryHealthScore(countryId);
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId);
     }
 
     @Test
@@ -61,30 +63,62 @@ public class CountryControllerTest {
         CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
         when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
         when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(healthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
+        when(countryHealthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
         CountriesHealthScoreDto globalHealthIndicators = countryController.getCountriesHealthIndicatorScores(4, null);
         int size = globalHealthIndicators.getCountryHealthScores().size();
         assertThat(size, is(1));
         assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
-        verify(healthIndicatorService).fetchCountriesHealthScores(4, null);
+        verify(countryHealthIndicatorService).fetchCountriesHealthScores(4, null);
     }
 
     @Test
     public void shouldInvokeGetGlobalHealthIndicator() {
         GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
 
-        when(healthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
+        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
         GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator(null, 2);
         assertThat(expected, is(actual));
-        verify(healthIndicatorService).getGlobalHealthIndicator(null, 2);
+        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2);
+    }
+
+    @Test
+    public void shouldSubmitHealthIndicators() {
+        GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
+        doNothing().when(countryHealthDataService).submit(mock);
+        countryController.submitHealthIndicatorsFor(mock);
+        verify(countryHealthDataService).submit(mock);
+    }
+
+    @Test
+    public void shouldSaveCorrectedHealthIndicators() {
+        GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
+        doNothing().when(countryHealthDataService).submit(mock);
+        countryController.saveCorrectionsFor(mock);
+        verify(countryHealthDataService).saveCorrection(mock);
     }
 
     @Test
     public void shouldSaveHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
-        doNothing().when(countryService).save(mock);
+        doNothing().when(countryHealthDataService).save(mock, DRAFT.name());
         countryController.saveHealthIndicatorsFor(mock);
-        verify(countryService).save(mock);
+        verify(countryHealthDataService).save(mock, DRAFT.name());
+    }
+    @Test
+    public void shouldPublishHealthIndicators() {
+        GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
+        doNothing().when(countryHealthDataService).publish(mock);
+        countryController.publishHealthIndicatorsFor(mock);
+        verify(countryHealthDataService).publish(mock);
+    }
+
+    @Test
+    public void shouldFetchCountrySummary() {
+        CountrySummaryDto countrySummary = mock(CountrySummaryDto.class);
+        String countryId = "IND";
+        when(countryService.fetchCountrySummary(countryId)).thenReturn(countrySummary);
+        CountrySummaryDto actualCountrySummary = countryController.fetchCountrySummary(countryId);
+        assertThat(actualCountrySummary, is(countrySummary));
     }
 
     @Test
@@ -94,7 +128,8 @@ public class CountryControllerTest {
 
         when(developmentIndicatorService.fetchCountryDevelopmentScores(countryId)).thenReturn(developmentIndicator);
 
-        DevelopmentIndicator actualDevelopmentIndicator = countryController.getDevelopmentIndicatorForGivenCountryCode(countryId);
+        DevelopmentIndicator actualDevelopmentIndicator = countryController.
+                getDevelopmentIndicatorForGivenCountryCode(countryId);
 
         verify(developmentIndicatorService).fetchCountryDevelopmentScores(countryId);
 
@@ -102,20 +137,11 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldGetCountryDetails() throws Exception {
-        String countryId = "IND";
-
-        countryController.getCountryDetails(countryId);
-
-        verify(countryService).getDetails(countryId);
-    }
-
-    @Test
     public void shouldExportGlobalData() throws Exception {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         countryController.exportGlobalData(request, response);
-        verify(healthIndicatorService).createGlobalHealthIndicatorInExcel(request, response);
+        verify(countryHealthIndicatorService).createGlobalHealthIndicatorInExcel(request, response);
     }
 
     @Test
@@ -123,6 +149,18 @@ public class CountryControllerTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         countryController.exportCountryDetails(request, response, "IND");
-        verify(healthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
+        verify(countryHealthIndicatorService).createHealthIndicatorInExcelFor("IND", request, response);
+    }
+
+    @Test
+    public void shouldSaveCountrySummaryAsNewStatus() throws Exception {
+        String countryId = "IND";
+        UUID countryUUID = UUID.randomUUID();
+        CountryUrlGenerationStatusDto expected = new CountryUrlGenerationStatusDto(countryId, true, null);
+        when(countryHealthDataService.saveNewCountrySummary(countryUUID)).thenReturn(expected);
+
+        CountryUrlGenerationStatusDto actualResponse = countryController.saveUrlGenerationStatus(countryUUID);
+
+        assertSame(actualResponse, expected);
     }
  }

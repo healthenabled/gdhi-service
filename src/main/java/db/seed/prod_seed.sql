@@ -1,4 +1,4 @@
-INSERT INTO validated_config.country_resource_links
+INSERT INTO country_health_data.country_resource_links
 (country_id, link)
 values
 ('JOR', 'info@ehs-int.com'),
@@ -28,7 +28,7 @@ values
 
 
 
- INSERT INTO validated_config.countries_summary
+ INSERT INTO country_health_data.country_summary
  (country_id,
   summary,
   contact_name,
@@ -128,7 +128,9 @@ values
   ('GHA', 'We have a system of aggregated data collection by use of the DHIS ad also electronic medical records systems at our public hospital facilities. We are currently deploying eTracker at the primary care level (community health compounds to collect real time transactional data', null, null, null, 'kawoonor@gmail.com', 'Dr. Koku Awoonoor', 'Director PPME, GHS', 'kawoonor@gmail.com', '', null, null, '2017-11-23'),
   ('NZL', 'New Zealand has some pockets of good digital health but is still making progress at a national level. ', null, null, null, 'r.whittaker@auckland.ac.nz', 'Robyn Whittaker', 'Assoc Prof, CD Innovation', 'r.whittaker@auckland.ac.nz', '', null, null, '2017-11-17');
 
- insert into validated_config.health_indicators (country_id, category_id, indicator_id, indicator_score, supporting_text) values
+ insert into country_health_data.health_indicators (country_id, category_id, indicator_id, indicator_score,
+ supporting_text)
+ values
  ('JOR',
  1,
  1,

@@ -1,6 +1,6 @@
 package it.gdhi.model;
 
-import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.CountryHealthIndicatorId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,20 +9,21 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Optional;
 
 import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 
 @Entity
-@Table(schema = "validated_config", name="health_indicators")
+@Table(schema = "country_health_data", name = "health_indicators")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-public class HealthIndicator {
+public class CountryHealthIndicator {
 
     @EmbeddedId
-    private HealthIndicatorId healthIndicatorId;
+    private CountryHealthIndicatorId countryHealthIndicatorId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
@@ -48,19 +49,25 @@ public class HealthIndicator {
                     insertable = false, updatable = false)})
     private IndicatorScore indicatorScore;
 
-    @Column(name="indicator_score")
+    @Column(name = "indicator_score")
     private Integer score;
 
     @Column(name = "supporting_text")
     private String supportingText;
 
-    public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore) {
-        this.healthIndicatorId = healthIndicatorId;
+    @Column(insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    private Date updatedAt;
+
+    public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore) {
+        this.countryHealthIndicatorId = countryHealthIndicatorId;
         this.score = indicatorScore;
     }
 
-    public HealthIndicator(HealthIndicatorId healthIndicatorId, Integer indicatorScore, String supportingText) {
-        this.healthIndicatorId = healthIndicatorId;
+    public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore,
+                                  String supportingText) {
+        this.countryHealthIndicatorId = countryHealthIndicatorId;
         this.score = indicatorScore;
         this.supportingText = supportingText;
     }
@@ -73,9 +80,15 @@ public class HealthIndicator {
         return this.indicator.getIndicatorId();
     }
 
+    public String getIndicatorCode() {
+        return this.indicator.getCode();
+    }
+
     public String getIndicatorDescription() {
         return this.indicator.getDefinition();
     }
+
+    public Integer getIndicatorRank() { return this.indicator.getRank(); }
 
     public String getCountryId() {
         return this.country.getId();
@@ -86,4 +99,11 @@ public class HealthIndicator {
                 .map(IndicatorScore::getDefinition)
                 .orElse(SCORE_DESCRIPTION_NOT_AVAILABLE);
     }
+
+    @PreUpdate
+    @PrePersist
+    public void updateTimeStamps() {
+        updatedAt = new Date();
+    }
+
 }

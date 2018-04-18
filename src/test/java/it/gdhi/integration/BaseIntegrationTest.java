@@ -2,9 +2,9 @@ package it.gdhi.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.model.HealthIndicator;
-import it.gdhi.model.id.HealthIndicatorId;
-import it.gdhi.repository.IHealthIndicatorRepository;
+import it.gdhi.model.CountryHealthIndicator;
+import it.gdhi.model.id.CountryHealthIndicatorId;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,13 +30,13 @@ public class BaseIntegrationTest {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Autowired
-    IHealthIndicatorRepository healthIndicatorRepository;
+    ICountryHealthIndicatorRepository healthIndicatorRepository;
 
     @After
     public void tearDown() throws Exception {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate,"validated_config.health_indicators",
-                "validated_config.countries_summary", "validated_config.country_resource_links");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate,"country_health_data.health_indicators",
+                "country_health_data.country_resource_links","country_health_data.country_summary");
     }
 
     ObjectMapper getMapper() {
@@ -48,10 +48,10 @@ public class BaseIntegrationTest {
     }
 
     void setupHealthIndicatorsForCountry(String countryId, List<HealthIndicatorDto> healthIndicatorDtos) {
-        healthIndicatorDtos.stream().forEach(healthIndicator -> {
-            HealthIndicatorId healthIndicatorId1 = new HealthIndicatorId(countryId,healthIndicator.getCategoryId(),healthIndicator.getIndicatorId());
-            HealthIndicator healthIndicatorSetupData1 = new HealthIndicator(healthIndicatorId1, healthIndicator.getScore(), healthIndicator.getSupportingText());
-            healthIndicatorRepository.save(healthIndicatorSetupData1);
+        healthIndicatorDtos.forEach(healthIndicator -> {
+            CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,healthIndicator.getCategoryId(),healthIndicator.getIndicatorId(),healthIndicator.getStatus());
+            CountryHealthIndicator countryHealthIndicatorSetupData1 = new CountryHealthIndicator(countryHealthIndicatorId1, healthIndicator.getScore(), healthIndicator.getSupportingText());
+            healthIndicatorRepository.save(countryHealthIndicatorSetupData1);
         });
     }
 
@@ -60,9 +60,5 @@ public class BaseIntegrationTest {
         HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
         HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
         assertEquals(expectedMap, actualMap);
-    }
-
-    SimpleDateFormat getDateFormat() {
-        return dateFormat;
     }
 }

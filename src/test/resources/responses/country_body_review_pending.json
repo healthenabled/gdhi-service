@@ -1,0 +1,68 @@
+{
+  "countryId": "IND",
+  "status":"REVIEW_PENDING",
+  "countrySummary": {
+    "countryId": "IND",
+    "countryName": "India",
+    "countryAlpha2Code": "IN",
+    "summary": "summary new",
+    "contactName": "contactName new",
+    "contactDesignation": "contactDesignation new",
+    "contactOrganization": "contactOrganization new",
+    "contactEmail": "email new",
+    "dataFeederName": "feeder name new",
+    "dataFeederRole": "coll role new",
+    "dataFeederEmail": "email new",
+    "dataApproverName": "coll name new",
+    "dataApproverRole": "coll role new",
+    "dataApproverEmail": "coll email new",
+    "collectedDate": null,
+    "resources": [
+      "link1 new"
+    ]
+  },
+  "healthIndicators": [
+    {
+      "categoryId": 1,
+      "indicatorId": 1,
+      "status":"REVIEW_PENDING",
+      "score": 2,
+      "supportingText": "sp1 new"
+    },
+    {
+      "categoryId": 1,
+      "indicatorId": 2,
+      "status":"REVIEW_PENDING",
+      "score": 3,
+      "supportingText": "sp2 new"
+    },
+    {
+      "categoryId": 2,
+      "indicatorId": 3,
+      "status":"REVIEW_PENDING",
+      "score": null,
+      "supportingText": "sp3 new"
+    },
+    {
+      "categoryId": 2,
+      "indicatorId": 4,
+      "status":"REVIEW_PENDING",
+      "score": 4,
+      "supportingText": "sp4 new"
+    },
+    {
+      "categoryId": 3,
+      "indicatorId": 5,
+      "status":"REVIEW_PENDING",
+      "score": 1,
+      "supportingText": "sp5 new"
+    },
+    {
+      "categoryId": 3,
+      "indicatorId": 6,
+      "status":"REVIEW_PENDING",
+      "score": null,
+      "supportingText": "sp6 new"
+    }
+  ]
+}

@@ -3,6 +3,7 @@
     {
       "countryId": "IND",
       "countryName": "India",
+      "countryAlpha2Code": "IN",
       "overallScore": 2.0,
       "categories": [
         {
@@ -13,24 +14,27 @@
           "indicators": [
             {
               "id": 1,
+              "code": "1",
               "name": "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
               "indicatorDescription": "Does the country have a separate department / agency / national working group for digital health?",
               "score": 3,
               "supportingText": "sp1",
-              "scoreDescription": "Governance structure and any related working groups have a scope of work (SOW) and conduct regular meetings with stakeholder participation/ consultation."
+              "scoreDescription": "Governance structure and any related working groups have a scope of work (SOW) and conduct regular meetings with stakeholder participation and/or consultation."
             },
             {
               "id": 2,
+              "code": "2",
               "name": "Digital Health prioritized at the national level through planning",
               "indicatorDescription": "Is digital health included and budgeted for in national health or relevant national strategies and/or plan(s)?",
               "score": 1,
               "supportingText": "sp2",
-              "scoreDescription": "Digital health is being implemented in an ad hoc fashion in health programs with some discussion of inclusion in national health or other relevant national strategies or plans"
+              "scoreDescription": "Digital health is not included in the national health strategy. It is being implemented in an ad hoc fashion in health programs."
             }
           ]
         }
       ],
-      "countryPhase": 2
+      "countryPhase": 2,
+      "collectedDate": "April 2018"
     }
   ]
 }

@@ -4,19 +4,18 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.HealthIndicator;
-import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.IHealthIndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,13 +30,7 @@ public class CountryService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Autowired
-    private IHealthIndicatorRepository iHealthIndicatorRepository;
-
-    @Autowired
-    private  MailerService mailerService;
-
-    @Autowired
-    private ICountryResourceLinkRepository iCountryResourceLinkRepository;
+    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
     @Transactional
     public List<Country> fetchCountries() {
@@ -46,52 +39,39 @@ public class CountryService {
 
     @Transactional
     public CountrySummaryDto fetchCountrySummary(String countryId) {
-        CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
+        CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, "PUBLISHED");
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
-    @Transactional
-    public void save(GdhiQuestionnaire gdhiQuestionnaire) {
-         saveCountryContactInfo(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getCountrySummary());
-         saveHealthIndicators(gdhiQuestionnaire.getCountryId(), gdhiQuestionnaire.getHealthIndicators());
-         String feederName = gdhiQuestionnaire.getDataFeederName();
-         String feederRole = gdhiQuestionnaire.getDataFeederRole();
-         String contactEmail = gdhiQuestionnaire.getContactEmail();
-         Country country = iCountryRepository.find(gdhiQuestionnaire.getCountryId());
-         mailerService.send(country, feederName, feederRole, contactEmail);
-    }
+    public GdhiQuestionnaire getDetails(UUID countryUUID) {
 
-    public GdhiQuestionnaire getDetails(String countryId) {
-        CountrySummary countrySummary = iCountrySummaryRepository.findOne(countryId);
-        List<HealthIndicator> healthIndicators = iHealthIndicatorRepository.findHealthIndicatorsFor(countryId);
-        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
-                .map(CountrySummaryDto::new)
-                .orElse(null);
-        List<HealthIndicatorDto> healthIndicatorDtos = healthIndicators.stream()
-                .map(HealthIndicatorDto::new)
-                .collect(toList());
-        return new GdhiQuestionnaire(countryId, countrySummaryDto, healthIndicatorDtos);
-    }
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
 
-    private void saveHealthIndicators(String countryId, List<HealthIndicatorDto> healthIndicatorDto) {
-        List<HealthIndicator> healthIndicators = transformToHealthIndicator(countryId, healthIndicatorDto);
-        if(healthIndicators != null) {
-            healthIndicators.stream().forEach(health -> iHealthIndicatorRepository.save(health));
+        GdhiQuestionnaire gdhiQuestionnaire = null;
+
+        List<CountrySummary> countrySummaries = iCountrySummaryRepository.findAll(countryId);
+
+
+        if(countrySummaries != null) {
+            CountrySummary countrySummary = countrySummaries.size() > 1 ?
+                    countrySummaries.stream()
+                            .filter(countrySummaryTmp -> !countrySummaryTmp.getCountrySummaryId().getStatus()
+                                    .equalsIgnoreCase("PUBLISHED")).findFirst().get() :
+                    Optional.ofNullable(countrySummaries.get(0)).get();
+
+            List<CountryHealthIndicator> countryHealthIndicators =
+                    iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId,
+                            countrySummary.getCountrySummaryId().getStatus());
+            CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
+                    .map(CountrySummaryDto::new)
+                    .orElse(null);
+            List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
+                    .map(HealthIndicatorDto::new)
+                    .collect(toList());
+            gdhiQuestionnaire = new GdhiQuestionnaire(countryId, countrySummary.getCountrySummaryId().getStatus(),
+                    countrySummaryDto, healthIndicatorDtos);
         }
-    }
 
-    private List<HealthIndicator> transformToHealthIndicator(String countryId,
-                                                             List<HealthIndicatorDto> healthIndicatorDto) {
-        return healthIndicatorDto.stream().map(dto -> {
-            HealthIndicatorId healthIndicatorId = new HealthIndicatorId(countryId, dto.getCategoryId(),
-                                                  dto.getIndicatorId());
-            return new HealthIndicator(healthIndicatorId, dto.getScore(), dto.getSupportingText());
-        }).collect(toList());
-    }
-
-    private void saveCountryContactInfo(String countryId, CountrySummaryDto countrySummaryDetailDto) {
-        CountrySummary countrySummary = new CountrySummary(countryId, countrySummaryDetailDto);
-        iCountryResourceLinkRepository.deleteResources(countryId);
-        iCountrySummaryRepository.save(countrySummary);
+        return gdhiQuestionnaire;
     }
 }

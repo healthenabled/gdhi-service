@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import java.util.UUID;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -34,7 +36,7 @@ public class ICountryRepositoryTest {
 
     @Test
     public void shouldGetCountryGivenId() throws Exception {
-        Country country = new Country("ABC", "Republic of ABC");
+        Country country = new Country("ABC", "Republic of ABC",UUID.randomUUID(),"AB");
         entityManager.persist(country);
         entityManager.flush();
         entityManager.clear();

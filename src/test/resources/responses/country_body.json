@@ -1,8 +1,10 @@
 {
   "countryId": "IND",
+  "status":"DRAFT",
   "countrySummary": {
     "countryId": "IND",
     "countryName": "India",
+    "countryAlpha2Code": "IN",
     "summary": "summary",
     "contactName": "contactName",
     "contactDesignation": "contactDesignation",
@@ -11,10 +13,10 @@
     "dataFeederName": "feeder name",
     "dataFeederRole": "coll role",
     "dataFeederEmail": "email",
-    "dataCollectorName": "coll name",
-    "dataCollectorRole": "coll role",
-    "dataCollectorEmail": "coll email",
-    "collectedDate": null,
+    "dataApproverName": "coll name",
+    "dataApproverRole": "coll role",
+    "dataApproverEmail": "coll email",
+    "collectedDate": "04-04-2018",
     "resources": [
       "link1",
       "link2"
@@ -24,36 +26,42 @@
     {
       "categoryId": 1,
       "indicatorId": 1,
+      "status":"DRAFT",
       "score": 1,
       "supportingText": "sp1"
     },
     {
       "categoryId": 1,
       "indicatorId": 2,
+      "status":"DRAFT",
       "score": 2,
       "supportingText": "sp1"
     },
     {
       "categoryId": 2,
       "indicatorId": 3,
+      "status":"DRAFT",
       "score": 3,
       "supportingText": "sp1"
     },
     {
       "categoryId": 2,
       "indicatorId": 4,
+      "status":"DRAFT",
       "score": null,
       "supportingText": "sp1"
     },
     {
       "categoryId": 3,
       "indicatorId": 5,
+      "status":"DRAFT",
       "score": null,
       "supportingText": "sp1"
     },
     {
       "categoryId": 3,
       "indicatorId": 6,
+      "status":"DRAFT",
       "score": null,
       "supportingText": "sp1"
     }

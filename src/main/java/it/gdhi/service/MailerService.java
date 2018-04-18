@@ -22,7 +22,7 @@ public class MailerService {
     private Mailer mailer;
 
     @Autowired
-    MailAddresses mailAddresses;
+    private MailAddresses mailAddresses;
 
     @Value("${frontEndURL}")
     private String frontEndURL;
@@ -49,6 +49,6 @@ public class MailerService {
     }
 
     private String constructHealthIndicatorPath(Country country) {
-        return format(HEALTH_INDICATOR_PATH, frontEndURL, country.getId());
+        return format(HEALTH_INDICATOR_PATH, frontEndURL, country.getUniqueId());
     }
 }

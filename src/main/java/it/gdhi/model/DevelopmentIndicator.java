@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(schema = "validated_config", name="development_indicators")
+@Table(schema = "country_health_data", name="development_indicators")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

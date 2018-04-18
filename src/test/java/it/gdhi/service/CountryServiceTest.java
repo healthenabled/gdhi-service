@@ -4,33 +4,33 @@ import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.HealthIndicator;
+import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountryResourceLinkId;
-import it.gdhi.model.id.HealthIndicatorId;
+import it.gdhi.model.id.CountrySummaryId;
+import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.IHealthIndicatorRepository;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryServiceTest {
@@ -42,11 +42,7 @@ public class CountryServiceTest {
     @Mock
     ICountrySummaryRepository iCountrySummaryRepository;
     @Mock
-    ICountryResourceLinkRepository iCountryResourceLinkRepository;
-    @Mock
-    IHealthIndicatorRepository iHealthIndicatorRepository;
-    @Mock
-    MailerService mailerService;
+    ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
     @Test
     public void shouldInsertTestData() {
@@ -63,13 +59,16 @@ public class CountryServiceTest {
         String contactOrganization = "Contact Organization";
         String link1 = "Link 1";
         String link2 = "Link 2";
-        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1));
-        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2));
+        String status = "PUBLISHED";
+        CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId("ARG", link1,
+                status), new Date(), null);
+        CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId("ARG", link2,
+                status), new Date(), null);
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
         CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
+                .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary(summary)
-                .country(new Country(countryId, "Argentina"))
+                .country(new Country(countryId, "Argentina", UUID.randomUUID(), "AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -77,13 +76,13 @@ public class CountryServiceTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("email")
-                .dataCollectorName("coll name")
-                .dataFeederRole("coll role")
-                .dataCollectorEmail("coll email")
+                .dataApproverName("coll name")
+                .dataApproverRole("coll role")
+                .dataApproverEmail("coll email")
                 .collectedDate(new Date())
                 .countryResourceLinks(countryResourceLinks)
                 .build();
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
+        when(iCountrySummaryRepository.findByCountryAndStatus(countryId, status)).thenReturn(countrySummary);
 
         CountrySummaryDto countrySummaryDto = countryService.fetchCountrySummary(countryId);
 
@@ -95,9 +94,9 @@ public class CountryServiceTest {
         assertThat(countrySummaryDto.getDataFeederName(), is(countrySummary.getDataFeederName()));
         assertThat(countrySummaryDto.getDataFeederRole(), is(countrySummary.getDataFeederRole()));
         assertThat(countrySummaryDto.getDataFeederEmail(), is(countrySummary.getDataFeederEmail()));
-        assertThat(countrySummaryDto.getDataCollectorName(), is(countrySummary.getDataCollectorName()));
-        assertThat(countrySummaryDto.getDataCollectorRole(), is(countrySummary.getDataCollectorRole()));
-        assertThat(countrySummaryDto.getDataCollectorEmail(), is(countrySummary.getDataCollectorEmail()));
+        assertThat(countrySummaryDto.getDataApproverName(), is(countrySummary.getDataApproverName()));
+        assertThat(countrySummaryDto.getDataApproverRole(), is(countrySummary.getDataApproverRole()));
+        assertThat(countrySummaryDto.getDataApproverEmail(), is(countrySummary.getDataApproverEmail()));
         assertThat(countrySummaryDto.getCollectedDate(), is(countrySummary.getCollectedDate()));
         assertThat(countrySummaryDto.getSummary(), is(summary));
         assertThat(countrySummaryDto.getResources(), Matchers.containsInAnyOrder(link1, link2));
@@ -112,62 +111,14 @@ public class CountryServiceTest {
     }
 
     @Test
-    public void shouldSaveDetailsForACountry() throws Exception {
-        List<String> resourceLinks = asList("Res 1");
-        CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
-                .resources(resourceLinks).build();
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
-        GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId("ARG")
-                .countrySummary(countrySummaryDetailDto)
-                .healthIndicators(healthIndicatorDtos).build();
-        countryService.save(gdhiQuestionnaire);
-        ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
-        ArgumentCaptor<HealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(HealthIndicator.class);
-        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository, iHealthIndicatorRepository);
-        inOrder.verify(iCountryResourceLinkRepository).deleteResources("ARG");
-        inOrder.verify(iCountrySummaryRepository).save(summaryCaptor.capture());
-        inOrder.verify(iHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
-        CountrySummary summaryCaptorValue = summaryCaptor.getValue();
-        assertThat(summaryCaptorValue.getCountryId(), is("ARG"));
-        assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));
-        assertThat(summaryCaptorValue.getCountryResourceLinks().get(0).getLink(), is("Res 1"));
-        assertThat(healthIndicatorsCaptorList.getValue().getHealthIndicatorId().getCategoryId(), is(1));
-    }
-
-    @Test
-    public void shouldSendEmailOnSuccessfulSaveOfCountryDetailsAndIndicators() throws Exception {
-        String countryId = "ARG";
-        Country country = new Country(countryId, "Argentina");
-        List<String> resourceLinks = asList("Res 1");
-        String feeder = "feeder";
-        String feederRole = "feeder role";
-        String contactEmail = "contact@test.com";
-        CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
-                .dataFeederName(feeder)
-                .dataFeederRole(feederRole)
-                .contactEmail(contactEmail)
-                .resources(resourceLinks).build();
-
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, 2, "Text"));
-        GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
-                .countrySummary(countrySummaryDetailDto)
-                .healthIndicators(healthIndicatorDtos).build();
-
-        when(iCountrySummaryRepository.save(any(CountrySummary.class))).thenReturn(CountrySummary.builder().build());
-        when(iHealthIndicatorRepository.save(any(HealthIndicator.class))).thenReturn(HealthIndicator.builder().build());
-        when(countryDetailRepository.find(countryId)).thenReturn(country);
-
-        countryService.save(gdhiQuestionnaire);
-
-        verify(mailerService).send(country, feeder, feederRole, contactEmail);
-    }
-
-    @Test
     public void shouldGetGlobalHealthScoreDto() throws Exception {
         String countryId = "IND";
+        String statusValue = "PUBLISHED";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "India", countryUUID, "IN");
         CountrySummary countrySummary = CountrySummary.builder()
-                .countryId(countryId)
-                .country(new Country("IND", "India"))
+                .countrySummaryId(new CountrySummaryId(countryId, statusValue))
+                .country(country)
                 .summary("summary")
                 .contactName("contactName")
                 .contactDesignation("contact designation")
@@ -176,50 +127,55 @@ public class CountryServiceTest {
                 .dataFeederName("feeder name")
                 .dataFeederRole("feeder role")
                 .dataFeederEmail("feeder email")
-                .dataCollectorName("collector name")
-                .dataCollectorRole("collector role")
-                .dataCollectorEmail("collector email")
+                .dataApproverName("collector name")
+                .dataApproverRole("collector role")
+                .dataApproverRole("collector email")
                 .collectedDate(new Date())
-                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link"))))
+                .countryResourceLinks(asList(new CountryResourceLink(new CountryResourceLinkId(countryId, "link",
+                        statusValue), new Date(), null)))
                 .build();
 
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(countrySummary);
-        HealthIndicator indicator1 = HealthIndicator.builder()
-                .healthIndicatorId(new HealthIndicatorId(countryId, 1, 2))
+        when(iCountrySummaryRepository.findAll(countryId)).thenReturn(asList(countrySummary));
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
+        CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2, statusValue))
                 .score(5)
                 .build();
-        HealthIndicator indicator2 = HealthIndicator.builder()
-                .healthIndicatorId(new HealthIndicatorId(countryId, 2, 3))
+        CountryHealthIndicator indicator2 = CountryHealthIndicator.builder()
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 2, 3, statusValue))
                 .score(4)
                 .build();
-        List<HealthIndicator> healthIndicators = asList(indicator1, indicator2);
-        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(healthIndicators);
+        List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, statusValue)).thenReturn(countryHealthIndicators);
 
-        GdhiQuestionnaire details = countryService.getDetails(countryId);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
 
         assertSummary(countrySummary, details.getCountrySummary());
-        assertIndicators(healthIndicators, details.getHealthIndicators());
+        assertIndicators(countryHealthIndicators, details.getHealthIndicators());
     }
 
     @Test
     public void shouldHandleCountriesNotAvailable() throws Exception {
         String countryId = "IND";
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "India", countryUUID, "IN");
 
-        when(iCountrySummaryRepository.findOne(countryId)).thenReturn(null);
+        when(iCountrySummaryRepository.findAll(countryId)).thenReturn(null);
 
-        when(iHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(asList());
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId, null)).thenReturn(Collections.emptyList());
 
-        GdhiQuestionnaire details = countryService.getDetails(countryId);
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
+        GdhiQuestionnaire details = countryService.getDetails(countryUUID);
 
-        assertNull(details.getCountrySummary());
+        assertNull(details);
     }
 
-    private void assertIndicators(List<HealthIndicator> expectedHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
-        assertEquals(expectedHealthIndicators.size(), actualHealthIndicators.size());
-        expectedHealthIndicators.forEach(expected -> {
+    private void assertIndicators(List<CountryHealthIndicator> expectedCountryHealthIndicators, List<HealthIndicatorDto> actualHealthIndicators) {
+        assertEquals(expectedCountryHealthIndicators.size(), actualHealthIndicators.size());
+        expectedCountryHealthIndicators.forEach(expected -> {
             HealthIndicatorDto actualIndicator = actualHealthIndicators.stream()
-                    .filter(actual -> actual.getCategoryId().equals(expected.getHealthIndicatorId().getCategoryId())
-                            && actual.getIndicatorId().equals(expected.getHealthIndicatorId().getIndicatorId()))
+                    .filter(actual -> actual.getCategoryId().equals(expected.getCountryHealthIndicatorId().getCategoryId())
+                            && actual.getIndicatorId().equals(expected.getCountryHealthIndicatorId().getIndicatorId()))
                     .findFirst()
                     .get();
             assertEquals(expected.getScore(), actualIndicator.getScore());
@@ -237,8 +193,8 @@ public class CountryServiceTest {
         assertEquals(expectedCountrySummary.getDataFeederName(), actualCountrySummary.getDataFeederName());
         assertEquals(expectedCountrySummary.getDataFeederRole(), actualCountrySummary.getDataFeederRole());
         assertEquals(expectedCountrySummary.getDataFeederEmail(), actualCountrySummary.getDataFeederEmail());
-        assertEquals(expectedCountrySummary.getDataCollectorName(), actualCountrySummary.getDataCollectorName());
-        assertEquals(expectedCountrySummary.getDataCollectorEmail(), actualCountrySummary.getDataCollectorEmail());
+        assertEquals(expectedCountrySummary.getDataApproverName(), actualCountrySummary.getDataApproverName());
+        assertEquals(expectedCountrySummary.getDataApproverEmail(), actualCountrySummary.getDataApproverEmail());
         assertEquals(expectedCountrySummary.getCollectedDate(), actualCountrySummary.getCollectedDate());
         assertEquals(expectedCountrySummary.getCountryResourceLinks().stream().map(CountryResourceLink::getLink).collect(Collectors.toList()),
                 actualCountrySummary.getResources());
