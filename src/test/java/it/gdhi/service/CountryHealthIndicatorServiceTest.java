@@ -564,6 +564,7 @@ public class CountryHealthIndicatorServiceTest {
         when(mock1.getScore()).thenReturn(2);
         Country mockCountry1 = mock(Country.class);
         Category mock = mock(Category.class);
+        Indicator indicatorMock = mock(Indicator.class);
 
         when(mock1.getCountryId()).thenReturn("IND");
         when(mock1.getCountry()).thenReturn(mockCountry1);
@@ -571,6 +572,8 @@ public class CountryHealthIndicatorServiceTest {
         when(mock1.getCategory()).thenReturn(mock);
         when(mock1.getCategory().getId()).thenReturn(9);
         when(mock1.getCategory().getName()).thenReturn("Category 1");
+        when(mock1.getIndicator()).thenReturn(indicatorMock);
+        when(mock1.getIndicator().getParentId()).thenReturn(null);
 
         CountryHealthIndicator mock2 = mock(CountryHealthIndicator.class);
         when(mock2.getScore()).thenReturn(null);
@@ -582,6 +585,8 @@ public class CountryHealthIndicatorServiceTest {
         when(mock2.getCategory()).thenReturn(mock);
         when(mock2.getCategory().getId()).thenReturn(9);
         when(mock2.getCategory().getName()).thenReturn("Category 1");
+        when(mock2.getIndicator()).thenReturn(indicatorMock);
+        when(mock2.getIndicator().getParentId()).thenReturn(null);
 
         CountryHealthIndicator mock3 = mock(CountryHealthIndicator.class);
         when(mock3.getScore()).thenReturn(null);
@@ -592,6 +597,8 @@ public class CountryHealthIndicatorServiceTest {
         when(mock3.getCategory()).thenReturn(mock);
         when(mock3.getCategory().getId()).thenReturn(8);
         when(mock3.getCategory().getName()).thenReturn("Category 2");
+        when(mock3.getIndicator()).thenReturn(indicatorMock);
+        when(mock3.getIndicator().getParentId()).thenReturn(null);
 
 
         List<CountryHealthIndicator> countryHealthIndicators = new ArrayList<>();

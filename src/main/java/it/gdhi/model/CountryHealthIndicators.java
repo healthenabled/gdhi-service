@@ -30,13 +30,14 @@ public class CountryHealthIndicators {
     }
 
     public Map<Integer, Double> groupByCategoryIdWithoutNullAndNegativeScores() {
-        return excludingNullAndNegativeScores()
+        return excludingNullAndNegativeScores().filter(countryHealthIndicator
+                -> countryHealthIndicator.getIndicator() != null
+                && countryHealthIndicator.getIndicator().getParentId() == null)
                 .collect(groupingBy(h -> h.getCategory().getId(),
                         averagingInt(CountryHealthIndicator::getScore)));
     }
 
     public Double getOverallScore() {
-        this.excludeSubIndicators();
         OptionalDouble optionalDouble = this.groupByCategoryIdWithoutNullAndNegativeScores()
                 .values()
                 .stream()
