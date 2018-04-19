@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor
 @Getter
@@ -35,12 +36,20 @@ public class CountryHealthIndicators {
     }
 
     public Double getOverallScore() {
+        this.excludeSubIndicators();
         OptionalDouble optionalDouble = this.groupByCategoryIdWithoutNullAndNegativeScores()
                 .values()
                 .stream()
                 .mapToDouble(Double::doubleValue)
                 .average();
         return optionalDouble.isPresent() ? optionalDouble.getAsDouble() : null;
+    }
+
+    private void excludeSubIndicators() {
+        this.countryHealthIndicators = countryHealthIndicators.stream()
+                .filter(healthIndicator -> healthIndicator.getIndicator() != null
+                        && healthIndicator.getIndicator().getParentId() == null)
+                .collect(toList());
     }
 
     public String getCountryName() {
