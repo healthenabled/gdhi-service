@@ -42,8 +42,11 @@ public class CountryHealthDataService {
     @Autowired
     private ICountrySummaryRepository iCountrySummaryRepository;
 
+    @Autowired
+    private BenchMarkService benchmarkService;
+
     @Transactional
-    public void save(GdhiQuestionnaire gdhiQuestionnaire, String  nextStatus) {
+    public void save(GdhiQuestionnaire gdhiQuestionnaire, String nextStatus) {
         String currentStatus = iCountrySummaryRepository.getCountrySummaryStatus(gdhiQuestionnaire.getCountryId());
         if (!nextStatus.equals(currentStatus)) {
             removeEntriesWithStatus(gdhiQuestionnaire.getCountryId(), currentStatus);
@@ -152,7 +155,7 @@ public class CountryHealthDataService {
         iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
     }
 
-    public Map<String, List<AdminViewFormDetailsDto>> getAdminViewFormDetails(){
+    public Map<String, List<AdminViewFormDetailsDto>> getAdminViewFormDetails() {
         List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
 
         List<AdminViewFormDetailsDto> adminViewFormDetailsDtoList = countrySummaries
@@ -163,12 +166,18 @@ public class CountryHealthDataService {
                         dto.getCountrySummaryId().getStatus(),
                         dto.getContactName(),
                         dto.getContactEmail()
-                        ))
+                ))
                 .collect(toList());
 
 
         return adminViewFormDetailsDtoList.stream()
                 .collect(groupingBy(AdminViewFormDetailsDto::getStatus));
+    }
+
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(UUID countryId, String benchmarkType) {
+        Country country = iCountryRepository.findByUUID(countryId);
+
+        return benchmarkService.getBenchmarkFor(country.getId(), benchmarkType);
     }
 
 }

@@ -45,7 +45,7 @@ public class CountryService {
         CountrySummary countrySummary = iCountrySummaryRepository.findByCountryAndStatus(countryId, "PUBLISHED");
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
-
+    //todo: Chunk out these methods
     public GdhiQuestionnaire getDetails(UUID countryUUID,boolean isPublishOnly) {
 
         String countryId = iCountryRepository.findByUUID(countryUUID).getId();
@@ -66,7 +66,7 @@ public class CountryService {
                     Optional.ofNullable(countrySummaries.get(0)).get();
 
             List<CountryHealthIndicator> countryHealthIndicators =
-                    iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(countryId,
+                    iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId,
                             countrySummary.getCountrySummaryId().getStatus());
             CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
                     .map(CountrySummaryDto::new)

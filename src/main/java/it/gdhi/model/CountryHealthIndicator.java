@@ -106,4 +106,7 @@ public class CountryHealthIndicator {
         updatedAt = new Date();
     }
 
+    public boolean isScoreValid() {
+        return ( score != null && score >=0 );
+    }
 }

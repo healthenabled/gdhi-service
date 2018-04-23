@@ -17,7 +17,11 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     @Query("SELECT h FROM CountryHealthIndicator h WHERE " +
             "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
-    List<CountryHealthIndicator> findHealthIndicatorsByStatus(String countryId, String status);
+    List<CountryHealthIndicator> findHealthIndicatorsByCountryIdAndStatus(String countryId, String status);
+
+    @Query("SELECT h FROM CountryHealthIndicator h WHERE " +
+            "h.countryHealthIndicatorId.status=?1")
+    List<CountryHealthIndicator> findHealthIndicatorsByStatus(String status);
 
     @Query("SELECT distinct (countryHealthIndicatorId.countryId) FROM CountryHealthIndicator")
     List<String> findCountriesWithHealthScores();
@@ -26,7 +30,7 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     @Query("SELECT h FROM CountryHealthIndicator h WHERE (?1 is null or h.category.id = ?1) "+
             "and h.countryHealthIndicatorId.status=?2")
-    List<CountryHealthIndicator> findByStatus(Integer categoryId, String currentStatus);
+    List<CountryHealthIndicator> findByCategoryAndStatus(Integer categoryId, String currentStatus);
 
     @Modifying
     @Query("DELETE FROM CountryHealthIndicator h WHERE " +

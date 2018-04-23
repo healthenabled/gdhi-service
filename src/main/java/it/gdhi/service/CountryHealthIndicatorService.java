@@ -55,7 +55,7 @@ public class CountryHealthIndicatorService {
     @Transactional
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase) {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
-                .findByStatus(categoryId, PUBLISHED.name());
+                .findByCategoryAndStatus(categoryId, PUBLISHED.name());
 
         Map<String, List<CountryHealthIndicator>> groupByCountry = countryHealthIndicators.stream()
                 .collect(groupingBy(CountryHealthIndicator::getCountryId));

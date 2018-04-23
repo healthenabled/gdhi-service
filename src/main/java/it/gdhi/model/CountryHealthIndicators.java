@@ -45,7 +45,7 @@ public class CountryHealthIndicators {
                 .average();
         return optionalDouble.isPresent() ? optionalDouble.getAsDouble() : null;
     }
-
+    //todo: remove this method
     private void excludeSubIndicators() {
         this.countryHealthIndicators = countryHealthIndicators.stream()
                 .filter(healthIndicator -> healthIndicator.getIndicator() != null
@@ -71,7 +71,7 @@ public class CountryHealthIndicators {
 
     private Stream<CountryHealthIndicator> excludingNullAndNegativeScores() {
         return countryHealthIndicators.stream()
-                .filter(healthIndicator -> (healthIndicator.getScore()!= null && healthIndicator.getScore() >= 0));
+                .filter(healthIndicator -> healthIndicator.isScoreValid());
     }
 
 }

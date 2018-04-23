@@ -109,21 +109,21 @@ public class ICountryHealthIndicatorFilterRepositoryTest {
     @Test
     public void shouldFilterHealthRepositoryBasedOnCategoryAndPhaseAndByStatus() throws Exception {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
-                .findByStatus(categoryId1, PUBLISHED.name());
+                .findByCategoryAndStatus(categoryId1, PUBLISHED.name());
         assertEquals(3, countryHealthIndicators.size());
     }
 
     @Test
     public void shouldGetAllCountriesWhenNoCategoryAndPhaseIsGiven() throws Exception {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
-                .findByStatus(null, PUBLISHED.name());
+                .findByCategoryAndStatus(null, PUBLISHED.name());
         assertEquals(4, countryHealthIndicators.size());
     }
 
     @Test
     public void shouldReturnEmptyListWhenGivenCategoryHasNoHealthIndicatorPresent() throws Exception {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
-                .findByStatus(7, PUBLISHED.name());
+                .findByCategoryAndStatus(7, PUBLISHED.name());
         assertEquals(0, countryHealthIndicators.size());
     }
 }
