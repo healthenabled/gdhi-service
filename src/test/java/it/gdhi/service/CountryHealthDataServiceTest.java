@@ -3,9 +3,7 @@ package it.gdhi.service;
 import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
-import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
@@ -19,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -205,8 +202,11 @@ public class CountryHealthDataServiceTest {
     public void shouldDeleteCountryData() {
         String countryId = "AFG";
         String status = REVIEW_PENDING.name();
+        UUID countryUUID = UUID.randomUUID();
+        Country country = new Country(countryId, "Argentina", countryUUID, "AR");
+        when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
 
-        countryHealthDataService.deleteCountryData(countryId);
+        countryHealthDataService.deleteCountryData(countryUUID);
 
         verify(iCountrySummaryRepository).removeCountrySummary(countryId, status);
         verify(iCountryHealthIndicatorRepository).removeHealthIndicatorsBy(countryId, status);

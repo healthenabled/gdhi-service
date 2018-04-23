@@ -166,13 +166,13 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldDeleteCountryData() {
-        CountrySummaryDto countrySummaryDto = CountrySummaryDto.builder().countryId("IND").build();
-        doNothing().when(countryHealthDataService).deleteCountryData(countrySummaryDto.getCountryId());
+    public void shouldDeleteCountryData() throws Exception {
+        UUID countryUUID = UUID.randomUUID();
+        doNothing().when(countryHealthDataService).deleteCountryData(countryUUID);
 
-        countryController.deleteCountryData(countrySummaryDto);
+        countryController.deleteCountryData(countryUUID);
 
-        verify(countryHealthDataService).deleteCountryData(countrySummaryDto.getCountryId());
+        verify(countryHealthDataService).deleteCountryData(countryUUID);
     }
 
     @Test

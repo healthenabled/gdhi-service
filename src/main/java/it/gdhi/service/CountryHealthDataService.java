@@ -145,7 +145,8 @@ public class CountryHealthDataService {
     }
 
     @Transactional
-    public void deleteCountryData(String  countryId) {
+    public void deleteCountryData(UUID countryUUID) {
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
         iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, REVIEW_PENDING.name());
         iCountryResourceLinkRepository.deleteResources(countryId, REVIEW_PENDING.name());
         iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
@@ -156,15 +157,13 @@ public class CountryHealthDataService {
 
         List<AdminViewFormDetailsDto> adminViewFormDetailsDtoList = countrySummaries
                 .stream()
-                .map(dto -> {
-                    return new AdminViewFormDetailsDto(
-                            dto.getCountry().getName(),
-                            dto.getCountry().getUniqueId(),
-                            dto.getCountrySummaryId().getStatus(),
-                            dto.getContactName(),
-                            dto.getContactEmail()
-                            );
-                })
+                .map(dto -> new AdminViewFormDetailsDto(
+                        dto.getCountry().getName(),
+                        dto.getCountry().getUniqueId(),
+                        dto.getCountrySummaryId().getStatus(),
+                        dto.getContactName(),
+                        dto.getContactEmail()
+                        ))
                 .collect(toList());
 
 

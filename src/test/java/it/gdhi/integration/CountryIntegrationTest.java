@@ -49,7 +49,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private MailerService mailerService;
 
-    public UUID COUNTRY_UUID = null;
+    private UUID COUNTRY_UUID = null;
 
     private void addCountrySummary(String countryId, String countryName, String status, String alpha2Code, UUID countryUUID, String collectedDate,
                                    List<CountryResourceLink> countryResourceLinks) throws Exception {
@@ -83,7 +83,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "PUBLISHED";
         String alpha2Code = "IN";
-        UUID countryUUID = COUNTRY_UUID;
 
         Integer categoryId1 = 1;
         Integer categoryId2 = 2;
@@ -95,7 +94,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_1 = 5;
         Integer indicatorId3_2 = 6;
 
-        addCountrySummary(countryId, "India", status, alpha2Code, countryUUID, "04-04-2018",new ArrayList<>());
+        addCountrySummary(countryId, "India", status, alpha2Code, COUNTRY_UUID, "04-04-2018",new ArrayList<>());
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -120,7 +119,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "PUBLISHED";
         String alpha2code = "IN";
-        UUID countryUUID = COUNTRY_UUID;
 
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
@@ -130,7 +128,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "04-04-2018" ,countryResourceLinks);
+        addCountrySummary(countryId, "India", status, alpha2code, COUNTRY_UUID, "04-04-2018" ,countryResourceLinks);
 
         Response response = given()
                 .contentType("application/json")
@@ -145,7 +143,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "DRAFT";
         String alpha2code = "IN";
-        UUID countryUUID = COUNTRY_UUID;
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
                 "link1",status), new Date(), null);
@@ -162,7 +159,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "04-04-2018", countryResourceLinks);
+        addCountrySummary(countryId, "India", status, alpha2code, COUNTRY_UUID, "04-04-2018", countryResourceLinks);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -276,7 +273,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         String countryId = "IND";
         String status = "REVIEW_PENDING";
         String alpha2code = "IN";
-        UUID countryUUID = COUNTRY_UUID;
 
         CountryResourceLink countryResourceLink1 = new CountryResourceLink(new CountryResourceLinkId(countryId,
                 "link1",status), new Date(), null);
@@ -293,7 +289,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Integer indicatorId3_2 = 6;
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
-        addCountrySummary(countryId, "India", status, alpha2code, countryUUID, "2018-04-04", countryResourceLinks);
+        addCountrySummary(countryId, "India", status, alpha2code, COUNTRY_UUID, "2018-04-04", countryResourceLinks);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
@@ -308,12 +304,10 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .body("{\"countryId\":\"IND\"}")
-                .post("http://localhost:" + port + "/countries/delete");
+                .delete("http://localhost:" + port + "/countries/" + COUNTRY_UUID.toString() + "/delete");
 
         assertEquals(200, response.getStatusCode());
     }
-
 
     @Ignore
     @Test
