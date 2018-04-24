@@ -309,6 +309,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         assertEquals(200, response.getStatusCode());
     }
 
+    //TODO: rewrite this test
     @Ignore
     @Test
     public void shouldGetAllCountrySummary() throws Exception {
@@ -326,6 +327,47 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
 
         assertResponse(response.asString(), "admin_view_form_details.json");
+    }
+
+    @Test
+    public void shouldGetGlobalAvgBenchmarkForGivenCountry() throws Exception {
+        UUID indiaUUID = iCountryRepository.find("IND").getUniqueId();
+
+        Integer categoryId1 = 1;
+        Integer indicatorId1 = 1;
+
+        addCountrySummary("IND", "INDIA", "PUBLISHED", "IN", indiaUUID, "2018-04-04" , emptyList());
+        addCountrySummary("PAK", "PAKISTAN", "PUBLISHED", "PK", UUID.randomUUID(), "2018-04-04" , emptyList());
+        addCountrySummary("ARE", "UNITED ARAB EMIRATES", "PUBLISHED", "UE", UUID.randomUUID(), "2018-04-04" , emptyList());
+        addCountrySummary("LKA", "SRI LANKA", "DRAFT", "SL", UUID.randomUUID(), "2018-04-04" , emptyList());
+        addCountrySummary("IND", "INDIA", "NEW", "IN", UUID.randomUUID(), "2018-04-04" , emptyList());
+
+
+        List<HealthIndicatorDto> healthIndicatorDto = setUpHealthIndicatorDto(categoryId1, indicatorId1, "PUBLISHED", 1);
+        setupHealthIndicatorsForCountry("IND", healthIndicatorDto);
+
+        List<HealthIndicatorDto> healthIndicatorDto1 = setUpHealthIndicatorDto(categoryId1, indicatorId1, "PUBLISHED", 2);
+        setupHealthIndicatorsForCountry("PAK", healthIndicatorDto1);
+
+        List<HealthIndicatorDto> healthIndicatorDto2 = setUpHealthIndicatorDto(categoryId1, indicatorId1, "PUBLISHED", -1);
+        setupHealthIndicatorsForCountry("ARE", healthIndicatorDto2);
+
+        List<HealthIndicatorDto> healthIndicatorDto3 = setUpHealthIndicatorDto(categoryId1, indicatorId1, "DRAFT", 5);
+        setupHealthIndicatorsForCountry("LKA", healthIndicatorDto3);
+
+        Response response = given()
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:" + port + "/countries/"+indiaUUID +"/benchmark/global");
+
+        assertEquals(200, response.getStatusCode());
+
+        assertEquals(response.asString(), "{\"1\":{\"benchmarkScore\":2,\"benchmarkValue\":\"Below\"}}");
+    }
+
+    private List<HealthIndicatorDto> setUpHealthIndicatorDto(Integer indicatorId, Integer categoryId, String status, Integer score) {
+        return asList(
+                HealthIndicatorDto.builder().categoryId(categoryId).indicatorId(indicatorId).status(status).score(score).supportingText("Some text").build());
     }
 
 }

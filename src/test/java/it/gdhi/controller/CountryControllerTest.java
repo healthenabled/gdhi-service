@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static java.util.Collections.emptyMap;
@@ -190,4 +191,13 @@ public class CountryControllerTest {
         countryController.getQuestionnaireForPublishedCountry(countryUUID);
         verify(countryService).getDetails(countryUUID,true);
     }
- }
+
+    @Test
+    public void shouldGetBenchmarkDetailsFor() {
+        UUID countryUUID = UUID.randomUUID();
+        String benchmarkType = "global";
+        when(countryHealthDataService.getBenchmarkDetailsFor(countryUUID, benchmarkType)).thenReturn(new HashMap<>());
+        countryController.getBenchmarkDetailsFor(countryUUID, benchmarkType);
+        verify(countryHealthDataService).getBenchmarkDetailsFor(countryUUID, benchmarkType);
+    }
+}
