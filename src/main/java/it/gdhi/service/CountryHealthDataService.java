@@ -13,11 +13,10 @@ import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static it.gdhi.utils.FormStatus.*;
 import static java.util.Objects.isNull;
@@ -178,4 +177,44 @@ public class CountryHealthDataService {
         return benchmarkService.getBenchmarkFor(countryId, benchmarkType);
     }
 
+    public boolean validateRequiredFields(GdhiQuestionnaire gdhiQuestionnaire) {
+        return verifyFields(gdhiQuestionnaire.getCountrySummary())
+                && verifyDateRange(gdhiQuestionnaire.getCountrySummary().getCollectedDate())
+                && verifyResources(gdhiQuestionnaire.getCountrySummary().getResources())
+                && verifyIndicators(gdhiQuestionnaire.getHealthIndicators());
+    }
+
+    private boolean verifyIndicators(List<HealthIndicatorDto> healthIndicators) {
+        return healthIndicators.stream().noneMatch(healthIndicatorDto
+                -> StringUtils.isEmpty(healthIndicatorDto.getSupportingText())
+        && healthIndicatorDto.getScore() < -1);
+    }
+
+    private boolean verifyResources(List<String> resources) {
+        return !resources.isEmpty();
+    }
+
+    private boolean verifyFields(CountrySummaryDto countrySummary) {
+        return countrySummary.getCollectedDate() != null
+                && !StringUtils.isEmpty(countrySummary.getCountryId())
+                && !StringUtils.isEmpty(countrySummary.getContactDesignation())
+                && !StringUtils.isEmpty(countrySummary.getContactEmail())
+                && !StringUtils.isEmpty(countrySummary.getContactName())
+                && !StringUtils.isEmpty(countrySummary.getContactOrganization())
+                && !StringUtils.isEmpty(countrySummary.getCountryName())
+                && !StringUtils.isEmpty(countrySummary.getDataApproverEmail())
+                && !StringUtils.isEmpty(countrySummary.getDataApproverName())
+                && !StringUtils.isEmpty(countrySummary.getDataApproverRole())
+                && !StringUtils.isEmpty(countrySummary.getDataFeederEmail())
+                && !StringUtils.isEmpty(countrySummary.getDataFeederName())
+                && !StringUtils.isEmpty(countrySummary.getDataFeederRole())
+                && !StringUtils.isEmpty(countrySummary.getSummary());
+    }
+
+    private boolean verifyDateRange(Date collectedDate) {
+        Calendar myCalendar = new GregorianCalendar(2010, 0, 1);
+        Date backDate = myCalendar.getTime();
+
+        return collectedDate.before(new Date()) && collectedDate.after(backDate);
+    }
 }

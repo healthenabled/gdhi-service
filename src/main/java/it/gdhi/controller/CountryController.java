@@ -11,6 +11,8 @@ import it.gdhi.service.DevelopmentIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,8 +81,16 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/submit", method = RequestMethod.POST)
-    public void submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.submit(gdhiQuestionnaire);
+    @ResponseBody
+    public ResponseEntity submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        boolean isValid;
+        isValid = countryHealthDataService.validateRequiredFields(gdhiQuestionnaire);
+        if (isValid) {
+            countryHealthDataService.submit(gdhiQuestionnaire);
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @RequestMapping(value = "/countries/saveCorrection", method = RequestMethod.POST)
@@ -89,8 +99,16 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/publish", method = RequestMethod.POST)
-    public void publishHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.publish(gdhiQuestionnaire);
+    @ResponseBody
+    public ResponseEntity publishHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        boolean isValid;
+        isValid = countryHealthDataService.validateRequiredFields(gdhiQuestionnaire);
+        if (isValid) {
+            countryHealthDataService.publish(gdhiQuestionnaire);
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
