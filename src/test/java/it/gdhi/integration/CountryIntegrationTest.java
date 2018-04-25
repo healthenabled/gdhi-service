@@ -10,6 +10,7 @@ import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.MailerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
@@ -48,6 +50,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MailerService mailerService;
+
+    @Autowired
+    CountryHealthDataService countryHealthDataService;
 
     private UUID INDIA_UUID = null;
     private String INDIA_ID = "IND";
@@ -230,6 +235,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         addCountrySummary(INDIA_ID, "India", "NEW", "IN", UUID.randomUUID(),  "2018-04-04", new ArrayList<>());
         mailerService = mock(MailerService.class);
         doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
+
+        countryHealthDataService = mock(CountryHealthDataService.class);
+        when(countryHealthDataService.validateRequiredFields(any())).thenReturn(true);
 
         Response response = given()
                 .contentType("application/json")

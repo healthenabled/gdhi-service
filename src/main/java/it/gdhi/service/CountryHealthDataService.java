@@ -187,11 +187,11 @@ public class CountryHealthDataService {
     private boolean verifyIndicators(List<HealthIndicatorDto> healthIndicators) {
         return healthIndicators.stream().noneMatch(healthIndicatorDto
                 -> StringUtils.isEmpty(healthIndicatorDto.getSupportingText())
-        && healthIndicatorDto.getScore() < -1);
+        || healthIndicatorDto.getScore() < -1);
     }
 
     private boolean verifyResources(List<String> resources) {
-        return !resources.isEmpty();
+        return (resources!=null && !resources.isEmpty());
     }
 
     private boolean verifyFields(CountrySummaryDto countrySummary) {
@@ -214,7 +214,7 @@ public class CountryHealthDataService {
     private boolean verifyDateRange(Date collectedDate) {
         Calendar myCalendar = new GregorianCalendar(2010, 0, 1);
         Date backDate = myCalendar.getTime();
-
-        return collectedDate.before(new Date()) && collectedDate.after(backDate);
+        Date today = new GregorianCalendar().getTime();
+        return (collectedDate.equals(today)) || (collectedDate.before(today) && collectedDate.after(backDate));
     }
 }
