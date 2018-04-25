@@ -4,10 +4,7 @@ import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
-import it.gdhi.model.Category;
-import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountryHealthIndicators;
-import it.gdhi.model.CountrySummary;
+import it.gdhi.model.*;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +21,7 @@ import java.util.function.Predicate;
 
 import static it.gdhi.controller.strategy.FilterStrategy.getCategoryPhaseFilter;
 import static it.gdhi.controller.strategy.FilterStrategy.getCountryPhaseFilter;
-import static it.gdhi.utils.FormStatus.*;
-import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
+import static it.gdhi.utils.FormStatus.PUBLISHED;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Objects.isNull;
@@ -79,7 +75,8 @@ public class CountryHealthIndicatorService {
                 .collect(groupingBy(CategoryHealthScoreDto::getId));
         List<CategoryHealthScoreDto> categoryHealthScores = groupByCategory.entrySet().stream()
                 .map(this::getCategoryHealthScoreDto).collect(toList());
-        Integer globalPhase = convertScoreToPhase(getAverageCategoryScore(categoryHealthScores));
+        Score averageCategoryScore = new Score(getAverageCategoryScore(categoryHealthScores));
+        Integer globalPhase = averageCategoryScore.convertToPhase();
         return new GlobalHealthScoreDto(globalPhase, categoryHealthScores);
     }
 
@@ -107,7 +104,7 @@ public class CountryHealthIndicatorService {
         CategoryHealthScoreDto categoryHealthScoreDto = categoriesHealthScore.stream().findFirst()
                 .orElse(new CategoryHealthScoreDto());
         return new CategoryHealthScoreDto(entry.getKey(), categoryHealthScoreDto.getName(), globalScore,
-                convertScoreToPhase(globalScore), null);
+                (new Score(globalScore)).convertToPhase(), null);
     }
 
     private List<CategoryHealthScoreDto> getCategoriesInCountries(CountriesHealthScoreDto countries) {
@@ -137,7 +134,7 @@ public class CountryHealthIndicatorService {
                 new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
-                overallScore, categoryDtos, convertScoreToPhase(overallScore), collectedDateStr);
+                overallScore, categoryDtos, (new Score(overallScore)).convertToPhase(), collectedDateStr);
     }
 
 
