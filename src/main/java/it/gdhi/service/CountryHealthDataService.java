@@ -174,10 +174,8 @@ public class CountryHealthDataService {
                 .collect(groupingBy(AdminViewFormDetailsDto::getStatus));
     }
 
-    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(UUID countryId, String benchmarkType) {
-        Country country = iCountryRepository.findByUUID(countryId);
-
-        return benchmarkService.getBenchmarkFor(country.getId(), benchmarkType);
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, String benchmarkType) {
+        return benchmarkService.getBenchmarkFor(countryId, benchmarkType);
     }
 
 }

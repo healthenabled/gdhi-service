@@ -358,7 +358,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries/"+indiaUUID +"/benchmark/global");
+                .get("http://localhost:" + port + "/countries/IND/benchmark/global");
 
         assertEquals(200, response.getStatusCode());
 

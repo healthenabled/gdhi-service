@@ -194,10 +194,10 @@ public class CountryControllerTest {
 
     @Test
     public void shouldGetBenchmarkDetailsFor() {
-        UUID countryUUID = UUID.randomUUID();
+        String countryID = "IND";
         String benchmarkType = "global";
-        when(countryHealthDataService.getBenchmarkDetailsFor(countryUUID, benchmarkType)).thenReturn(new HashMap<>());
-        countryController.getBenchmarkDetailsFor(countryUUID, benchmarkType);
-        verify(countryHealthDataService).getBenchmarkDetailsFor(countryUUID, benchmarkType);
+        when(countryHealthDataService.getBenchmarkDetailsFor(countryID, benchmarkType)).thenReturn(new HashMap<>());
+        countryController.getBenchmarkDetailsFor(countryID, benchmarkType);
+        verify(countryHealthDataService).getBenchmarkDetailsFor(countryID, benchmarkType);
     }
 }

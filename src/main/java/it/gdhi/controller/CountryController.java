@@ -132,8 +132,8 @@ public class CountryController {
         return countryHealthDataService.getAdminViewFormDetails();
     }
 
-    @RequestMapping(value = "/countries/{uuid}/benchmark/{type}", method = RequestMethod.GET)
-    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(@PathVariable("uuid") UUID countryId,
+    @RequestMapping(value = "/countries/{id}/benchmark/{type}", method = RequestMethod.GET)
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(@PathVariable("id") String countryId,
                                                              @PathVariable("type") String benchmarkType) {
         return countryHealthDataService.getBenchmarkDetailsFor(countryId, benchmarkType);
     }
