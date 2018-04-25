@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import static it.gdhi.utils.Constants.Mail.BODY;
-import static it.gdhi.utils.Constants.Mail.HEALTH_INDICATOR_PATH;
-import static it.gdhi.utils.Constants.Mail.SUBJECT;
 import static java.lang.String.format;
 
 @Service
@@ -27,6 +24,15 @@ public class MailerService {
     @Value("${frontEndURL}")
     private String frontEndURL;
 
+    static final String SUBJECT = "GDHI has a new response from %s";
+    static final String HEALTH_INDICATOR_PATH = "%s/admin/health_indicator_questionnaire/%s/review";
+    static final String BODY = "Hello %s  ,\n" +
+            "%s, %s has provided response for %s, in the GDHI website.\n" +
+            "Contact: %s \n" +
+            "For more details visit: %s \n" +
+            "Regards \n" +
+            "GDHI Team ";
+
     @Async
     public void send(Country country, String feeder, String feederRole, String contactEmail) {
         mailAddresses.getAddressMap().entrySet().forEach((entry) -> {
@@ -41,7 +47,7 @@ public class MailerService {
 
     private String constructBody(Country country, String name, String feeder, String feederRole, String contactMail) {
         return format(BODY, name, feeder, feederRole, country.getName(),
-                        contactMail, constructHealthIndicatorPath(country));
+                contactMail, constructHealthIndicatorPath(country));
     }
 
     private String constructSubject(Country country) {

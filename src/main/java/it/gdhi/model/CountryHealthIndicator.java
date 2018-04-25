@@ -12,8 +12,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Optional;
 
-import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
-
 @Entity
 @Table(schema = "country_health_data", name = "health_indicators")
 @AllArgsConstructor
@@ -21,6 +19,7 @@ import static it.gdhi.utils.Constants.SCORE_DESCRIPTION_NOT_AVAILABLE;
 @Getter
 @Builder
 public class CountryHealthIndicator {
+    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available or Not Applicable";
 
     @EmbeddedId
     private CountryHealthIndicatorId countryHealthIndicatorId;

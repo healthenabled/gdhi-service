@@ -61,4 +61,10 @@ public class BaseIntegrationTest {
         HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
         assertEquals(expectedMap, actualMap);
     }
+
+    void assertStringResponse(String responseJSON, String expectedJSON) throws IOException {
+        HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
+        HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
+        assertEquals(expectedMap, actualMap);
+    }
 }
