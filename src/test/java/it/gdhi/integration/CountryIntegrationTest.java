@@ -258,7 +258,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .body(expectedResponseJson("country_body_edit.json"))
                 .post("http://localhost:" + port + "/countries/submit");
 
-        assertEquals(200, response.getStatusCode());
+        assertEquals(201, response.getStatusCode());
 
         response = given()
                 .contentType("application/json")

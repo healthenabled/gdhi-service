@@ -16,9 +16,9 @@
     "dataApproverName": "coll name new",
     "dataApproverRole": "coll role new",
     "dataApproverEmail": "coll email new",
-    "collectedDate": null,
+    "collectedDate": "10-02-2015",
     "resources": [
-      "link1 new"
+      "www.example.com"
     ]
   },
   "healthIndicators": [
@@ -40,7 +40,7 @@
       "categoryId": 2,
       "indicatorId": 3,
       "status":"DRAFT",
-      "score": null,
+      "score": -1,
       "supportingText": "sp3 new"
     },
     {
@@ -61,7 +61,7 @@
       "categoryId": 3,
       "indicatorId": 6,
       "status":"DRAFT",
-      "score": null,
+      "score": -1,
       "supportingText": "sp6 new"
     }
   ]

@@ -87,6 +87,7 @@ public class CountryControllerTest {
     public void shouldSubmitHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
         doNothing().when(countryHealthDataService).submit(mock);
+        when(countryHealthDataService.validateRequiredFields(mock)).thenReturn(true);
         countryController.submitHealthIndicatorsFor(mock);
         verify(countryHealthDataService).submit(mock);
     }
@@ -110,6 +111,7 @@ public class CountryControllerTest {
     public void shouldPublishHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
         doNothing().when(countryHealthDataService).publish(mock);
+        when(countryHealthDataService.validateRequiredFields(mock)).thenReturn(true);
         countryController.publishHealthIndicatorsFor(mock);
         verify(countryHealthDataService).publish(mock);
     }
