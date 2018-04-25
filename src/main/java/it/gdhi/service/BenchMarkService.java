@@ -31,8 +31,7 @@ public class BenchMarkService {
                 .findHealthIndicatorsByStatus(PUBLISHED.name());
 
         Map<Integer, Double> indicatorBenchmarkScores = publishedCountryHealthIndicators.stream()
-                .filter(indicator -> indicator.isScoreValid() && indicator.getIndicator().getParentId()
-                        == null)
+                .filter(indicator -> indicator.isScoreValid() && indicator.getIndicator().getParentId() == null)
                 .collect(groupingBy(h -> h.getIndicatorId(),
                         averagingInt(CountryHealthIndicator::getScore)));
 
@@ -47,10 +46,7 @@ public class BenchMarkService {
                 .findHealthIndicatorsFor(countryId);
 
         Map<Integer, BenchmarkDto> benchmarkScoresForCountry = countryHealthIndicator.stream()
-                .filter(indicator ->
-                        (indicator.isScoreValid() && indicator.getIndicator().getParentId() == null
-                                && indicatorBenchmarkScores.containsKey(indicator.getIndicatorId()
-                        )))
+                .filter(indicator -> (indicator.isScoreValid() && indicator.getIndicator().getParentId() == null))
                 .collect(Collectors.toMap(CountryHealthIndicator::getIndicatorId,
                         indicator -> constructBenchMarkDto(indicator.getScore(),
                                 indicatorBenchmarkScores.get(indicator.getIndicatorId()))));
