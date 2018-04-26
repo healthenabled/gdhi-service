@@ -56,20 +56,6 @@ public class CountryController {
         return countryHealthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
-    @RequestMapping("/countries_health_indicator_scores")
-    public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
-            @RequestParam(value = "categoryId", required = false) Integer categoryId,
-            @RequestParam(value = "phase", required = false) Integer score) {
-        return countryHealthIndicatorService.fetchCountriesHealthScores(categoryId, score);
-    }
-
-    @RequestMapping("/global_health_indicators")
-    public GlobalHealthScoreDto getGlobalHealthIndicator(
-            @RequestParam(value = "categoryId", required = false) Integer categoryId,
-            @RequestParam(value = "phase", required = false) Integer score) {
-        return countryHealthIndicatorService.getGlobalHealthIndicator(categoryId, score);
-    }
-
     @RequestMapping("/countries/{id}/country_summary")
     public CountrySummaryDto fetchCountrySummary(@PathVariable("id") String countryId) {
         return countryService.fetchCountrySummary(countryId);

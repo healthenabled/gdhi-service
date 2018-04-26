@@ -59,31 +59,6 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldInvokeFetchHealthScoresOnGettingGlobalInfo() {
-        CountriesHealthScoreDto mockGlobalHealthScore = mock(CountriesHealthScoreDto.class);
-
-        CountryHealthScoreDto countryHealthScoreDto = mock(CountryHealthScoreDto.class);
-        when(countryHealthScoreDto.getCountryId()).thenReturn("ARG");
-        when(mockGlobalHealthScore.getCountryHealthScores()).thenReturn(singletonList(countryHealthScoreDto));
-        when(countryHealthIndicatorService.fetchCountriesHealthScores(4, null)).thenReturn(mockGlobalHealthScore);
-        CountriesHealthScoreDto globalHealthIndicators = countryController.getCountriesHealthIndicatorScores(4, null);
-        int size = globalHealthIndicators.getCountryHealthScores().size();
-        assertThat(size, is(1));
-        assertThat(globalHealthIndicators.getCountryHealthScores().get(0).getCountryId(), is(countryHealthScoreDto.getCountryId()));
-        verify(countryHealthIndicatorService).fetchCountriesHealthScores(4, null);
-    }
-
-    @Test
-    public void shouldInvokeGetGlobalHealthIndicator() {
-        GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
-
-        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
-        GlobalHealthScoreDto actual = countryController.getGlobalHealthIndicator(null, 2);
-        assertThat(expected, is(actual));
-        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2);
-    }
-
-    @Test
     public void shouldSubmitHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
         doNothing().when(countryHealthDataService).submit(mock);
