@@ -4,10 +4,12 @@ import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryPhase;
 import it.gdhi.model.CountryResourceLink;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.CountrySummaryId;
+import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.CountryHealthDataService;
@@ -49,6 +51,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
+
+    @Autowired
+    private ICountryPhaseRepository countryPhaseRepository;
 
     @Autowired
     private MailerService mailerService;
@@ -386,14 +391,24 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         List<HealthIndicatorDto> healthIndicatorDto3 = setUpHealthIndicatorDto(categoryId1, indicatorId1, "DRAFT", 5);
         setupHealthIndicatorsForCountry("LKA", healthIndicatorDto3);
 
+        setUpCountryPhase(INDIA_ID, 1);
+        setUpCountryPhase("PAK", 2);
+        setUpCountryPhase("ARE", null);
+        setUpCountryPhase("LKA", 5);
+
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/countries/IND/benchmark/global");
+                .get("http://localhost:" + port + "/countries/IND/benchmark/-1");
 
         assertEquals(200, response.getStatusCode());
 
         assertEquals(response.asString(), "{\"1\":{\"benchmarkScore\":2,\"benchmarkValue\":\"Below\"}}");
+    }
+
+    private void setUpCountryPhase(String countryId, Integer countryPhaseValue) {
+        CountryPhase countryPhase = CountryPhase.builder().countryId(countryId).countryOverallPhase(countryPhaseValue).build();
+        countryPhaseRepository.save(countryPhase);
     }
 
     private List<HealthIndicatorDto> setUpHealthIndicatorDto(Integer indicatorId, Integer categoryId, String status, Integer score) {

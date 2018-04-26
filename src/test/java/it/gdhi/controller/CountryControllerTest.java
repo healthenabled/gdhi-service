@@ -169,9 +169,9 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldGetBenchmarkDetailsFor() {
+    public void shouldGetGlobalBenchmarkDetailsFor() {
         String countryID = "IND";
-        String benchmarkType = "global";
+        Integer benchmarkType = -1;
         when(countryHealthDataService.getBenchmarkDetailsFor(countryID, benchmarkType)).thenReturn(new HashMap<>());
         countryController.getBenchmarkDetailsFor(countryID, benchmarkType);
         verify(countryHealthDataService).getBenchmarkDetailsFor(countryID, benchmarkType);

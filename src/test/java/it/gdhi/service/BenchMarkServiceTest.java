@@ -30,7 +30,7 @@ public class BenchMarkServiceTest {
     @Test
     public void shouldGetGlobalBenchmarkDataForACountry() {
         String countryId = "IND";
-        String benchmarkType = "Global";
+        Integer benchmarkType = -1;
         Integer indicatorId1 = 1;
         Integer indicatorId2 = 2;
         Integer indicatorId3 = 3;
@@ -43,7 +43,7 @@ public class BenchMarkServiceTest {
         CountryHealthIndicator countryHealthIndicatorForInd2 = buildCountryHealthIndicator(indicatorId2, countryId, 1);
         CountryHealthIndicator countryHealthIndicatorForInd3 = buildCountryHealthIndicator(indicatorId3, countryId, 3);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(PUBLISHED.name()))
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatusAndPhase(PUBLISHED.name(), benchmarkType))
                 .thenReturn(Arrays.asList(countryHealthIndicator1, countryHealthIndicator2, countryHealthIndicator3,
                         countryHealthIndicatorForInd1, countryHealthIndicatorForInd2, countryHealthIndicatorForInd3));
 
@@ -67,7 +67,7 @@ public class BenchMarkServiceTest {
     @Test
     public void shouldGetGlobalBenchmarkForACountryWithSomeCountryHavingNA() {
         String countryId = "IND";
-        String benchmarkType = "Global";
+        Integer benchmarkType = -1;
         Integer indicatorId1 = 1;
         Integer indicatorId2 = 2;
         Integer indicatorId3 = 3;
@@ -79,7 +79,7 @@ public class BenchMarkServiceTest {
         CountryHealthIndicator countryHealthIndicatorForInd1 = buildCountryHealthIndicator(indicatorId1, countryId, -1);
         CountryHealthIndicator countryHealthIndicatorForInd2 = buildCountryHealthIndicator(indicatorId2, countryId, -1);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(PUBLISHED.name()))
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatusAndPhase(PUBLISHED.name(), benchmarkType))
                 .thenReturn(Arrays.asList(countryHealthIndicator1, countryHealthIndicator2,
                         countryHealthIndicatorForInd1, countryHealthIndicatorForInd2, countryHealthIndicator3));
 
@@ -96,7 +96,7 @@ public class BenchMarkServiceTest {
     @Test
     public void shouldGetGlobalBenchmarkForACountryOnlyUsingMainIndicators() {
         String countryId = "IND";
-        String benchmarkType = "Global";
+        Integer benchmarkType = -1;
         Integer indicatorId1 = 1;
         Integer indicatorId2 = 2;
         Integer indicatorId3 = 3;
@@ -113,7 +113,7 @@ public class BenchMarkServiceTest {
                 .score(1).build();
 
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatus(PUBLISHED.name()))
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByStatusAndPhase(PUBLISHED.name(), benchmarkType))
                 .thenReturn(Arrays.asList(countryHealthIndicatorForInd3, countryHealthIndicator2,
                         countryHealthIndicatorForInd1, countryHealthIndicatorForInd2));
 

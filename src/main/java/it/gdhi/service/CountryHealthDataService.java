@@ -181,7 +181,7 @@ public class CountryHealthDataService {
                 .collect(groupingBy(CountrySummaryStatusDto::getStatus));
     }
 
-    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, String benchmarkType) {
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, Integer benchmarkType) {
         return benchmarkService.getBenchmarkFor(countryId, benchmarkType);
     }
 

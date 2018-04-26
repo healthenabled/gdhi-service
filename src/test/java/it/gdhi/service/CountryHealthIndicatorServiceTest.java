@@ -48,9 +48,9 @@ public class CountryHealthIndicatorServiceTest {
         Integer score1 = 3;
         Integer score2 = 4;
         Integer score3 = 1;
-        String status ="PUBLISHED";
+        String publishedStatus ="PUBLISHED";
 
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, status);
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, publishedStatus);
         Country country1 = new Country("Ind", "India",UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, "Leadership and Governance");
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition1", 1);
@@ -58,7 +58,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1, country1,
                 category1, indicator1, indicatorScore1, score1,  "st1", new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId2,indicatorId2 , status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId2,indicatorId2 , publishedStatus);
         Category category2 = new Category(categoryId2, "Category2");
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 2", "Definition2", 2);
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 3", "Definition3", 3);
@@ -72,7 +72,7 @@ public class CountryHealthIndicatorServiceTest {
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator3, countryHealthIndicator2, countryHealthIndicator1);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId1, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
     }
 
@@ -127,12 +127,12 @@ public class CountryHealthIndicatorServiceTest {
         Integer indicatorId1 = 1;
         Integer indicatorId2 = 2;
         String categoryName = "Leadership and Governance";
-        String status = "PUBLISHED";
+        String publishedStatus = "PUBLISHED";
 
         String countryId = "IND";
         String countryName = "India";
         CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,categoryId1,
-                indicatorId1, status);
+                indicatorId1, publishedStatus);
         String countryAlpha2Code = "IN";
         Country country1 = new Country(countryId, countryName, UUID.randomUUID(), countryAlpha2Code);
         Category category1 = new Category(categoryId1, categoryName);
@@ -140,7 +140,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  null, null, new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId2,status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId2,publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         Integer indicatorScore = 2;
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
@@ -148,7 +148,7 @@ public class CountryHealthIndicatorServiceTest {
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet4(healthScoreForACountry, countryId, countryName, countryAlpha2Code);
@@ -177,8 +177,8 @@ public class CountryHealthIndicatorServiceTest {
 
         String countryId1 = "IND";
         String countryName = "India";
-        String status = "PUBLISHED";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, status);
+        String publishedStatus = "PUBLISHED";
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, publishedStatus);
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Category category2 = new Category(categoryId2, categoryName2 );
@@ -186,14 +186,14 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  null, "st1", new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
                 country1, category2, indicator2, IndicatorScore.builder().build(),  2, "st2", new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId1, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet5(healthScoreForACountry, countryId, countryName);
@@ -210,8 +210,8 @@ public class CountryHealthIndicatorServiceTest {
         String categoryName2 = "Category2";
 
         String countryName = "India";
-        String status = "PUBLISHED";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId1, status);
+        String publishedStatus = "PUBLISHED";
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId1, publishedStatus);
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Category category2 = new Category(categoryId2, categoryName2 );
@@ -219,14 +219,14 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  null, "st1", new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId2,status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId,categoryId1,indicatorId2,publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
                 country1, category2, indicator2, IndicatorScore.builder().indicatorId(indicatorId2).score(-1).build(),  2, "st2", new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet5(healthScoreForACountry, countryId, countryName);
@@ -257,22 +257,22 @@ public class CountryHealthIndicatorServiceTest {
 
         String countryId1 = "IND";
         String countryName = "India";
-        String status = "PUBLISHED";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1,status);
+        String publishedStatus = "PUBLISHED";
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1,publishedStatus);
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition", 1);
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  null, null , new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
                 country1, category1, indicator2, IndicatorScore.builder().build(),  null, null , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId1, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet6(healthScoreForACountry, countryId, countryName);
@@ -301,22 +301,22 @@ public class CountryHealthIndicatorServiceTest {
 
         String countryId1 = "IND";
         String countryName = "India";
-        String status = "PUBLISHED";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, status);
+        String publishedStatus = "PUBLISHED";
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, publishedStatus);
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition", 1);
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" , new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2,publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
                 country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId1, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet2(healthScoreForACountry, countryId, countryName);
@@ -349,27 +349,27 @@ public class CountryHealthIndicatorServiceTest {
 
         String countryId1 = "IND";
         String countryName = "India";
-        String status = "PUBLISHED";
-        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, status);
+        String publishedStatus = "PUBLISHED";
+        CountryHealthIndicatorId countryHealthIndicatorId1 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId1, publishedStatus);
         Country country1 = new Country(countryId, countryName,UUID.randomUUID(), "IN");
         Category category1 = new Category(categoryId1, categoryName );
         Indicator indicator1 = new Indicator(indicatorId1, "Indicator 1", "Definition", 1);
         CountryHealthIndicator countryHealthIndicator1 = new CountryHealthIndicator(countryHealthIndicatorId1,
                 country1, category1, indicator1, IndicatorScore.builder().build(),  indicatorScore1, "st1" , new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2, status);
+        CountryHealthIndicatorId countryHealthIndicatorId2 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId2, publishedStatus);
         Indicator indicator2 = new Indicator(indicatorId2, "Indicator 1", "Definition", 2);
         CountryHealthIndicator countryHealthIndicator2 = new CountryHealthIndicator(countryHealthIndicatorId2,
                 country1, category1, indicator2, IndicatorScore.builder().build(),  indicatorScore2, "st2" , new Date(), null);
 
-        CountryHealthIndicatorId countryHealthIndicatorId3 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId3, status);
+        CountryHealthIndicatorId countryHealthIndicatorId3 = new CountryHealthIndicatorId(countryId1,categoryId1,indicatorId3, publishedStatus);
         Indicator indicator3 = new Indicator(indicatorId3, "Indicator 1", "Definition", 3);
         CountryHealthIndicator countryHealthIndicator3 = new CountryHealthIndicator(countryHealthIndicatorId3,
                 country1, category1, indicator3, IndicatorScore.builder().build(),  indicatorScore3, "st3" , new Date(), null);
 
         List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator1, countryHealthIndicator2, countryHealthIndicator3);
 
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor(countryId1)).thenReturn(countryHealthIndicatorsForCountry);
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId1, publishedStatus)).thenReturn(countryHealthIndicatorsForCountry);
 
         CountryHealthScoreDto healthScoreForACountry = countryHealthIndicatorService.fetchCountryHealthScore(countryId);
         assertSet3(healthScoreForACountry, countryId, countryName);
@@ -610,8 +610,6 @@ public class CountryHealthIndicatorServiceTest {
 
         when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(1,PUBLISHED.name())).thenReturn(countryHealthIndicators);
         when(iCountryHealthIndicatorRepository.findCountriesWithHealthScores()).thenReturn(asList("IND", "USA"));
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor("IND")).thenReturn(asList(mock1));
-        when(iCountryHealthIndicatorRepository.findHealthIndicatorsFor("USA")).thenReturn(asList(mock2, mock3));
 
         GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(1, 2);
 

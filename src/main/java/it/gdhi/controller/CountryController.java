@@ -139,7 +139,7 @@ public class CountryController {
 
     @RequestMapping(value = "/countries/{id}/benchmark/{type}", method = RequestMethod.GET)
     public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(@PathVariable("id") String countryId,
-                                                             @PathVariable("type") String benchmarkType) {
+                                                             @PathVariable("type") Integer benchmarkType) {
         return countryHealthDataService.getBenchmarkDetailsFor(countryId, benchmarkType);
     }
 

@@ -41,7 +41,7 @@ public class CountryHealthIndicatorService {
 
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
-                .findHealthIndicatorsFor(countryId));
+                .findHealthIndicatorsByCountryIdAndStatus(countryId, PUBLISHED.name()));
         return constructCountryHealthScore(countryId, countryHealthIndicators,
                 getCategoryPhaseFilter(null, null));
     }

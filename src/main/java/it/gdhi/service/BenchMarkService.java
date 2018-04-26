@@ -26,9 +26,9 @@ public class BenchMarkService {
     private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
 
-    private Map<Integer, Double> calculateBenchmarkScoresForIndicators(String benchmarkType) {
-        List<CountryHealthIndicator> publishedCountryHealthIndicators = iCountryHealthIndicatorRepository
-                .findHealthIndicatorsByStatus(PUBLISHED.name());
+    private Map<Integer, Double> calculateBenchmarkScoresForIndicators(Integer benchmarkType) {
+        List<CountryHealthIndicator> publishedCountryHealthIndicators =
+                iCountryHealthIndicatorRepository.findHealthIndicatorsByStatusAndPhase(PUBLISHED.name(), benchmarkType);
 
         Map<Integer, Double> indicatorBenchmarkScores = publishedCountryHealthIndicators.stream()
                 .filter(indicator -> indicator.isScoreValid() && indicator.getIndicator().getParentId() == null)
@@ -39,14 +39,16 @@ public class BenchMarkService {
     }
 
 
-    Map<Integer, BenchmarkDto> getBenchmarkFor(String countryId, String benchmarkType) {
+    Map<Integer, BenchmarkDto> getBenchmarkFor(String countryId, Integer benchmarkType) {
         Map<Integer, Double> indicatorBenchmarkScores = calculateBenchmarkScoresForIndicators(benchmarkType);
 
         List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository
                 .findHealthIndicatorsByCountryIdAndStatus(countryId, PUBLISHED.name());
 
         Map<Integer, BenchmarkDto> benchmarkScoresForCountry = countryHealthIndicator.stream()
-                .filter(indicator -> (indicator.isScoreValid() && indicator.getIndicator().getParentId() == null))
+                .filter(indicator -> (indicator.isScoreValid() &&
+                        indicatorBenchmarkScores.containsKey(indicator.getIndicatorId())
+                        && indicator.getIndicator().getParentId() == null))
                 .collect(Collectors.toMap(CountryHealthIndicator::getIndicatorId,
                         indicator -> constructBenchMarkDto(indicator.getScore(),
                                 indicatorBenchmarkScores.get(indicator.getIndicatorId()))));
