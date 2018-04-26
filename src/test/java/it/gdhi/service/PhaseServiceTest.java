@@ -9,10 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +40,8 @@ public class PhaseServiceTest {
 
         List<PhaseDto> actualPhaseDtos = phaseService.getPhaseOptions();
         assertEquals(3, actualPhaseDtos.size());
-        assertEquals(expectedPhaseDtos, actualPhaseDtos);
+        assertThat(expectedPhaseDtos.get(0)).isEqualToComparingFieldByField(actualPhaseDtos.get(0));
+        assertThat(expectedPhaseDtos.get(1)).isEqualToComparingFieldByField(actualPhaseDtos.get(1));
+        assertThat(expectedPhaseDtos.get(2)).isEqualToComparingFieldByField(actualPhaseDtos.get(2));
     }
 }

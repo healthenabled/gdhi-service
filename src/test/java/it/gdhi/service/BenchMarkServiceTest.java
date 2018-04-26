@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 
 import static it.gdhi.utils.FormStatus.PUBLISHED;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -58,9 +59,10 @@ public class BenchMarkServiceTest {
 
         Map<Integer, BenchmarkDto> benchmarkFor = benchMarkService.getBenchmarkFor(countryId, benchmarkType);
 
-        assertTrue(expectedBenchMark.equals(benchmarkFor));
+        assertThat(expectedBenchMark.get(indicatorId1)).isEqualToComparingFieldByField(benchmarkFor.get(indicatorId1));
+        assertThat(expectedBenchMark.get(indicatorId2)).isEqualToComparingFieldByField(benchmarkFor.get(indicatorId2));
+        assertThat(expectedBenchMark.get(indicatorId3)).isEqualToComparingFieldByField(benchmarkFor.get(indicatorId3));
     }
-
 
     @Test
     public void shouldGetGlobalBenchmarkForACountryWithSomeCountryHavingNA() {
@@ -126,7 +128,8 @@ public class BenchMarkServiceTest {
 
         Map<Integer, BenchmarkDto> benchmarkFor = benchMarkService.getBenchmarkFor(countryId, benchmarkType);
 
-        assertTrue(expectedBenchMark.equals(benchmarkFor));
+        assertThat(expectedBenchMark.get(indicatorId1)).isEqualToComparingFieldByField(benchmarkFor.get(indicatorId1));
+        assertThat(expectedBenchMark.get(indicatorId2)).isEqualToComparingFieldByField(benchmarkFor.get(indicatorId2));
     }
 
     private CountryHealthIndicator buildCountryHealthIndicator(Integer indicatorId, String countryId, Integer score) {
