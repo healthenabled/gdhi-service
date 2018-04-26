@@ -179,10 +179,10 @@ public class CountryControllerTest {
     }
 
     @Test
-    public void shouldGetAdminViewFormDetails() {
-        when(countryHealthDataService.getAdminViewFormDetails()).thenReturn(emptyMap());
-        countryController.getAdminViewFormDetails();
-        verify(countryHealthDataService).getAdminViewFormDetails();
+    public void shouldGetAllCountryStatusSummaries() {
+        when(countryHealthDataService.getAllCountryStatusSummaries()).thenReturn(emptyMap());
+        countryController.getAllCountryStatusSummaries();
+        verify(countryHealthDataService).getAllCountryStatusSummaries();
     }
 
     @Test

@@ -177,23 +177,14 @@ public class CountryHealthDataService {
         iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
     }
 
-    public Map<String, List<AdminViewFormDetailsDto>> getAdminViewFormDetails() {
+    public Map<String, List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
         List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
 
-        List<AdminViewFormDetailsDto> adminViewFormDetailsDtoList = countrySummaries
-                .stream()
-                .map(dto -> new AdminViewFormDetailsDto(
-                        dto.getCountry().getName(),
-                        dto.getCountry().getUniqueId(),
-                        dto.getCountrySummaryId().getStatus(),
-                        dto.getContactName(),
-                        dto.getContactEmail()
-                ))
-                .collect(toList());
+        List<CountrySummaryStatusDto> countrySummaryStatusDtos = countrySummaries
+                .stream().map(CountrySummaryStatusDto::new).collect(toList());
 
-
-        return adminViewFormDetailsDtoList.stream()
-                .collect(groupingBy(AdminViewFormDetailsDto::getStatus));
+        return countrySummaryStatusDtos.stream()
+                .collect(groupingBy(CountrySummaryStatusDto::getStatus));
     }
 
     public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, String benchmarkType) {

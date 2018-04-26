@@ -145,9 +145,9 @@ public class CountryController {
         countryHealthDataService.deleteCountryData(countryUIID);
     }
 
-    @RequestMapping("/admin/view_form_details")
-    public Map<String , List<AdminViewFormDetailsDto>> getAdminViewFormDetails() {
-        return countryHealthDataService.getAdminViewFormDetails();
+    @RequestMapping("/countries/country_status_summaries")
+    public Map<String , List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
+        return countryHealthDataService.getAllCountryStatusSummaries();
     }
 
     @RequestMapping(value = "/countries/{id}/benchmark/{type}", method = RequestMethod.GET)

@@ -241,15 +241,15 @@ public class CountryHealthDataServiceTest {
 
         when(iCountrySummaryRepository.getAll()).thenReturn(asList(countrySummaryIND,countrySummaryARG,
                 countrySummaryALG,countrySummaryINDNEW));
-        Map<String, List<AdminViewFormDetailsDto>> adminViewFormDetails = countryHealthDataService.getAdminViewFormDetails();
+        Map<String, List<CountrySummaryStatusDto>> adminViewFormDetails = countryHealthDataService.getAllCountryStatusSummaries();
         assertEquals(adminViewFormDetails.get("NEW").size(), 2);
         assertEquals(adminViewFormDetails.get("REVIEW_PENDING").size(), 1);
 
-        AdminViewFormDetailsDto adminViewFormDetailsDto = adminViewFormDetails.get("REVIEW_PENDING").stream().findFirst().get();
+        CountrySummaryStatusDto countrySummaryStatusDto = adminViewFormDetails.get("REVIEW_PENDING").stream().findFirst().get();
 
-        assertEquals(adminViewFormDetailsDto.getContactName(), "Contact Name 1");
-        assertEquals(adminViewFormDetailsDto.getContactEmail(), "con1@gdhi.com");
-        assertEquals(adminViewFormDetailsDto.getCountryName(), "ARGENTINA");
+        assertEquals(countrySummaryStatusDto.getContactName(), "Contact Name 1");
+        assertEquals(countrySummaryStatusDto.getContactEmail(), "con1@gdhi.com");
+        assertEquals(countrySummaryStatusDto.getCountryName(), "ARGENTINA");
     }
 
     @Test

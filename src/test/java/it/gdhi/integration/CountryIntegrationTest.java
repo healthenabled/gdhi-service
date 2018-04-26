@@ -310,7 +310,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         Response response = given()
                 .contentType("application/json")
                 .when()
-                .get("http://localhost:" + port + "/admin/view_form_details");
+                .get("http://localhost:" + port + "/countries/country_status_summaries");
 
         String expectedJson = "{\n" +
                 "  \"NEW\": [{\n" +
