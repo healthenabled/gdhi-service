@@ -43,7 +43,7 @@ public class BenchMarkService {
         Map<Integer, Double> indicatorBenchmarkScores = calculateBenchmarkScoresForIndicators(benchmarkType);
 
         List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository
-                .findHealthIndicatorsFor(countryId);
+                .findHealthIndicatorsByCountryIdAndStatus(countryId, PUBLISHED.name());
 
         Map<Integer, BenchmarkDto> benchmarkScoresForCountry = countryHealthIndicator.stream()
                 .filter(indicator -> (indicator.isScoreValid() && indicator.getIndicator().getParentId() == null))

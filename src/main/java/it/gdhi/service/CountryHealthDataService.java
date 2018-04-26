@@ -3,18 +3,23 @@ package it.gdhi.service;
 import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
+import it.gdhi.model.CountryHealthIndicators;
 import it.gdhi.model.CountrySummary;
+import it.gdhi.model.Score;
+import it.gdhi.model.CountryPhase;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountryResourceLinkRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -42,7 +47,13 @@ public class CountryHealthDataService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Autowired
+    private ICountryPhaseRepository iCountryPhaseRepository;
+
+    @Autowired
     private BenchMarkService benchmarkService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire, String nextStatus) {
@@ -54,6 +65,14 @@ public class CountryHealthDataService {
                 nextStatus, gdhiQuestionnaire.getCountrySummary());
         saveHealthIndicators(gdhiQuestionnaire.getCountryId(),
                 nextStatus, gdhiQuestionnaire.getHealthIndicators());
+    }
+
+    private void calculateAndSaveCountryPhase(String countryId, String status) {
+        CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
+                .findHealthIndicatorsByCountryIdAndStatus(countryId, status));
+        Double overallScore = countryHealthIndicators.getOverallScore();
+        Integer countryPhase = new Score(overallScore).convertToPhase();
+        iCountryPhaseRepository.save(new CountryPhase(countryId, countryPhase));
     }
 
     private void removeEntriesWithStatus(String countryId, String currentStatus) {
@@ -83,8 +102,11 @@ public class CountryHealthDataService {
         List<CountryHealthIndicator> countryHealthIndicators = transformToHealthIndicator(countryId, status,
                 healthIndicatorDto);
         if (countryHealthIndicators != null) {
-            countryHealthIndicators.forEach(health ->
-                    iCountryHealthIndicatorRepository.save(health));
+            countryHealthIndicators.forEach(health -> {
+                CountryHealthIndicator countryHealthIndicator = iCountryHealthIndicatorRepository.save(health);
+                entityManager.flush();
+                entityManager.refresh(countryHealthIndicator);
+            });
         }
     }
 
@@ -132,6 +154,7 @@ public class CountryHealthDataService {
     @Transactional
     public void publish(GdhiQuestionnaire gdhiQuestionnaire) {
         save(gdhiQuestionnaire, PUBLISHED.name());
+        calculateAndSaveCountryPhase(gdhiQuestionnaire.getCountryId(), PUBLISHED.name());
     }
 
     @Transactional

@@ -1,14 +1,9 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
-import it.gdhi.model.Country;
-import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountrySummary;
+import it.gdhi.model.*;
 import it.gdhi.model.id.CountrySummaryId;
-import it.gdhi.repository.ICountryHealthIndicatorRepository;
-import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
-import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.repository.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -17,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 import static it.gdhi.utils.FormStatus.*;
@@ -42,9 +38,14 @@ public class CountryHealthDataServiceTest {
     MailerService mailerService;
     @Mock
     ICountryRepository countryDetailRepository;
+    @Mock
+    EntityManager entityManager;
+    @Mock
+    ICountryPhaseRepository iCountryPhaseRepository;
+
 
     @Test
-    public void shouldSaveDetailsForACountry() throws Exception {
+    public void shouldPublishDetailsForACountry() throws Exception {
         List<String> resourceLinks = asList("Res 1");
         CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder().summary("Summary 1")
                 .resources(resourceLinks).build();
@@ -55,12 +56,23 @@ public class CountryHealthDataServiceTest {
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
 
+        Indicator indicator1 = Indicator.builder().indicatorId(1).parentId(null).build();
+        CountryHealthIndicator countryHealthIndicator1 = CountryHealthIndicator.builder()
+                .indicator(indicator1)
+                .score(2)
+                .category(Category.builder().id(1).indicators(Arrays.asList(indicator1)).build())
+                .build();
+
+
+        when(iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId, status))
+                .thenReturn(asList(countryHealthIndicator1));
         when(iCountrySummaryRepository.getCountrySummaryStatus(countryId)).thenReturn(status);
         countryHealthDataService.publish(gdhiQuestionnaire);
 
         ArgumentCaptor<CountrySummary> summaryCaptor = ArgumentCaptor.forClass(CountrySummary.class);
         ArgumentCaptor<CountryHealthIndicator> healthIndicatorsCaptorList = ArgumentCaptor.forClass(CountryHealthIndicator.class);
-        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository, iCountryHealthIndicatorRepository);
+        InOrder inOrder = inOrder(iCountryResourceLinkRepository, iCountrySummaryRepository,
+                iCountryHealthIndicatorRepository, iCountryPhaseRepository);
         inOrder.verify(iCountryResourceLinkRepository).deleteResources(countryId, status);
         inOrder.verify(iCountrySummaryRepository).save(summaryCaptor.capture());
         inOrder.verify(iCountryHealthIndicatorRepository).save(healthIndicatorsCaptorList.capture());
@@ -69,6 +81,11 @@ public class CountryHealthDataServiceTest {
         assertThat(summaryCaptorValue.getSummary(), is("Summary 1"));
         assertThat(summaryCaptorValue.getCountryResourceLinks().get(0).getLink(), is("Res 1"));
         assertThat(healthIndicatorsCaptorList.getValue().getCountryHealthIndicatorId().getCategoryId(), is(1));
+        ArgumentCaptor<CountryPhase> phaseDetailsCaptor = ArgumentCaptor.forClass(CountryPhase.class);
+        inOrder.verify(iCountryPhaseRepository).save(phaseDetailsCaptor.capture());
+        assertThat(phaseDetailsCaptor.getValue().getCountryOverallPhase(), is(2));
+        assertThat(phaseDetailsCaptor.getValue().getCountryId(), is(countryId));
+
     }
 
     @Test
