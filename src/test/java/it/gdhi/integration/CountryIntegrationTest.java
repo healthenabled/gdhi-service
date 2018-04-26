@@ -22,7 +22,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -32,7 +35,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
@@ -132,26 +134,42 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 "link1",status), new Date(), null);
         CountryResourceLink countryResourceLink2 = new CountryResourceLink(new CountryResourceLinkId(countryId,
                 "link2",status), new Date(), null);
-        Integer categoryId1 = 1;
-        Integer categoryId2 = 2;
-        Integer categoryId3 = 3;
-        Integer indicatorId1_1 = 1;
-        Integer indicatorId1_2 = 2;
-        Integer indicatorId2_1 = 3;
-        Integer indicatorId2_2 = 4;
-        Integer indicatorId3_1 = 5;
-        Integer indicatorId3_2 = 6;
         List<CountryResourceLink> countryResourceLinks = asList(countryResourceLink1, countryResourceLink2);
 
         addCountrySummary(countryId, "India", status, alpha2code, INDIA_UUID, "04-04-2018", countryResourceLinks);
 
         List<HealthIndicatorDto> healthIndicatorDtos = asList(
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp1").build(),
-                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
+                HealthIndicatorDto.builder().categoryId(1).indicatorId(1).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(1).indicatorId(2).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(2).indicatorId(3).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(2).indicatorId(4).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(3).indicatorId(5).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(3).indicatorId(6).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(3).indicatorId(7).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(3).indicatorId(8).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(9).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(10).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(11).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(12).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(5).indicatorId(13).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(5).indicatorId(14).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(6).indicatorId(15).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(6).indicatorId(16).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(17).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(18).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(19).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(20).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(21).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(22).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(23).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(24).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(25).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(4).indicatorId(26).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(27).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(28).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(29).status(status).score(1).supportingText("blah@blah.com").build(),
+                HealthIndicatorDto.builder().categoryId(7).indicatorId(30).status(status).score(1).supportingText("blah@blah.com").build());
+
 
         setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
 
@@ -159,15 +177,13 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:" + port + "/countries/" + INDIA_UUID.toString());
-
-        assertResponse(response.asString(), "country_body.json");
+        String responseJson = response.asString();
+        assertResponse(responseJson, "country_body.json");
     }
 
     @Test
     public void shouldSaveCountryDetailsWhenNoDateIsProvided() throws Exception {
         addCountrySummary(INDIA_ID, "India", "NEW", "IN", UUID.randomUUID(), "04-04-2018", new ArrayList<>());
-        mailerService = mock(MailerService.class);
-        doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
 
         Response response = given()
                 .contentType("application/json")
@@ -211,8 +227,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:" + port + "/countries/" + INDIA_UUID.toString());
-
-        assertResponse(response.asString(), "country_body.json");
+        String responseJson = response.asString();
+        assertResponse(responseJson, "country_body.json");
 
         response = given()
                 .contentType("application/json")
@@ -226,18 +242,13 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:" + port + "/countries/" + INDIA_UUID.toString());
-
-        assertResponse(response.asString(), "country_body_edit.json");
+        responseJson = response.asString();
+        assertResponse(responseJson, "country_body_edit.json");
     }
 
     @Test
     public void shouldSubmitCountryDetails() throws Exception {
         addCountrySummary(INDIA_ID, "India", "NEW", "IN", UUID.randomUUID(),  "2018-04-04", new ArrayList<>());
-        mailerService = mock(MailerService.class);
-        doNothing().when(mailerService).send(any(Country.class), anyString(), anyString(), anyString());
-
-        countryHealthDataService = mock(CountryHealthDataService.class);
-        when(countryHealthDataService.validateRequiredFields(any())).thenReturn(true);
 
         Response response = given()
                 .contentType("application/json")
@@ -251,8 +262,8 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:" + port + "/countries/" + INDIA_UUID.toString());
-
-        assertResponse(response.asString(), "country_body_review_pending.json");
+        String responseJson = response.asString();
+        assertResponse(responseJson, "country_body_review_pending.json");
     }
 
     @Test

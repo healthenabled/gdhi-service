@@ -13,10 +13,8 @@ import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -65,10 +63,15 @@ public class CountryService {
             List<CountryHealthIndicator> countryHealthIndicators =
                     iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus(countryId,
                             countrySummary.getCountrySummaryId().getStatus());
+
+            List<CountryHealthIndicator> sortedCountryHealthIndicators = countryHealthIndicators.stream().sorted(
+                    Comparator.comparing(o -> o.getIndicator().getRank()))
+                    .collect(Collectors.toList());
+
             CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
                     .map(CountrySummaryDto::new)
                     .orElse(null);
-            List<HealthIndicatorDto> healthIndicatorDtos = countryHealthIndicators.stream()
+            List<HealthIndicatorDto> healthIndicatorDtos = sortedCountryHealthIndicators.stream()
                     .map(HealthIndicatorDto::new)
                     .collect(toList());
             gdhiQuestionnaire = new GdhiQuestionnaire(countryId, countrySummary.getCountrySummaryId().getStatus(),

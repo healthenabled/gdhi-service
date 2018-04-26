@@ -43,6 +43,8 @@ public class CountryHealthDataServiceTest {
     @Mock
     ICountryPhaseRepository iCountryPhaseRepository;
 
+    @Mock
+    CategoryIndicatorService categoryIndicatorService;
 
     @Test
     public void shouldPublishDetailsForACountry() throws Exception {
@@ -274,10 +276,11 @@ public class CountryHealthDataServiceTest {
                 .countryName(countryName)
                 .resources(resourceLinks)
                 .build();
-
+        List<HealthIndicatorDto> healthIndicatorDtos = getHealthIndicatorDto(1, "some text");
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
-                .healthIndicators(asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, "Some Text 1"))).build();
+                .healthIndicators(healthIndicatorDtos).build();
 
         assertTrue(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire));
     }
@@ -291,7 +294,8 @@ public class CountryHealthDataServiceTest {
                 .resources(resourceLinks)
                 .build();
 
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, "REVIEW_PENDING", 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = getHealthIndicatorDto(1, "some text");
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
@@ -320,7 +324,9 @@ public class CountryHealthDataServiceTest {
                 .countryName(countryName)
                 .build();
 
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = getHealthIndicatorDto(1, "some text");
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
+
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtos).build();
@@ -374,7 +380,9 @@ public class CountryHealthDataServiceTest {
                 .resources(resourceLinks)
                 .build();
 
-        List<HealthIndicatorDto> healthIndicatorDtos = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtos = getHealthIndicatorDto(1, "some text");
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
+
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailBefore2010)
                 .healthIndicators(healthIndicatorDtos).build();
@@ -390,7 +398,7 @@ public class CountryHealthDataServiceTest {
     }
 
     @Test
-    public void shouldFalseIfIndicatorDataIsInvalid() {
+    public void shouldReturnFalseIfIndicatorDataIsInvalid() {
         String countryId = "AUS";
         String countryName = "Australia";
         List<String> resourceLinks = asList("Res 1");
@@ -412,20 +420,89 @@ public class CountryHealthDataServiceTest {
                 .resources(resourceLinks)
                 .build();
 
-        List<HealthIndicatorDto> healthIndicatorDtosWithInvalidScore = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", -2, "Text"));
+        List<HealthIndicatorDto> healthIndicatorDtoList = getHealthIndicatorDto(-2, "some text");
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
+
+        List<HealthIndicatorDto> healthIndicatorDtosWithInvalidScore = healthIndicatorDtoList;
         GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtosWithInvalidScore).build();
 
         assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire));
 
-        List<HealthIndicatorDto> healthIndicatorDtosWithInvalidSupportingText = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 2, ""));
+        List<HealthIndicatorDto> healthIndicatorDtosWithInvalidSupportingText = getHealthIndicatorDto(2, "");;
+
         GdhiQuestionnaire gdhiQuestionnaire1 = GdhiQuestionnaire.builder().countryId(countryId)
                 .countrySummary(countrySummaryDetailDto)
                 .healthIndicators(healthIndicatorDtosWithInvalidSupportingText).build();
 
         assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire1));
 
+        List<HealthIndicatorDto> healthIndicatorDtoWithNull =  new ArrayList<>();
+        for(int i=0;i<30;i++){
+            healthIndicatorDtoList.add(null);
+        }
+
+        GdhiQuestionnaire gdhiQuestionnaire2 = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDtoWithNull).build();
+
+        assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire2));
+
+        List<HealthIndicatorDto> healthIndicatorDtosWithNullScore = getHealthIndicatorDto(null, "something");
+
+        GdhiQuestionnaire gdhiQuestionnaire3 = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDtosWithNullScore).build();
+
+        assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire3));
+
+        List<HealthIndicatorDto> healthIndicatorDtosWithNullSupoortText = getHealthIndicatorDto(1, null);
+
+        GdhiQuestionnaire gdhiQuestionnaire4 = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDtosWithNullSupoortText).build();
+
+        assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire4));
+
+        GdhiQuestionnaire gdhiQuestionnaire5 = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(null).build();
+
+        assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire5));
+    }
+
+    @Test
+    public void shouldReturnFalseIfAllIndicatorsAreNotPresent() {
+        String countryId = "AUS";
+        String countryName = "Australia";
+        List<String> resourceLinks = asList("Res 1");
+        CountrySummaryDto countrySummaryDetailDto = CountrySummaryDto.builder()
+                .summary("Summary 1")
+                .collectedDate(new Date())
+                .dataFeederEmail("feeder@email.com")
+                .dataFeederName("feeder")
+                .dataFeederRole("feeder role")
+                .contactEmail("contact@test.com")
+                .contactDesignation("some designation")
+                .contactName("some contact name")
+                .contactOrganization("contact org")
+                .dataApproverEmail("approver@email.com")
+                .dataApproverName("Some approver name")
+                .dataApproverRole("some approver role")
+                .countryId(countryId)
+                .countryName(countryName)
+                .resources(resourceLinks)
+                .build();
+
+        List<HealthIndicatorDto> healthIndicatorDto = asList(new HealthIndicatorDto(1, 1, "PUBLISHED", 1, "Text"));
+        when(categoryIndicatorService.getHealthIndicatorCount()).thenReturn(30);
+
+        GdhiQuestionnaire gdhiQuestionnaire = GdhiQuestionnaire.builder().countryId(countryId)
+                .countrySummary(countrySummaryDetailDto)
+                .healthIndicators(healthIndicatorDto).build();
+
+        assertFalse(countryHealthDataService.validateRequiredFields(gdhiQuestionnaire));
     }
 
     private CountrySummary getCountrySummary(String countryId , String statusValue , String countryName ,
@@ -439,5 +516,13 @@ public class CountryHealthDataServiceTest {
                 .contactEmail(contactEmail)
                 .countryResourceLinks(emptyList())
                 .build();
+    }
+
+    private List<HealthIndicatorDto> getHealthIndicatorDto(Integer score, String supportText) {
+        List<HealthIndicatorDto> healthIndicatorDtoList =  new ArrayList<>();
+        for(int i=0;i<30;i++){
+            healthIndicatorDtoList.add(new HealthIndicatorDto(1, 1, "PUBLISHED", score, supportText));
+        }
+        return healthIndicatorDtoList;
     }
 }

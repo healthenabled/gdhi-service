@@ -1,19 +1,10 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
-import it.gdhi.model.Country;
-import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountryHealthIndicators;
-import it.gdhi.model.CountrySummary;
-import it.gdhi.model.Score;
-import it.gdhi.model.CountryPhase;
+import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountrySummaryId;
-import it.gdhi.repository.ICountryHealthIndicatorRepository;
-import it.gdhi.repository.ICountryRepository;
-import it.gdhi.repository.ICountryResourceLinkRepository;
-import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.repository.ICountryPhaseRepository;
+import it.gdhi.repository.*;
 import it.gdhi.utils.FormStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +45,9 @@ public class CountryHealthDataService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    CategoryIndicatorService categoryIndicatorService;
 
     @Transactional
     public void save(GdhiQuestionnaire gdhiQuestionnaire, String nextStatus) {
@@ -199,9 +193,16 @@ public class CountryHealthDataService {
     }
 
     private boolean verifyIndicators(List<HealthIndicatorDto> healthIndicators) {
-        return healthIndicators.stream().noneMatch(healthIndicatorDto
-                -> StringUtils.isEmpty(healthIndicatorDto.getSupportingText())
-        || healthIndicatorDto.getScore() < -1);
+       int count = categoryIndicatorService.getHealthIndicatorCount();
+
+        return (healthIndicators != null)
+                && (count == healthIndicators.size())
+                && healthIndicators.stream().noneMatch(healthIndicatorDto
+                -> healthIndicatorDto == null
+                    ||healthIndicatorDto.getScore() == null
+                    || (StringUtils.isEmpty(healthIndicatorDto.getSupportingText())
+                    || healthIndicatorDto.getScore() < -1)
+                );
     }
 
     private boolean verifyResources(List<String> resources) {

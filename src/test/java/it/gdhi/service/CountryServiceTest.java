@@ -3,10 +3,7 @@ package it.gdhi.service;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.model.Country;
-import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountryResourceLink;
-import it.gdhi.model.CountrySummary;
+import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountryResourceLinkId;
 import it.gdhi.model.id.CountrySummaryId;
@@ -20,10 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -139,10 +133,12 @@ public class CountryServiceTest {
         when(countryDetailRepository.findByUUID(countryUUID)).thenReturn(country);
         CountryHealthIndicator indicator1 = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 1, 2, statusValue))
+                .indicator(new Indicator(2,"Some indicator","some code",1,null,new ArrayList<>(),"some def"))
                 .score(5)
                 .build();
         CountryHealthIndicator indicator2 = CountryHealthIndicator.builder()
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(countryId, 2, 3, statusValue))
+                .indicator(new Indicator(3,"Some indicator","some code",2,null,new ArrayList<>(),"some def"))
                 .score(4)
                 .build();
         List<CountryHealthIndicator> countryHealthIndicators = asList(indicator1, indicator2);
