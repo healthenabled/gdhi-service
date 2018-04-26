@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -138,7 +137,7 @@ public class CountryControllerTest {
         CountryUrlGenerationStatusDto expected = new CountryUrlGenerationStatusDto(countryId, true, null);
         when(countryHealthDataService.saveNewCountrySummary(countryUUID)).thenReturn(expected);
 
-        CountryUrlGenerationStatusDto actualResponse = countryController.saveUrlGenerationStatus(countryUUID);
+        CountryUrlGenerationStatusDto actualResponse = countryController.saveNewCountrySummary(countryUUID);
 
         assertSame(actualResponse, expected);
     }

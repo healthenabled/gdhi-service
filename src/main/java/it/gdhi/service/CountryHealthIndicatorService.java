@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -40,7 +39,6 @@ public class CountryHealthIndicatorService {
     @Autowired
     private ExcelUtilService excelUtilService;
 
-    @Transactional
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
                 .findHealthIndicatorsFor(countryId));
@@ -48,7 +46,6 @@ public class CountryHealthIndicatorService {
                 getCategoryPhaseFilter(null, null));
     }
 
-    @Transactional
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase) {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
                 .findByCategoryAndStatus(categoryId, PUBLISHED.name());
@@ -67,7 +64,6 @@ public class CountryHealthIndicatorService {
         return new CountriesHealthScoreDto(globalHealthScores);
     }
 
-    @Transactional
     public GlobalHealthScoreDto getGlobalHealthIndicator(Integer categoryId, Integer phase) {
         CountriesHealthScoreDto countries = this.fetchCountriesHealthScores(categoryId, phase);
         List<CategoryHealthScoreDto> categories = getCategoriesInCountries(countries);

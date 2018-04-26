@@ -120,8 +120,9 @@ public class CountryController {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 
-    @RequestMapping(value = "/countries/{uuid}/url_gen_status", method = RequestMethod.POST)
-    public CountryUrlGenerationStatusDto saveUrlGenerationStatus(@PathVariable("uuid") UUID countryUIID)
+    //TODO: add integration test for this endpoint
+    @RequestMapping(value = "/countries/{uuid}/generate_url", method = RequestMethod.POST)
+    public CountryUrlGenerationStatusDto saveNewCountrySummary(@PathVariable("uuid") UUID countryUIID)
             throws Exception {
         return countryHealthDataService.saveNewCountrySummary(countryUIID);
     }
