@@ -6,6 +6,7 @@ import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
 import it.gdhi.model.*;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
+import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class CountryHealthIndicatorService {
 
     @Autowired
     private ICountrySummaryRepository iCountrySummaryRepository;
+
+    @Autowired
+    private ICountryPhaseRepository iCountryPhaseRepository;
 
     @Autowired
     private ExcelUtilService excelUtilService;
@@ -123,14 +127,14 @@ public class CountryHealthIndicatorService {
                                                               CountryHealthIndicators countryHealthIndicators,
                                                               Predicate<? super CategoryHealthScoreDto> phaseFilter) {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
-        Double overallScore = countryHealthIndicators.getOverallScore();
+        CountryPhase countryPhase = iCountryPhaseRepository.findOne(countryId);
         CountrySummary countrySummary = iCountrySummaryRepository.
                 findByCountryAndStatus(countryId, PUBLISHED.name());
         String collectedDateStr = countrySummary != null && countrySummary.getCollectedDate() != null ?
                 new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
-                overallScore, categoryDtos, (new Score(overallScore)).convertToPhase(), collectedDateStr);
+                categoryDtos, countryPhase.getCountryOverallPhase(), collectedDateStr);
     }
 
 

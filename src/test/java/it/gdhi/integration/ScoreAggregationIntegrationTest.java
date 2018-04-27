@@ -4,8 +4,10 @@ import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
 import it.gdhi.model.Country;
+import it.gdhi.model.CountryPhase;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountrySummaryId;
+import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +36,9 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ICountrySummaryRepository countrySummaryRepository;
 
+    @Autowired
+    private ICountryPhaseRepository iCountryPhaseRepository;
+
     private void addCountrySummary(String countryId, String countryName, String alpha2code) throws  Exception{
         String status = "PUBLISHED";
         SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
@@ -57,6 +62,11 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 .countryResourceLinks(new ArrayList<>())
                 .build();
         countrySummaryRepository.save(countrySummary);
+    }
+
+    private void addCountryPhase(String countryId, Integer phase) {
+        CountryPhase countryPhase = CountryPhase.builder().countryId(countryId).countryOverallPhase(phase).build();
+        iCountryPhaseRepository.save(countryPhase);
     }
 
     @Test
@@ -91,6 +101,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(4).supportingText("sp7").build(),
@@ -102,6 +113,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
+
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -113,6 +126,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(india, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -155,6 +169,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -166,6 +181,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -177,6 +193,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -219,6 +236,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -230,6 +248,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -241,6 +260,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -283,6 +303,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp19").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -294,6 +315,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp20").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -305,6 +327,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -344,6 +367,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(4).supportingText("sp7").build(),
@@ -354,6 +378,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -364,6 +389,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -402,6 +428,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -412,6 +439,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -422,6 +450,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -460,6 +489,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -470,6 +500,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
 
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -480,6 +511,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
@@ -518,6 +550,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
 
         setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp7").build(),
@@ -527,8 +560,8 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
-
         setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 3);
 
         healthIndicatorDtos = asList(
                 HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
@@ -539,6 +572,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")

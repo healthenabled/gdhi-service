@@ -4,7 +4,6 @@
       "countryId": "IND",
       "countryName": "India",
       "countryAlpha2Code": "IN",
-      "overallScore": 2.0,
       "categories": [
         {
           "id": 1,
@@ -33,14 +32,13 @@
           ]
         }
       ],
-      "countryPhase": 2,
+      "countryPhase": 3,
       "collectedDate": "April 2018"
     },
     {
       "countryId": "PAK",
       "countryName": "Pakistan",
       "countryAlpha2Code": "PK",
-      "overallScore": null,
       "categories": [
         {
           "id": 1,
@@ -76,7 +74,6 @@
       "countryId": "GBR",
       "countryName": "United Kingdom",
       "countryAlpha2Code": "GB",
-      "overallScore": 3.0,
       "categories": [
         {
           "id": 1,
