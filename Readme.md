@@ -14,6 +14,11 @@ connect to DB gdhi
 
 3. Execute `sh ./utils/set-up-git-hooks.sh` from base folder to validate commit message format.
 
+4. Upon the server start, hit the following endpoint to populate the country overall phase (Only for Published Countries.)
+
+```
+   localhost:8080/api/admin/countries/calculate_phase
+```
 **To Run**
 
 1. Run by executing
