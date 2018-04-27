@@ -96,6 +96,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
 
         setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
+        setUpCountryPhase(countryId, 2);
 
         Response response = given()
                 .contentType("application/json")

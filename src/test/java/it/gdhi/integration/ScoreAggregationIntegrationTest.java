@@ -126,7 +126,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 HealthIndicatorDto.builder().categoryId(categoryId4).indicatorId(indicatorId4_1).status(status).score(null).supportingText("sp21").build());
 
         setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
-        addCountryPhase(india, null);
+        addCountryPhase(pakistan, null);
 
         Response response = given()
                 .contentType("application/json")
