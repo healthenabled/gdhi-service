@@ -12,6 +12,9 @@ public interface ICountrySummaryRepository extends Repository<CountrySummary, St
     @Query("SELECT c FROM CountrySummary c WHERE c.countrySummaryId.countryId = UPPER(?1)")
     CountrySummary findOne(String countryId);
 
+    @Query("SELECT c.countrySummaryId.countryId  FROM CountrySummary c WHERE c.countrySummaryId.status= UPPER(?1)")
+    List<String> findAllByStatus(String status);
+
     @Query("SELECT c FROM CountrySummary c WHERE c.countrySummaryId.countryId = UPPER(?1) and" +
             " c.countrySummaryId.status= UPPER(?2)")
     CountrySummary findByCountryAndStatus(String countryId, String status);

@@ -143,4 +143,8 @@ public class CountryController {
         return countryHealthDataService.getBenchmarkDetailsFor(countryId, benchmarkType);
     }
 
+    @RequestMapping(value = "/admin/countries/calculate_phase", method = RequestMethod.GET)
+    public void calculateCountryPhase() {
+        countryHealthDataService.calculatePhaseForAllCountries();
+    }
 }

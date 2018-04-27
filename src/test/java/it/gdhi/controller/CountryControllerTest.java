@@ -176,4 +176,11 @@ public class CountryControllerTest {
         countryController.getBenchmarkDetailsFor(countryID, benchmarkType);
         verify(countryHealthDataService).getBenchmarkDetailsFor(countryID, benchmarkType);
     }
+
+    @Test
+    public void shouldCalculatePhaseForAllCountries() {
+        doNothing().when(countryHealthDataService).calculatePhaseForAllCountries();
+        countryController.calculateCountryPhase();
+        verify(countryHealthDataService).calculatePhaseForAllCountries();
+    }
 }

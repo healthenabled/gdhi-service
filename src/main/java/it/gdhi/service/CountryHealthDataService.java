@@ -61,6 +61,90 @@ public class CountryHealthDataService {
                 nextStatus, gdhiQuestionnaire.getHealthIndicators());
     }
 
+
+    public CountryUrlGenerationStatusDto saveNewCountrySummary(UUID countryUUID) {
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
+
+        CountryUrlGenerationStatusDto statusDto;
+
+        String currentStatus = getStatusOfCountrySummary(countryId);
+
+        if (isNull(currentStatus) || currentStatus.equalsIgnoreCase(PUBLISHED.toString())) {
+            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW.toString()),
+                    new CountrySummaryDto());
+            iCountrySummaryRepository.save(countrySummary);
+            statusDto = new CountryUrlGenerationStatusDto(countryId, true, isNull(currentStatus) ? null :
+                    FormStatus.valueOf(currentStatus));
+        } else {
+            statusDto = new CountryUrlGenerationStatusDto(countryId, false, FormStatus.valueOf(currentStatus));
+        }
+        return statusDto;
+    }
+
+    @Transactional
+    public void publish(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, PUBLISHED.name());
+        calculateAndSaveCountryPhase(gdhiQuestionnaire.getCountryId(), PUBLISHED.name());
+    }
+
+    @Transactional
+    public void submit(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, REVIEW_PENDING.name());
+        sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
+                gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
+    }
+
+    @Transactional
+    public void saveCorrection(GdhiQuestionnaire gdhiQuestionnaire) {
+        save(gdhiQuestionnaire, REVIEW_PENDING.name());
+    }
+
+    @Transactional
+    public void deleteCountryData(UUID countryUUID) {
+        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
+        iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, REVIEW_PENDING.name());
+        iCountryResourceLinkRepository.deleteResources(countryId, REVIEW_PENDING.name());
+        iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
+    }
+
+    @Transactional
+    public void calculatePhaseForAllCountries() {
+        List<String> publishedCountries = iCountrySummaryRepository.findAllByStatus(PUBLISHED.name());
+        publishedCountries.stream().forEach(country -> calculateAndSaveCountryPhase(country, PUBLISHED.name()));
+    }
+
+    public Map<String, List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
+        List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
+
+        List<CountrySummaryStatusDto> countrySummaryStatusDtos = countrySummaries
+                .stream().map(CountrySummaryStatusDto::new).collect(toList());
+
+        return countrySummaryStatusDtos.stream()
+                .collect(groupingBy(CountrySummaryStatusDto::getStatus));
+    }
+
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, Integer benchmarkType) {
+        return benchmarkService.getBenchmarkFor(countryId, benchmarkType);
+    }
+
+    public boolean validateRequiredFields(GdhiQuestionnaire gdhiQuestionnaire) {
+        return verifyFields(gdhiQuestionnaire.getCountrySummary())
+                && verifyDateRange(gdhiQuestionnaire.getCountrySummary().getCollectedDate())
+                && verifyResources(gdhiQuestionnaire.getCountrySummary().getResources())
+                && verifyIndicators(gdhiQuestionnaire.getHealthIndicators());
+    }
+
+    private List<CountryHealthIndicator> transformToHealthIndicator(String countryId,
+                                                                    String status,
+                                                                    List<HealthIndicatorDto> healthIndicatorDto) {
+        return healthIndicatorDto.stream().map(dto -> {
+            CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,
+                    dto.getCategoryId(), dto.getIndicatorId(), status);
+            return new CountryHealthIndicator(countryHealthIndicatorId, dto.getScore(), dto.getSupportingText());
+        }).collect(toList());
+    }
+
+
     private void calculateAndSaveCountryPhase(String countryId, String status) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
                 .findHealthIndicatorsByCountryIdAndStatus(countryId, status));
@@ -104,35 +188,6 @@ public class CountryHealthDataService {
         }
     }
 
-    private List<CountryHealthIndicator> transformToHealthIndicator(String countryId,
-                                                                    String status,
-                                                                    List<HealthIndicatorDto> healthIndicatorDto) {
-        return healthIndicatorDto.stream().map(dto -> {
-            CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(countryId,
-                    dto.getCategoryId(), dto.getIndicatorId(), status);
-            return new CountryHealthIndicator(countryHealthIndicatorId, dto.getScore(), dto.getSupportingText());
-        }).collect(toList());
-    }
-
-    public CountryUrlGenerationStatusDto saveNewCountrySummary(UUID countryUUID) throws Exception {
-        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
-
-        CountryUrlGenerationStatusDto statusDto;
-
-        String currentStatus = getStatusOfCountrySummary(countryId);
-
-        if (isNull(currentStatus) || currentStatus.equalsIgnoreCase(PUBLISHED.toString())) {
-            CountrySummary countrySummary = new CountrySummary(new CountrySummaryId(countryId, NEW.toString()),
-                    new CountrySummaryDto());
-            iCountrySummaryRepository.save(countrySummary);
-            statusDto = new CountryUrlGenerationStatusDto(countryId, true, isNull(currentStatus) ? null :
-                    FormStatus.valueOf(currentStatus));
-        } else {
-            statusDto = new CountryUrlGenerationStatusDto(countryId, false, FormStatus.valueOf(currentStatus));
-        }
-        return statusDto;
-    }
-
     private String getStatusOfCountrySummary(String countryId) {
         String currentStatus = null;
         List<String> countrySummaryStatuses = iCountrySummaryRepository.getAllStatus(countryId);
@@ -143,53 +198,6 @@ public class CountryHealthDataService {
                     countrySummaryStatuses.get(0);
         }
         return currentStatus;
-    }
-
-    @Transactional
-    public void publish(GdhiQuestionnaire gdhiQuestionnaire) {
-        save(gdhiQuestionnaire, PUBLISHED.name());
-        calculateAndSaveCountryPhase(gdhiQuestionnaire.getCountryId(), PUBLISHED.name());
-    }
-
-    @Transactional
-    public void submit(GdhiQuestionnaire gdhiQuestionnaire) {
-        save(gdhiQuestionnaire, REVIEW_PENDING.name());
-        sendMail(gdhiQuestionnaire.getDataFeederName(), gdhiQuestionnaire.getDataFeederRole(),
-                gdhiQuestionnaire.getContactEmail(), gdhiQuestionnaire.getCountryId());
-    }
-
-    @Transactional
-    public void saveCorrection(GdhiQuestionnaire gdhiQuestionnaire) {
-        save(gdhiQuestionnaire, REVIEW_PENDING.name());
-    }
-
-    @Transactional
-    public void deleteCountryData(UUID countryUUID) {
-        String countryId = iCountryRepository.findByUUID(countryUUID).getId();
-        iCountryHealthIndicatorRepository.removeHealthIndicatorsBy(countryId, REVIEW_PENDING.name());
-        iCountryResourceLinkRepository.deleteResources(countryId, REVIEW_PENDING.name());
-        iCountrySummaryRepository.removeCountrySummary(countryId, REVIEW_PENDING.name());
-    }
-
-    public Map<String, List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
-        List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
-
-        List<CountrySummaryStatusDto> countrySummaryStatusDtos = countrySummaries
-                .stream().map(CountrySummaryStatusDto::new).collect(toList());
-
-        return countrySummaryStatusDtos.stream()
-                .collect(groupingBy(CountrySummaryStatusDto::getStatus));
-    }
-
-    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(String countryId, Integer benchmarkType) {
-        return benchmarkService.getBenchmarkFor(countryId, benchmarkType);
-    }
-
-    public boolean validateRequiredFields(GdhiQuestionnaire gdhiQuestionnaire) {
-        return verifyFields(gdhiQuestionnaire.getCountrySummary())
-                && verifyDateRange(gdhiQuestionnaire.getCountrySummary().getCollectedDate())
-                && verifyResources(gdhiQuestionnaire.getCountrySummary().getResources())
-                && verifyIndicators(gdhiQuestionnaire.getHealthIndicators());
     }
 
     private boolean verifyIndicators(List<HealthIndicatorDto> healthIndicators) {
@@ -232,4 +240,5 @@ public class CountryHealthDataService {
         Date today = new GregorianCalendar().getTime();
         return (collectedDate.equals(today)) || (collectedDate.before(today) && collectedDate.after(backDate));
     }
+
 }
