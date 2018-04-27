@@ -61,7 +61,7 @@ public class CountryHealthDataService {
                 nextStatus, gdhiQuestionnaire.getHealthIndicators());
     }
 
-
+    @Transactional
     public CountryUrlGenerationStatusDto saveNewCountrySummary(UUID countryUUID) {
         String countryId = iCountryRepository.findByUUID(countryUUID).getId();
 
@@ -147,7 +147,7 @@ public class CountryHealthDataService {
 
     private void calculateAndSaveCountryPhase(String countryId, String status) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
-                .findHealthIndicatorsByCountryIdAndStatus(countryId, status));
+                .findByCountryIdAndStatus(countryId, status));
         Double overallScore = countryHealthIndicators.getOverallScore();
         Integer countryPhase = new Score(overallScore).convertToPhase();
         iCountryPhaseRepository.save(new CountryPhase(countryId, countryPhase));

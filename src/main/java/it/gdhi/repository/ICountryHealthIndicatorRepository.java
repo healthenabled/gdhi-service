@@ -13,13 +13,13 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     @Query("SELECT h FROM CountryHealthIndicator h WHERE " +
             "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
-    List<CountryHealthIndicator> findHealthIndicatorsByCountryIdAndStatus(String countryId, String status);
+    List<CountryHealthIndicator> findByCountryIdAndStatus(String countryId, String status);
 
     @Query("SELECT h FROM CountryHealthIndicator h, CountryPhase ph WHERE " +
             "h.countryHealthIndicatorId.countryId = ph.countryId and " +
             "h.countryHealthIndicatorId.status=?1 and " +
             "ph.countryOverallPhase = CASE WHEN (?2 = -1) THEN ph.countryOverallPhase ELSE ?2 END")
-    List<CountryHealthIndicator> findHealthIndicatorsByStatusAndPhase(String status, Integer countryPhase);
+    List<CountryHealthIndicator> findByStatusAndPhase(String status, Integer countryPhase);
 
     @Query("SELECT distinct (countryHealthIndicatorId.countryId) FROM CountryHealthIndicator")
     List<String> findCountriesWithHealthScores();

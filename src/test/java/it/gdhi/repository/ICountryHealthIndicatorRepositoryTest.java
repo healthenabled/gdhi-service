@@ -77,7 +77,7 @@ public class ICountryHealthIndicatorRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus("IND", status);
+        List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository.findByCountryIdAndStatus("IND", status);
 
         assertThat(countryHealthIndicator.size(), is(1));
         assertThat(countryHealthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
@@ -104,7 +104,7 @@ public class ICountryHealthIndicatorRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus("IND", status);
+        List<CountryHealthIndicator> countryHealthIndicator = iCountryHealthIndicatorRepository.findByCountryIdAndStatus("IND", status);
 
         assertThat(countryHealthIndicator.size(), is(1));
         assertThat(countryHealthIndicator.get(0).getCategory().getName(), is("Leadership and Governance"));
@@ -129,7 +129,7 @@ public class ICountryHealthIndicatorRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus("IND", status);
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.findByCountryIdAndStatus("IND", status);
 
         assertEquals(1, countryHealthIndicators.size());
         CountryHealthIndicator countryHealthIndicator = countryHealthIndicators.get(0);
@@ -160,7 +160,7 @@ public class ICountryHealthIndicatorRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.findHealthIndicatorsByCountryIdAndStatus("IND", status);
+        List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository.findByCountryIdAndStatus("IND", status);
 
         assertEquals(1, countryHealthIndicators.size());
         CountryHealthIndicator countryHealthIndicator = countryHealthIndicators.get(0);

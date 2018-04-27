@@ -23,7 +23,7 @@ public class CategoryIndicatorService {
                                   .collect(toList());
     }
 
-    public Integer getHealthIndicatorCount() {
+    Integer getHealthIndicatorCount() {
         List<Category> categoryList = iCategoryRepository.findAll();
         AtomicInteger count = new AtomicInteger(0);
 
