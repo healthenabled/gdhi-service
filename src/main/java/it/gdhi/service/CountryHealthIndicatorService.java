@@ -134,7 +134,7 @@ public class CountryHealthIndicatorService {
                 new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
-                categoryDtos, countryPhase.getCountryOverallPhase(), collectedDateStr);
+                categoryDtos, countryPhase != null ? countryPhase.getCountryOverallPhase() : null, collectedDateStr);
     }
 
 
