@@ -18,8 +18,6 @@ public class CountryHealthScoreDto {
 
     private String countryAlpha2Code;
 
-    private Double overallScore;
-
     private List<CategoryHealthScoreDto> categories;
 
     private Integer countryPhase;

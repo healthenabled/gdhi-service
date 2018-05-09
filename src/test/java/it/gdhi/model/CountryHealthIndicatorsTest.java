@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class CountryHealthIndicatorsTest {
 
@@ -56,11 +58,11 @@ public class CountryHealthIndicatorsTest {
                 .build();
 
         CountryHealthIndicator countryHealthIndicator4 = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 21, status))
                 .country(country)
                 .category(Category.builder().id(1).build())
-                .indicator(Indicator.builder().indicatorId(1).build())
-                .score(null)
+                .indicator(Indicator.builder().indicatorId(21).parentId(9).build())
+                .score(2)
                 .build();
 
         CountryHealthIndicator countryHealthIndicator5 = CountryHealthIndicator.builder()
@@ -85,4 +87,10 @@ public class CountryHealthIndicatorsTest {
     public void shouldGetCountryAlpha2Code() throws Exception {
         assertEquals(countryAlpha2Code, new CountryHealthIndicators(countryHealthIndicators).getCountryAlpha2Code());
     }
+
+    @Test
+    public void ShouldgetOverallScoreForMainIndicators() throws Exception{
+        assertThat(3.3333333333333335, is(new CountryHealthIndicators(countryHealthIndicators).getOverallScore()));
+    }
+    
 }

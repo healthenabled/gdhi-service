@@ -11,13 +11,15 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     List<CountryHealthIndicator> findAll();
 
-    @Query("SELECT h FROM CountryHealthIndicator h WHERE h.countryHealthIndicatorId.countryId = ?1 " +
-            "and h.countryHealthIndicatorId.status = 'PUBLISHED'")
-    List<CountryHealthIndicator> findHealthIndicatorsFor(String countryId);
-
     @Query("SELECT h FROM CountryHealthIndicator h WHERE " +
             "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
-    List<CountryHealthIndicator> findHealthIndicatorsByStatus(String countryId, String status);
+    List<CountryHealthIndicator> findByCountryIdAndStatus(String countryId, String status);
+
+    @Query("SELECT h FROM CountryHealthIndicator h, CountryPhase ph WHERE " +
+            "h.countryHealthIndicatorId.countryId = ph.countryId and " +
+            "h.countryHealthIndicatorId.status=?1 and " +
+            "ph.countryOverallPhase = CASE WHEN (?2 = -1) THEN ph.countryOverallPhase ELSE ?2 END")
+    List<CountryHealthIndicator> findByStatusAndPhase(String status, Integer countryPhase);
 
     @Query("SELECT distinct (countryHealthIndicatorId.countryId) FROM CountryHealthIndicator")
     List<String> findCountriesWithHealthScores();
@@ -26,11 +28,11 @@ public interface ICountryHealthIndicatorRepository extends Repository<CountryHea
 
     @Query("SELECT h FROM CountryHealthIndicator h WHERE (?1 is null or h.category.id = ?1) "+
             "and h.countryHealthIndicatorId.status=?2")
-    List<CountryHealthIndicator> findByStatus(Integer categoryId, String currentStatus);
+    List<CountryHealthIndicator> findByCategoryAndStatus(Integer categoryId, String currentStatus);
 
     @Modifying
     @Query("DELETE FROM CountryHealthIndicator h WHERE " +
             "h.countryHealthIndicatorId.countryId = ?1 and h.countryHealthIndicatorId.status=?2")
-    void removeHealthIndicators(String countryId, String currentStatus);
+    void removeHealthIndicatorsBy(String countryId, String currentStatus);
 }
 

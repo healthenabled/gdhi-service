@@ -4,7 +4,6 @@
       "countryId": "IND",
       "countryName": "India",
       "countryAlpha2Code": "IN",
-      "overallScore": 2.5,
       "categories": [
         {
           "id": 1,
@@ -45,7 +44,7 @@
               "indicatorDescription": "Does the country have an eHealth or digital health strategy or framework and a costed digital health plan?",
               "score": 3,
               "supportingText": "sp3",
-              "scoreDescription": "National digital health costed plan developed and approved"
+              "scoreDescription": "National digital health costed plan developed and approved."
             },
             {
               "id": 4,
@@ -92,7 +91,6 @@
       "countryId": "GBR",
       "countryName": "United Kingdom",
       "countryAlpha2Code": "GB",
-      "overallScore": 3.0,
       "categories": [
         {
           "id": 1,
@@ -133,7 +131,7 @@
               "indicatorDescription": "Does the country have an eHealth or digital health strategy or framework and a costed digital health plan?",
               "score": 5,
               "supportingText": "sp9",
-              "scoreDescription": "National digital health strategy and costed plan fully implemented with planning underway for the next 3-5 year cycle"
+              "scoreDescription": "National digital health strategy and costed plan fully implemented with planning underway for the next 3-5 year cycle."
             },
             {
               "id": 4,

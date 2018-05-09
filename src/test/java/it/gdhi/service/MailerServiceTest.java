@@ -1,7 +1,6 @@
 package it.gdhi.service;
 
 import it.gdhi.model.Country;
-import it.gdhi.utils.Constants.Mail;
 import it.gdhi.utils.MailAddresses;
 import it.gdhi.utils.Mailer;
 import org.junit.Test;
@@ -50,11 +49,12 @@ public class MailerServiceTest {
         when(mailAddresses.getAddressMap()).thenReturn(address);
         mailerService.send(country, feeder, feederRole, contactEmail);
 
-        verify(mailer).send(email2, format(Mail.SUBJECT, country.getName()), constructBody(name2, country, feeder, feederRole, contactEmail, "http://test"));
-        verify(mailer).send(email1, format(Mail.SUBJECT, country.getName()), constructBody(name1, country, feeder, feederRole, contactEmail, "http://test"));
+        verify(mailer).send(email2, format(MailerService.SUBJECT, country.getName()), constructBody(name2, country, feeder,
+                feederRole, contactEmail, "http://test"));
+        verify(mailer).send(email1, format(MailerService.SUBJECT, country.getName()), constructBody(name1, country, feeder, feederRole, contactEmail, "http://test"));
     }
     private String constructBody(String name, Country country, String feeder, String feederRole, String contactEmail, String path) {
-        return format(Mail.BODY, name,feeder, feederRole,  country.getName(), contactEmail, format(Mail.HEALTH_INDICATOR_PATH, path, country.getUniqueId()));
+        return format(MailerService.BODY, name,feeder, feederRole,  country.getName(), contactEmail, format(MailerService.HEALTH_INDICATOR_PATH, path, country.getUniqueId()));
     }
 
 }

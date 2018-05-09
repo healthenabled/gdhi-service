@@ -28,14 +28,16 @@ public class CountryHealthIndicators {
                 .orElse(null);
     }
 
-    public Map<Integer, Double> groupByCategoryIdWithNotNullScores() {
-        return excludingNullScores()
+    public Map<Integer, Double> groupByCategoryIdWithoutNullAndNegativeScores() {
+        return excludingNullAndNegativeScores().filter(countryHealthIndicator
+                -> countryHealthIndicator.getIndicator() != null
+                && countryHealthIndicator.getIndicator().getParentId() == null)
                 .collect(groupingBy(h -> h.getCategory().getId(),
                         averagingInt(CountryHealthIndicator::getScore)));
     }
 
     public Double getOverallScore() {
-        OptionalDouble optionalDouble = this.groupByCategoryIdWithNotNullScores()
+        OptionalDouble optionalDouble = this.groupByCategoryIdWithoutNullAndNegativeScores()
                 .values()
                 .stream()
                 .mapToDouble(Double::doubleValue)
@@ -59,9 +61,9 @@ public class CountryHealthIndicators {
         return this.countryHealthIndicators.stream().collect(groupingBy(CountryHealthIndicator::getCategory));
     }
 
-    private Stream<CountryHealthIndicator> excludingNullScores() {
+    private Stream<CountryHealthIndicator> excludingNullAndNegativeScores() {
         return countryHealthIndicators.stream()
-                .filter(healthIndicator -> healthIndicator.getScore() != null);
+                .filter(healthIndicator -> healthIndicator.isScoreValid());
     }
 
 }

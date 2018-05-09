@@ -5,21 +5,24 @@ import it.gdhi.dto.*;
 import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryHealthDataService;
+import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import static it.gdhi.utils.FormStatus.*;
+import static it.gdhi.utils.FormStatus.DRAFT;
 
 @RestController
 @Slf4j
@@ -53,20 +56,6 @@ public class CountryController {
         return countryHealthIndicatorService.fetchCountryHealthScore(countryId);
     }
 
-    @RequestMapping("/countries_health_indicator_scores")
-    public CountriesHealthScoreDto getCountriesHealthIndicatorScores(
-            @RequestParam(value = "categoryId", required = false) Integer categoryId,
-            @RequestParam(value = "phase", required = false) Integer score) {
-        return countryHealthIndicatorService.fetchCountriesHealthScores(categoryId, score);
-    }
-
-    @RequestMapping("/global_health_indicators")
-    public GlobalHealthScoreDto getGlobalHealthIndicator(
-            @RequestParam(value = "categoryId", required = false) Integer categoryId,
-            @RequestParam(value = "phase", required = false) Integer score) {
-        return countryHealthIndicatorService.getGlobalHealthIndicator(categoryId, score);
-    }
-
     @RequestMapping("/countries/{id}/country_summary")
     public CountrySummaryDto fetchCountrySummary(@PathVariable("id") String countryId) {
         return countryService.fetchCountrySummary(countryId);
@@ -78,8 +67,16 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/submit", method = RequestMethod.POST)
-    public void submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.submit(gdhiQuestionnaire);
+    @ResponseBody
+    public ResponseEntity submitHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        boolean isValid;
+        isValid = countryHealthDataService.validateRequiredFields(gdhiQuestionnaire);
+        if (isValid) {
+            countryHealthDataService.submit(gdhiQuestionnaire);
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @RequestMapping(value = "/countries/saveCorrection", method = RequestMethod.POST)
@@ -88,13 +85,26 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/publish", method = RequestMethod.POST)
-    public void publishHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
-        countryHealthDataService.publish(gdhiQuestionnaire);
+    @ResponseBody
+    public ResponseEntity publishHealthIndicatorsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
+        boolean isValid;
+        isValid = countryHealthDataService.validateRequiredFields(gdhiQuestionnaire);
+        if (isValid) {
+            countryHealthDataService.publish(gdhiQuestionnaire);
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
     public GdhiQuestionnaire getQuestionnaireForCountry(@PathVariable("uuid") UUID countryUIID) {
-        return countryService.getDetails(countryUIID);
+        return countryService.getDetails(countryUIID,false);
+    }
+
+    @RequestMapping(value = "/countries/viewPublish/{uuid}", method = RequestMethod.GET)
+    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(@PathVariable("uuid") UUID countryUIID) {
+        return countryService.getDetails(countryUIID,true);
     }
 
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)
@@ -110,9 +120,31 @@ public class CountryController {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 
-    @RequestMapping(value = "/countries/{uuid}/url_gen_status", method = RequestMethod.POST)
-    public CountryUrlGenerationStatusDto saveUrlGenerationStatus(@PathVariable("uuid") UUID countryUIID)
+    //TODO: add integration test for this endpoint
+    @RequestMapping(value = "/countries/{uuid}/generate_url", method = RequestMethod.POST)
+    public CountryUrlGenerationStatusDto saveNewCountrySummary(@PathVariable("uuid") UUID countryUIID)
             throws Exception {
         return countryHealthDataService.saveNewCountrySummary(countryUIID);
+    }
+
+    @RequestMapping(value = "/countries/{uuid}/delete", method = RequestMethod.DELETE)
+    public void deleteCountryData(@PathVariable("uuid") UUID countryUIID) throws Exception {
+        countryHealthDataService.deleteCountryData(countryUIID);
+    }
+
+    @RequestMapping("/countries/country_status_summaries")
+    public Map<String , List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
+        return countryHealthDataService.getAllCountryStatusSummaries();
+    }
+
+    @RequestMapping(value = "/countries/{id}/benchmark/{type}", method = RequestMethod.GET)
+    public Map<Integer, BenchmarkDto> getBenchmarkDetailsFor(@PathVariable("id") String countryId,
+                                                             @PathVariable("type") Integer benchmarkType) {
+        return countryHealthDataService.getBenchmarkDetailsFor(countryId, benchmarkType);
+    }
+
+    @RequestMapping(value = "/admin/countries/calculate_phase", method = RequestMethod.GET)
+    public void calculateCountryPhase() {
+        countryHealthDataService.calculatePhaseForAllCountries();
     }
 }

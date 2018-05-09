@@ -4,18 +4,15 @@ import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
-import it.gdhi.model.Category;
-import it.gdhi.model.CountryHealthIndicator;
-import it.gdhi.model.CountryHealthIndicators;
-import it.gdhi.model.CountrySummary;
+import it.gdhi.model.*;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
+import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,8 +21,7 @@ import java.util.function.Predicate;
 
 import static it.gdhi.controller.strategy.FilterStrategy.getCategoryPhaseFilter;
 import static it.gdhi.controller.strategy.FilterStrategy.getCountryPhaseFilter;
-import static it.gdhi.utils.FormStatus.*;
-import static it.gdhi.utils.ScoreUtils.convertScoreToPhase;
+import static it.gdhi.utils.FormStatus.PUBLISHED;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Objects.isNull;
@@ -42,20 +38,21 @@ public class CountryHealthIndicatorService {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Autowired
+    private ICountryPhaseRepository iCountryPhaseRepository;
+
+    @Autowired
     private ExcelUtilService excelUtilService;
 
-    @Transactional
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
-                .findHealthIndicatorsFor(countryId));
+                .findByCountryIdAndStatus(countryId, PUBLISHED.name()));
         return constructCountryHealthScore(countryId, countryHealthIndicators,
                 getCategoryPhaseFilter(null, null));
     }
 
-    @Transactional
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase) {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
-                .findByStatus(categoryId, PUBLISHED.name());
+                .findByCategoryAndStatus(categoryId, PUBLISHED.name());
 
         Map<String, List<CountryHealthIndicator>> groupByCountry = countryHealthIndicators.stream()
                 .collect(groupingBy(CountryHealthIndicator::getCountryId));
@@ -71,7 +68,6 @@ public class CountryHealthIndicatorService {
         return new CountriesHealthScoreDto(globalHealthScores);
     }
 
-    @Transactional
     public GlobalHealthScoreDto getGlobalHealthIndicator(Integer categoryId, Integer phase) {
         CountriesHealthScoreDto countries = this.fetchCountriesHealthScores(categoryId, phase);
         List<CategoryHealthScoreDto> categories = getCategoriesInCountries(countries);
@@ -79,7 +75,8 @@ public class CountryHealthIndicatorService {
                 .collect(groupingBy(CategoryHealthScoreDto::getId));
         List<CategoryHealthScoreDto> categoryHealthScores = groupByCategory.entrySet().stream()
                 .map(this::getCategoryHealthScoreDto).collect(toList());
-        Integer globalPhase = convertScoreToPhase(getAverageCategoryScore(categoryHealthScores));
+        Score averageCategoryScore = new Score(getAverageCategoryScore(categoryHealthScores));
+        Integer globalPhase = averageCategoryScore.convertToPhase();
         return new GlobalHealthScoreDto(globalPhase, categoryHealthScores);
     }
 
@@ -107,7 +104,7 @@ public class CountryHealthIndicatorService {
         CategoryHealthScoreDto categoryHealthScoreDto = categoriesHealthScore.stream().findFirst()
                 .orElse(new CategoryHealthScoreDto());
         return new CategoryHealthScoreDto(entry.getKey(), categoryHealthScoreDto.getName(), globalScore,
-                convertScoreToPhase(globalScore), null);
+                (new Score(globalScore)).convertToPhase(), null);
     }
 
     private List<CategoryHealthScoreDto> getCategoriesInCountries(CountriesHealthScoreDto countries) {
@@ -130,21 +127,22 @@ public class CountryHealthIndicatorService {
                                                               CountryHealthIndicators countryHealthIndicators,
                                                               Predicate<? super CategoryHealthScoreDto> phaseFilter) {
         List<CategoryHealthScoreDto> categoryDtos = getCategoriesWithIndicators(countryHealthIndicators, phaseFilter);
-        Double overallScore = countryHealthIndicators.getOverallScore();
+        CountryPhase countryPhase = iCountryPhaseRepository.findOne(countryId);
         CountrySummary countrySummary = iCountrySummaryRepository.
                 findByCountryAndStatus(countryId, PUBLISHED.name());
         String collectedDateStr = countrySummary != null && countrySummary.getCollectedDate() != null ?
                 new SimpleDateFormat("MMMM yyyy").format(countrySummary.getCollectedDate()) : "";
         return new CountryHealthScoreDto(countryId, countryHealthIndicators.getCountryName(),
                 countryHealthIndicators.getCountryAlpha2Code(),
-                overallScore, categoryDtos, convertScoreToPhase(overallScore), collectedDateStr);
+                categoryDtos, countryPhase != null ? countryPhase.getCountryOverallPhase() : null, collectedDateStr);
     }
 
 
     private List<CategoryHealthScoreDto> getCategoriesWithIndicators(CountryHealthIndicators countryHealthIndicators,
                                                                      Predicate<? super CategoryHealthScoreDto>
                                                                              phaseFilter) {
-        Map<Integer, Double> nonNullCategoryScore = countryHealthIndicators.groupByCategoryIdWithNotNullScores();
+        Map<Integer, Double> nonNullCategoryScore = countryHealthIndicators
+                .groupByCategoryIdWithoutNullAndNegativeScores();
         return countryHealthIndicators.groupByCategory()
                 .entrySet()
                 .stream()

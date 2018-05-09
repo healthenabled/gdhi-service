@@ -31,7 +31,7 @@ public class IndicatorDto {
 
     private List<ScoreDto> scores;
 
-    public IndicatorDto(Indicator indicator) {
+    IndicatorDto(Indicator indicator) {
         this.indicatorId = indicator.getIndicatorId();
         this.indicatorCode = indicator.getCode();
         this.indicatorName = indicator.getName();

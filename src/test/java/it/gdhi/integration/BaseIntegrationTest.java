@@ -36,7 +36,7 @@ public class BaseIntegrationTest {
     public void tearDown() throws Exception {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         JdbcTestUtils.deleteFromTables(jdbcTemplate,"country_health_data.health_indicators",
-                "country_health_data.country_resource_links","country_health_data.country_summary");
+                "country_health_data.country_resource_links","country_health_data.country_summary","country_health_data.country_phase");
     }
 
     ObjectMapper getMapper() {
@@ -57,6 +57,12 @@ public class BaseIntegrationTest {
 
     void assertResponse(String responseJSON, String expectedJsonFileName) throws IOException {
         String expectedJSON = expectedResponseJson(expectedJsonFileName);
+        HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
+        HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
+        assertEquals(expectedMap, actualMap);
+    }
+
+    void assertStringResponse(String responseJSON, String expectedJSON) throws IOException {
         HashMap actualMap = getMapper().readValue(responseJSON, HashMap.class);
         HashMap expectedMap = getMapper().readValue(expectedJSON, HashMap.class);
         assertEquals(expectedMap, actualMap);

@@ -12,7 +12,7 @@ public class ScoreDto {
     private Integer score;
     private String scoreDefinition;
 
-    public ScoreDto(IndicatorScore indicatorScore) {
+    ScoreDto(IndicatorScore indicatorScore) {
         this.score = indicatorScore.getScore();
         this.scoreDefinition = indicatorScore.getDefinition();
     }

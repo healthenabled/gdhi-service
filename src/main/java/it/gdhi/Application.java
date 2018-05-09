@@ -20,6 +20,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -143,4 +144,12 @@ public class Application {
         return customFlyway;
     }
 
+    @Bean
+    public CommonsRequestLoggingFilter logFilter() {
+        CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
+        filter.setIncludeQueryString(true);
+        filter.setIncludePayload(false);
+        filter.setIncludeHeaders(true);
+        return filter;
+    }
 }

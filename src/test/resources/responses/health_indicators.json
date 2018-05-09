@@ -2,7 +2,6 @@
   "countryId": "IND",
   "countryName": "India",
   "countryAlpha2Code": "IN",
-  "overallScore": 2.25,
   "categories": [
     {
       "id": 1,
@@ -43,7 +42,7 @@
           "indicatorDescription": "Does the country have an eHealth or digital health strategy or framework and a costed digital health plan?",
           "score": 3,
           "supportingText": "sp1",
-          "scoreDescription": "National digital health costed plan developed and approved"
+          "scoreDescription": "National digital health costed plan developed and approved."
         },
         {
           "id": 4,
@@ -83,6 +82,6 @@
       ]
     }
   ],
-  "countryPhase": 3,
+  "countryPhase": 2,
   "collectedDate": "April 2018"
 }

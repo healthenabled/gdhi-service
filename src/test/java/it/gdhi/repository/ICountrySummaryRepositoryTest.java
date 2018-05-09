@@ -23,6 +23,7 @@ import static it.gdhi.utils.FormStatus.NEW;
 import static it.gdhi.utils.FormStatus.PUBLISHED;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -157,7 +158,6 @@ public class ICountrySummaryRepositoryTest {
     @Test
     public void shouldGetAllTheCountrySummaryStatusesForExistingData() {
         String countryId = "NZL";
-
         addCountrySummary(countryId, "New Zealand",
                 "NZ","NZL summary", new ArrayList<>(), PUBLISHED.toString());
         addCountrySummary(countryId, "New Zealand",
@@ -165,5 +165,16 @@ public class ICountrySummaryRepositoryTest {
         List<String> allStatus = iCountrySummaryRepository.getAllStatus(countryId);
         assert(allStatus.contains(PUBLISHED.toString()));
         assert(allStatus.contains(NEW.toString()));
+    }
+
+    @Test
+    public void shouldGetAllTheCountrySummaryData() {
+        String countryId = "IND";
+        addCountrySummary(countryId, "INDIA",
+                "IN","IND summary", new ArrayList<>(), PUBLISHED.toString());
+        addCountrySummary(countryId, "INDIA",
+                "IN","IND summary", new ArrayList<>(), NEW.toString());
+        List<CountrySummary> countrySummaries = iCountrySummaryRepository.getAll();
+        assertEquals(countrySummaries.size(),2);
     }
 }
