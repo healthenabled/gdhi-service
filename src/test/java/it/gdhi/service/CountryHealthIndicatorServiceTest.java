@@ -250,7 +250,7 @@ public class CountryHealthIndicatorServiceTest {
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         List<CategoryHealthScoreDto> category2 = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Category2")).collect(toList());
         assertThat(leadership.size(), is(1));
-        assertNull(leadership.get(0).getPhase());
+        assertThat(leadership.get(0).getPhase(),is(1));
         assertThat(category2.size(), is(1));
         assertThat(category2.get(0).getPhase(), is(2));
         assertThat(category2.get(0).getOverallScore(),is(2.0));
@@ -296,7 +296,7 @@ public class CountryHealthIndicatorServiceTest {
         assertNull(healthScoreForACountry.getCountryPhase());
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));
-        assertNull(leadership.get(0).getPhase());
+        assertThat(leadership.get(0).getPhase(),is(1));
     }
 
     @Test
@@ -397,7 +397,7 @@ public class CountryHealthIndicatorServiceTest {
         assertThat(healthScoreForACountry.getCountryPhase(), is(5));
         List<CategoryHealthScoreDto> leadership = healthScoreForACountry.getCategories().stream().filter(a -> a.getName().equals("Leadership and Governance")).collect(toList());
         assertThat(leadership.size(), is(1));
-        assertThat(leadership.get(0).getPhase(), is(5));
+        assertThat(leadership.get(0).getPhase(), is(3));
 
     }
 
@@ -703,7 +703,7 @@ public class CountryHealthIndicatorServiceTest {
 
         assertEquals(2, globalHealthIndicator.getOverAllScore().intValue());
         assertEquals(1, globalHealthIndicator.getCategories().size());
-        assertEquals(1.5, globalHealthIndicator.getCategories().get(0).getOverallScore(), 0.01);
+        assertEquals(1.333, globalHealthIndicator.getCategories().get(0).getOverallScore(), 0.01);
         assertEquals(2, globalHealthIndicator.getCategories().get(0).getPhase().intValue());
     }
 

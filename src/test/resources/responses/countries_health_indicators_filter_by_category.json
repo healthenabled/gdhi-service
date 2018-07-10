@@ -43,8 +43,8 @@
         {
           "id": 1,
           "name": "Leadership and Governance",
-          "overallScore": null,
-          "phase": null,
+          "overallScore": 1.0,
+          "phase": 1,
           "indicators": [
             {
               "id": 1,

@@ -1,5 +1,5 @@
 {
-  "overAllScore": 4,
+  "overAllScore": 3,
   "categories": [
     {
       "id": 1,
@@ -18,15 +18,15 @@
     {
       "id": 3,
       "name": "Legislation, Policy, and Compliance",
-      "overallScore": 4.0,
-      "phase": 4,
+      "overallScore": 1.5,
+      "phase": 2,
       "indicators": null
     },
     {
       "id": 4,
       "name": "Workforce",
-      "overallScore": null,
-      "phase": null,
+      "overallScore": 1.0,
+      "phase": 1,
       "indicators": null
     }
   ]

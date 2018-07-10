@@ -29,7 +29,7 @@ public class CountryHealthIndicatorsTest {
                 .country(country)
                 .category(Category.builder().id(1).build())
                 .indicator(Indicator.builder().indicatorId(1).build())
-                .score(5)
+                .score(3)
                 .build();
 
         CountryHealthIndicator countryHealthIndicator1 = CountryHealthIndicator.builder()
@@ -45,15 +45,15 @@ public class CountryHealthIndicatorsTest {
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 1, status))
                 .country(country)
                 .category(Category.builder().id(1).build())
-                .indicator(Indicator.builder().indicatorId(1).build())
+                .indicator(Indicator.builder().indicatorId(3).build())
                 .score(2)
                 .build();
 
         CountryHealthIndicator countryHealthIndicator2 = CountryHealthIndicator.builder()
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 2, 2, status))
                 .country(country)
                 .category(Category.builder().id(2).build())
-                .indicator(Indicator.builder().indicatorId(3).build())
+                .indicator(Indicator.builder().indicatorId(4).build())
                 .score(null)
                 .build();
 
@@ -61,15 +61,15 @@ public class CountryHealthIndicatorsTest {
                 .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 21, status))
                 .country(country)
                 .category(Category.builder().id(1).build())
-                .indicator(Indicator.builder().indicatorId(21).parentId(9).build())
+                .indicator(Indicator.builder().indicatorId(5).parentId(9).build())
                 .score(2)
                 .build();
 
         CountryHealthIndicator countryHealthIndicator5 = CountryHealthIndicator.builder()
                 .country(country)
-                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 1, 2, status))
+                .countryHealthIndicatorId(new CountryHealthIndicatorId(india, 2, 2, status))
                 .category(Category.builder().id(2).build())
-                .indicator(Indicator.builder().indicatorId(3).build())
+                .indicator(Indicator.builder().indicatorId(6).build())
                 .score(null)
                 .build();
 
@@ -90,7 +90,7 @@ public class CountryHealthIndicatorsTest {
 
     @Test
     public void ShouldgetOverallScoreForMainIndicators() throws Exception{
-        assertThat(3.3333333333333335, is(new CountryHealthIndicators(countryHealthIndicators).getOverallScore()));
+        assertEquals(2.0, new CountryHealthIndicators(countryHealthIndicators).getOverallScore(),0.5);
     }
     
 }
