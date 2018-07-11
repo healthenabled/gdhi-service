@@ -30,8 +30,13 @@ public class BenchMarkService {
         List<CountryHealthIndicator> publishedCountryHealthIndicators =
                 iCountryHealthIndicatorRepository.findByStatusAndPhase(PUBLISHED.name(), benchmarkType);
 
+
         Map<Integer, Double> indicatorBenchmarkScores = publishedCountryHealthIndicators.stream()
-                .filter(indicator -> indicator.isScoreValid() && indicator.getIndicator().getParentId() == null)
+                .map( row -> {
+                    row.convertNotAvailableToPhase1();
+                    return row;
+                })
+                .filter(indicator -> indicator.getIndicator().getParentId() == null)
                 .collect(groupingBy(h -> h.getIndicatorId(),
                         averagingInt(CountryHealthIndicator::getScore)));
 
