@@ -51,7 +51,7 @@
           "indicatorDescription": "What is the estimated percent (%) of the annual public spending on health committed to digital health?",
           "score": null,
           "supportingText": "sp1",
-          "scoreDescription": "Not Available or Not Applicable"
+          "scoreDescription": "Not Available"
         }
       ]
     },
@@ -68,7 +68,7 @@
           "indicatorDescription": "Is there a law on data security (storage, transmission, use) that is relevant to digital health?",
           "score": null,
           "supportingText": "sp1",
-          "scoreDescription": "Not Available or Not Applicable"
+          "scoreDescription": "Not Available"
         },
         {
           "id": 6,
@@ -77,7 +77,7 @@
           "indicatorDescription": "Is there a law to protect individual privacy, governing ownership, access and sharing of individually identifiable digital health data ?",
           "score": null,
           "supportingText": "sp1",
-          "scoreDescription": "Not Available or Not Applicable"
+          "scoreDescription": "Not Available"
         }
       ]
     }
