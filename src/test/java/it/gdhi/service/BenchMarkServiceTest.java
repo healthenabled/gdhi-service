@@ -16,6 +16,7 @@ import java.util.*;
 
 import static it.gdhi.utils.FormStatus.PUBLISHED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -90,7 +91,8 @@ public class BenchMarkServiceTest {
 
         Map<Integer, BenchmarkDto> benchmarkFor = benchMarkService.getBenchmarkFor(countryId, benchmarkType);
 
-        assertTrue(benchmarkFor.equals(new HashMap<Integer, BenchmarkDto>()));
+        assertEquals(benchmarkFor.size(),2);
+
     }
 
     @Test

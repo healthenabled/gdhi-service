@@ -173,7 +173,7 @@ public class ICountryHealthIndicatorRepositoryTest {
         assertThat(countryHealthIndicator.getIndicator().getIndicatorId(), is(indicatorId));
         assertThat(countryHealthIndicator.getIndicator().getName(), is("National digital health architecture and/or health information exchange"));
         assertThat(countryHealthIndicator.getIndicator().getDefinition(), is("Is there a national digital health (eHealth) architectural framework and/or health information exchange (HIE) established?"));
-        assertThat(countryHealthIndicator.getScoreDescription(), is("Not Available or Not Applicable"));
+        assertThat(countryHealthIndicator.getScoreDescription(), is("Not Available"));
         assertNull(countryHealthIndicator.getScore());
     }
 

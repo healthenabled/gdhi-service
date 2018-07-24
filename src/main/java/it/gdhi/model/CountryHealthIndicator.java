@@ -19,7 +19,7 @@ import java.util.Optional;
 @Getter
 @Builder
 public class CountryHealthIndicator {
-    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available or Not Applicable";
+    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available";
 
     @EmbeddedId
     private CountryHealthIndicatorId countryHealthIndicatorId;
@@ -65,6 +65,14 @@ public class CountryHealthIndicator {
     }
 
     public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore,
+                                  Indicator indicator,Category category  ) {
+        this.countryHealthIndicatorId = countryHealthIndicatorId;
+        this.score = indicatorScore;
+        this.indicator =  indicator;
+        this.category = category;
+    }
+
+    public CountryHealthIndicator(CountryHealthIndicatorId countryHealthIndicatorId, Integer indicatorScore,
                                   String supportingText) {
         this.countryHealthIndicatorId = countryHealthIndicatorId;
         this.score = indicatorScore;
@@ -107,5 +115,10 @@ public class CountryHealthIndicator {
 
     public boolean isScoreValid() {
         return ( score != null && score >=0 );
+    }
+
+    public void convertNotAvailableToPhase1() {
+        this.score = (this.score == null || this.score == -1) ? 1 :  this.score ;
+
     }
 }

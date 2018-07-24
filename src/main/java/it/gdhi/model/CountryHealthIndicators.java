@@ -3,10 +3,8 @@ package it.gdhi.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.averagingInt;
@@ -29,7 +27,8 @@ public class CountryHealthIndicators {
     }
 
     public Map<Integer, Double> groupByCategoryIdWithoutNullAndNegativeScores() {
-        return excludingNullAndNegativeScores().filter(countryHealthIndicator
+
+        return convertingNotAvailableToPhase1(countryHealthIndicators).filter(countryHealthIndicator
                 -> countryHealthIndicator.getIndicator() != null
                 && countryHealthIndicator.getIndicator().getParentId() == null)
                 .collect(groupingBy(h -> h.getCategory().getId(),
@@ -64,6 +63,18 @@ public class CountryHealthIndicators {
     private Stream<CountryHealthIndicator> excludingNullAndNegativeScores() {
         return countryHealthIndicators.stream()
                 .filter(healthIndicator -> healthIndicator.isScoreValid());
+    }
+
+    private Stream<CountryHealthIndicator> convertingNotAvailableToPhase1(
+            List<CountryHealthIndicator> newCountryHealthIndicators) {
+
+        return countryHealthIndicators.stream().map(row -> {
+            return new CountryHealthIndicator(row.getCountryHealthIndicatorId(),
+                    (row.getScore()== null || row.getScore()== -1 ) ? 1 : row.getScore(),
+                    row.getIndicator(),row.getCategory());
+
+        }).collect(Collectors.toList()).stream();
+
     }
 
 }
