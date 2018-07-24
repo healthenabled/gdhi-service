@@ -19,7 +19,7 @@ import java.util.Optional;
 @Getter
 @Builder
 public class CountryHealthIndicator {
-    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available or Not Applicable";
+    public static final String SCORE_DESCRIPTION_NOT_AVAILABLE="Not Available";
 
     @EmbeddedId
     private CountryHealthIndicatorId countryHealthIndicatorId;
