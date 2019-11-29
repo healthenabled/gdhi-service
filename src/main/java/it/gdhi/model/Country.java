@@ -23,4 +23,19 @@ public class Country {
     @Column(name = "alpha_2_code")
     private String alpha2Code;
 
+    @Column(name = "name_spanish")
+    private String nameSpanish;
+    @Column(name = "name_french")
+    private String nameFrench;
+    @Column(name = "name_portuguese")
+    private String namePortuguese;
+    @Column(name = "name_arabic")
+    private String nameArabic;
+
+    public Country(String id, String name, UUID uniqueId, String alpha2Code) {
+        this.id = id;
+        this.name = name;
+        this.uniqueId = uniqueId;
+        this.alpha2Code = alpha2Code;
+    }
 }
