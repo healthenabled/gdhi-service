@@ -70,6 +70,31 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldGetCountryListInGivenUserLanguage() throws Exception {
+        Response response = given()
+                .contentType("application/json")
+                .header("USER_LANGUAGE","FR")
+                .when()
+                .get("http://localhost:" + port + "/countries");
+
+        String expectedJSON = expectedResponseJson("countries_in_french.json");
+        ArrayList actualList = getMapper().readValue(response.asString(), ArrayList.class);
+        ArrayList expectedList = getMapper().readValue(expectedJSON, ArrayList.class);
+        assertEquals(expectedList, actualList);
+    }
+
+    @Test
+    public void shouldReturnNotAcceptableGivenInvalidLanguageInRequest() {
+        Response response = given()
+                .contentType("application/json")
+                .header("USER_LANGUAGE","LS")
+                .when()
+                .get("http://localhost:" + port + "/countries");
+
+        assertEquals(response.statusCode(), 406);
+    }
+
+    @Test
     public void shouldGetHealthIndicatorForACountry() throws Exception {
         String countryId = INDIA_ID;
         String status = "PUBLISHED";
@@ -447,4 +472,5 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .build();
         countrySummaryRepository.save(countrySummary);
     }
+
 }

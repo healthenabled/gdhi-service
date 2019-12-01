@@ -1,5 +1,6 @@
 package it.gdhi.service;
 
+import it.gdhi.dto.CountryDTO;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
@@ -9,6 +10,7 @@ import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static it.gdhi.utils.FormStatus.PUBLISHED;
+import static it.gdhi.utils.LanguageCode.EN;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
@@ -35,8 +38,11 @@ public class CountryService {
     @Autowired
     private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
-    public List<Country> fetchCountries() {
-        return iCountryRepository.findAll();
+    public List<CountryDTO> fetchCountries(LanguageCode languageCode) {
+        List<Country> countries = iCountryRepository.findAll();
+        return countries.stream()
+                        .map(country -> country.convertToLanguage(languageCode))
+                        .collect(toList());
     }
 
     public CountrySummaryDto fetchCountrySummary(String countryId) {

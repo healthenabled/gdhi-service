@@ -1,5 +1,6 @@
 package it.gdhi.service;
 
+import it.gdhi.dto.CountryDTO;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
@@ -20,7 +21,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.google.common.collect.ImmutableList.of;
+import static it.gdhi.utils.LanguageCode.EN;
+import static it.gdhi.utils.LanguageCode.FR;
 import static java.util.Arrays.asList;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -40,8 +45,21 @@ public class CountryServiceTest {
 
     @Test
     public void shouldInsertTestData() {
-        countryService.fetchCountries();
+        countryService.fetchCountries(EN);
         verify(countryDetailRepository).findAll();
+    }
+
+    @Test
+    public void shouldReturnCountriesGivenUserLanguageIsFrench() {
+        Country chile = new Country("CHL", "Chile", randomUUID(), "CH", "ChileSpanishName", "ChileFrenchName", "ChilePortugueseName", "ChileArabicName");
+        Country malaysia = new Country("MYL", "Malaysia", randomUUID(), "MY", "MalaysiaSpanishName", "MalaysiaFrenchName", "MalaysiaPortugueseName", "MalaysiaArabicName");
+        CountryDTO expectedChileDTO = new CountryDTO("CHL", "ChileFrenchName", chile.getUniqueId(), "CH");
+        CountryDTO expectedMalaysiaDTO = new CountryDTO("MYL", "MalaysiaFrenchName", malaysia.getUniqueId(), "MY");
+
+        when(countryDetailRepository.findAll()).thenReturn(Arrays.asList(chile, malaysia));
+        List<CountryDTO> actualCountries = countryService.fetchCountries(FR);
+
+        assertEquals(of(expectedChileDTO, expectedMalaysiaDTO), actualCountries);
     }
 
     @Test
@@ -62,7 +80,7 @@ public class CountryServiceTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary(summary)
-                .country(new Country(countryId, "Argentina", UUID.randomUUID(), "AR"))
+                .country(new Country(countryId, "Argentina", randomUUID(), "AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -108,7 +126,7 @@ public class CountryServiceTest {
     public void shouldGetGlobalHealthScoreDto() throws Exception {
         String countryId = "IND";
         String statusValue = "PUBLISHED";
-        UUID countryUUID = UUID.randomUUID();
+        UUID countryUUID = randomUUID();
         Country country = new Country(countryId, "India", countryUUID, "IN");
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, statusValue))
@@ -153,7 +171,7 @@ public class CountryServiceTest {
     @Test
     public void shouldHandleCountriesNotAvailable() throws Exception {
         String countryId = "IND";
-        UUID countryUUID = UUID.randomUUID();
+        UUID countryUUID = randomUUID();
         Country country = new Country(countryId, "India", countryUUID, "IN");
 
         when(iCountrySummaryRepository.findAll(countryId)).thenReturn(null);

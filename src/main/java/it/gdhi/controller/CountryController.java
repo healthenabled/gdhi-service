@@ -2,12 +2,12 @@ package it.gdhi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import it.gdhi.dto.*;
-import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
+import it.gdhi.utils.LanguageCode;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,8 @@ import static it.gdhi.utils.FormStatus.DRAFT;
 @Slf4j
 public class CountryController {
 
+    public static final String USER_LANGUAGE = "user_language";
+
     @Autowired
     private CountryService countryService;
 
@@ -41,8 +43,9 @@ public class CountryController {
     private DevelopmentIndicatorService developmentIndicatorService;
 
     @RequestMapping("/countries")
-    public List<Country> getCountries() {
-        return countryService.fetchCountries();
+    public List<CountryDTO> getCountries(HttpServletRequest request) {
+        LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        return countryService.fetchCountries(languageCode);
     }
 
     @RequestMapping("/countries/{id}/development_indicators")
@@ -146,5 +149,11 @@ public class CountryController {
     @RequestMapping(value = "/admin/countries/calculate_phase", method = RequestMethod.GET)
     public void calculateCountryPhase() {
         countryHealthDataService.calculatePhaseForAllCountries();
+    }
+
+    @ResponseStatus(value=HttpStatus.NOT_ACCEPTABLE, reason="User language requested not found")
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIOException(){
+        log.error("User language requested not found");
     }
 }

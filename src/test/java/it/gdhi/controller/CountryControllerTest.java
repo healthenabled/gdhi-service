@@ -1,27 +1,34 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.*;
+import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.CountryUrlGenerationStatusDto;
+import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
+import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static it.gdhi.utils.FormStatus.DRAFT;
+import static it.gdhi.utils.LanguageCode.EN;
+import static it.gdhi.utils.LanguageCode.FR;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static it.gdhi.utils.FormStatus.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryControllerTest {
@@ -43,8 +50,22 @@ public class CountryControllerTest {
 
     @Test
     public void shouldListCountries() {
-        countryController.getCountries();
-        verify(countryService).fetchCountries();
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "EN");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(EN);
+    }
+
+    @Test
+    public void shouldListCountriesInGivenLanguage() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "FR");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(FR);
     }
 
     @Test
@@ -182,5 +203,11 @@ public class CountryControllerTest {
         doNothing().when(countryHealthDataService).calculatePhaseForAllCountries();
         countryController.calculateCountryPhase();
         verify(countryHealthDataService).calculatePhaseForAllCountries();
+    }
+
+    @Test
+    public void should(){
+        LanguageCode en = LanguageCode.valueOf("EN");
+        System.out.println(en);
     }
 }
