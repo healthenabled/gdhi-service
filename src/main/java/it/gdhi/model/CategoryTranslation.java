@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "i18n", name = "country")
+@Table(schema = "i18n", name = "category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CountryTranslation {
+public class CategoryTranslation {
 
     @EmbeddedId
     private CountryTranslationId id;
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Country country;
+    @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Category category;
 }
