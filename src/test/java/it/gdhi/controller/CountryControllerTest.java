@@ -9,7 +9,6 @@ import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
-import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -47,6 +46,26 @@ public class CountryControllerTest {
 
     @Mock
     private CountryHealthIndicatorService countryHealthIndicatorService;
+
+    @Test
+    public void shouldListCountries() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(en);
+    }
+
+    @Test
+    public void shouldListCountriesInGivenLanguage() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "fr");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(fr);
+    }
 
     @Test
     public void shouldInvokeHealthIndicatorServiceCountryScore() {

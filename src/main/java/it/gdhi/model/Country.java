@@ -1,6 +1,7 @@
 package it.gdhi.model;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Slf4j
+@EqualsAndHashCode
 public class Country {
 
     @Id

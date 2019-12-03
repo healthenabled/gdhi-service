@@ -1,6 +1,5 @@
 package it.gdhi.service;
 
-import it.gdhi.dto.CountryDTO;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
@@ -10,6 +9,7 @@ import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.service.internationalization.CountryNameTranslator;
 import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,17 +28,22 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class CountryService {
 
-    @Autowired
-    private ICountryRepository iCountryRepository;
+    private final ICountryRepository iCountryRepository;
+    private final ICountrySummaryRepository iCountrySummaryRepository;
+    private final ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+    private final CountryNameTranslator translator;
 
     @Autowired
-    private ICountrySummaryRepository iCountrySummaryRepository;
-
-    @Autowired
-    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+    public CountryService(ICountryRepository iCountryRepository, ICountrySummaryRepository iCountrySummaryRepository, ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository, CountryNameTranslator translator) {
+        this.iCountryRepository = iCountryRepository;
+        this.iCountrySummaryRepository = iCountrySummaryRepository;
+        this.iCountryHealthIndicatorRepository = iCountryHealthIndicatorRepository;
+        this.translator = translator;
+    }
 
     public List<Country> fetchCountries(LanguageCode languageCode) {
-        return iCountryRepository.findAll();
+        List<Country> countries = iCountryRepository.findAll();
+        return translator.translate(countries, languageCode);
     }
 
     public CountrySummaryDto fetchCountrySummary(String countryId) {
