@@ -22,8 +22,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableList.of;
-import static it.gdhi.utils.LanguageCode.EN;
-import static it.gdhi.utils.LanguageCode.FR;
+import static it.gdhi.utils.LanguageCode.en;
+import static it.gdhi.utils.LanguageCode.fr;
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.Is.is;
@@ -45,7 +45,7 @@ public class CountryServiceTest {
 
     @Test
     public void shouldInsertTestData() {
-        countryService.fetchCountries(EN);
+        countryService.fetchCountries(en);
         verify(countryDetailRepository).findAll();
     }
 
@@ -57,7 +57,7 @@ public class CountryServiceTest {
         CountryDTO expectedMalaysiaDTO = new CountryDTO("MYL", "MalaysiaFrenchName", malaysia.getUniqueId(), "MY");
 
         when(countryDetailRepository.findAll()).thenReturn(Arrays.asList(chile, malaysia));
-        List<CountryDTO> actualCountries = countryService.fetchCountries(FR);
+        List<CountryDTO> actualCountries = countryService.fetchCountries(fr);
 
         assertEquals(of(expectedChileDTO, expectedMalaysiaDTO), actualCountries);
     }

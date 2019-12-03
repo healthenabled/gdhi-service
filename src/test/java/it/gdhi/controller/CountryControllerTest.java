@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.DRAFT;
-import static it.gdhi.utils.LanguageCode.EN;
-import static it.gdhi.utils.LanguageCode.FR;
+import static it.gdhi.utils.LanguageCode.en;
+import static it.gdhi.utils.LanguageCode.fr;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -55,7 +55,7 @@ public class CountryControllerTest {
 
         countryController.getCountries(request);
 
-        verify(countryService).fetchCountries(EN);
+        verify(countryService).fetchCountries(en);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class CountryControllerTest {
 
         countryController.getCountries(request);
 
-        verify(countryService).fetchCountries(FR);
+        verify(countryService).fetchCountries(fr);
     }
 
     @Test

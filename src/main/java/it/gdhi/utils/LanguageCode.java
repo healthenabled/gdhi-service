@@ -1,7 +1,8 @@
 package it.gdhi.utils;
 
+/* Do not change, dependency on front-end */
 public enum LanguageCode {
-    EN("english"), ES("spanish"), FR("french"), PT("portuguese"), AR("arabic");
+    en("english"), es("spanish"), fr("french"), pt("portuguese"), ar("arabic");
 
     private String name;
 

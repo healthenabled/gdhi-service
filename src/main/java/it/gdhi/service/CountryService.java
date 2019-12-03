@@ -21,7 +21,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static it.gdhi.utils.FormStatus.PUBLISHED;
-import static it.gdhi.utils.LanguageCode.EN;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 

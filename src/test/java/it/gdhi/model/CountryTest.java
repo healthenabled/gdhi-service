@@ -15,7 +15,7 @@ public class CountryTest {
         Country chile = new Country("CHL", "Chile", randomUUID(), "CH", "SpanishName", "FrenchName", "PortugueseName", "ArabicName");
         CountryDTO expectedChileDTO = new CountryDTO("CHL", "FrenchName", chile.getUniqueId(), "CH");
 
-        CountryDTO actualChileDTO = chile.convertToLanguage(LanguageCode.FR);
+        CountryDTO actualChileDTO = chile.convertToLanguage(LanguageCode.fr);
 
         assertEquals(expectedChileDTO.getName(), actualChileDTO.getName());
     }
