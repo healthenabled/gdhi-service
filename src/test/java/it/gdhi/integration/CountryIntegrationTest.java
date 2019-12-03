@@ -69,19 +69,7 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         INDIA_UUID = iCountryRepository.find(INDIA_ID).getUniqueId();
     }
 
-    @Test
-    public void shouldGetCountryListInGivenUserLanguage() throws Exception {
-        Response response = given()
-                .contentType("application/json")
-                .header("USER_LANGUAGE","FR")
-                .when()
-                .get("http://localhost:" + port + "/countries");
 
-        String expectedJSON = expectedResponseJson("countries_in_french.json");
-        ArrayList actualList = getMapper().readValue(response.asString(), ArrayList.class);
-        ArrayList expectedList = getMapper().readValue(expectedJSON, ArrayList.class);
-        assertEquals(expectedList, actualList);
-    }
 
     @Test
     public void shouldReturnNotAcceptableGivenInvalidLanguageInRequest() {

@@ -2,6 +2,7 @@ package it.gdhi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import it.gdhi.dto.*;
+import it.gdhi.model.Country;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
@@ -43,7 +44,7 @@ public class CountryController {
     private DevelopmentIndicatorService developmentIndicatorService;
 
     @RequestMapping("/countries")
-    public List<CountryDTO> getCountries(HttpServletRequest request) {
+    public List<Country> getCountries(HttpServletRequest request) {
         LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
         return countryService.fetchCountries(languageCode);
     }

@@ -49,26 +49,6 @@ public class CountryControllerTest {
     private CountryHealthIndicatorService countryHealthIndicatorService;
 
     @Test
-    public void shouldListCountries() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("USER_LANGUAGE", "EN");
-
-        countryController.getCountries(request);
-
-        verify(countryService).fetchCountries(en);
-    }
-
-    @Test
-    public void shouldListCountriesInGivenLanguage() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("USER_LANGUAGE", "FR");
-
-        countryController.getCountries(request);
-
-        verify(countryService).fetchCountries(fr);
-    }
-
-    @Test
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
@@ -203,11 +183,5 @@ public class CountryControllerTest {
         doNothing().when(countryHealthDataService).calculatePhaseForAllCountries();
         countryController.calculateCountryPhase();
         verify(countryHealthDataService).calculatePhaseForAllCountries();
-    }
-
-    @Test
-    public void should(){
-        LanguageCode en = LanguageCode.valueOf("EN");
-        System.out.println(en);
     }
 }

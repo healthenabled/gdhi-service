@@ -37,11 +37,8 @@ public class CountryService {
     @Autowired
     private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
 
-    public List<CountryDTO> fetchCountries(LanguageCode languageCode) {
-        List<Country> countries = iCountryRepository.findAll();
-        return countries.stream()
-                        .map(country -> country.convertToLanguage(languageCode))
-                        .collect(toList());
+    public List<Country> fetchCountries(LanguageCode languageCode) {
+        return iCountryRepository.findAll();
     }
 
     public CountrySummaryDto fetchCountrySummary(String countryId) {

@@ -21,9 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.ImmutableList.of;
 import static it.gdhi.utils.LanguageCode.en;
-import static it.gdhi.utils.LanguageCode.fr;
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.Is.is;
@@ -47,19 +45,6 @@ public class CountryServiceTest {
     public void shouldInsertTestData() {
         countryService.fetchCountries(en);
         verify(countryDetailRepository).findAll();
-    }
-
-    @Test
-    public void shouldReturnCountriesGivenUserLanguageIsFrench() {
-        Country chile = new Country("CHL", "Chile", randomUUID(), "CH", "ChileSpanishName", "ChileFrenchName", "ChilePortugueseName", "ChileArabicName");
-        Country malaysia = new Country("MYL", "Malaysia", randomUUID(), "MY", "MalaysiaSpanishName", "MalaysiaFrenchName", "MalaysiaPortugueseName", "MalaysiaArabicName");
-        CountryDTO expectedChileDTO = new CountryDTO("CHL", "ChileFrenchName", chile.getUniqueId(), "CH");
-        CountryDTO expectedMalaysiaDTO = new CountryDTO("MYL", "MalaysiaFrenchName", malaysia.getUniqueId(), "MY");
-
-        when(countryDetailRepository.findAll()).thenReturn(Arrays.asList(chile, malaysia));
-        List<CountryDTO> actualCountries = countryService.fetchCountries(fr);
-
-        assertEquals(of(expectedChileDTO, expectedMalaysiaDTO), actualCountries);
     }
 
     @Test
