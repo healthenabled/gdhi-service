@@ -23,7 +23,8 @@ public class ICategoryTranslationRepositoryTest {
 
     @Test
     public void shouldReturnCountryNameInArabic() {
-        String category = repository.findTranslationForLanguage("ar", "Services and Applications");
+        String category = repository.findTranslationForLanguage("ar",
+                                                            "Services and Applications");
 
         assertEquals(category, "الخدمات والتطبيقات");
     }

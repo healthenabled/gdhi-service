@@ -24,8 +24,10 @@ public class CategoryNameTranslator {
     }
 
     private String getCategoryTranslationForLanguage(LanguageCode languageCode, String categoryName) {
-        String translationCategoryName = translationRepository.findTranslationForLanguage(languageCode.toString(), categoryName);
-        return (translationCategoryName == null || translationCategoryName.isEmpty()) ? categoryName : translationCategoryName ;
+        String translationCategoryName = translationRepository.findTranslationForLanguage(languageCode.toString(),
+                                                                                            categoryName);
+        return (translationCategoryName == null || translationCategoryName.isEmpty()) ?
+                categoryName : translationCategoryName ;
     }
 
 }

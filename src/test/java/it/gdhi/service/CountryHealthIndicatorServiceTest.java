@@ -769,12 +769,15 @@ public class CountryHealthIndicatorServiceTest {
         List<CountryHealthIndicator> countryHealthIndicators = asList(countryHealthIndicator, countryHealthIndicator1);
         CountryPhase countryPhaseIND = buildCountryPhase("IND", 4 );
 
-        when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null,PUBLISHED.name())).thenReturn(countryHealthIndicators);
+        when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null,PUBLISHED.name()))
+                                                    .thenReturn(countryHealthIndicators);
         when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
-        when(categoryTranslator.translate("Legislation, Policy, and Compliance", ar)).thenReturn("التشريعات والسياسات والامتثال");
+        when(categoryTranslator.translate("Legislation, Policy, and Compliance", ar))
+                                                    .thenReturn("التشريعات والسياسات والامتثال");
         when(categoryTranslator.translate("Workforce", ar)).thenReturn("الأيدي العاملة");
 
-        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(null, null, ar);
+        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService
+                                                        .getGlobalHealthIndicator(null, null, ar);
         globalHealthIndicator.getCategories().sort(comparing(CategoryHealthScoreDto::getId));
 
         assertEquals("الأيدي العاملة", globalHealthIndicator.getCategories().get(0).getName());
