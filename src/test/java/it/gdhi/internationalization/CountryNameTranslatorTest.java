@@ -1,8 +1,9 @@
-package it.gdhi.service.internationalization;
+package it.gdhi.internationalization;
 
 import com.google.common.collect.ImmutableList;
+import it.gdhi.internationalization.repository.ICountryTranslationRepository;
+import it.gdhi.internationalization.service.CountryNameTranslator;
 import it.gdhi.model.Country;
-import it.gdhi.repository.ICountryTranslationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

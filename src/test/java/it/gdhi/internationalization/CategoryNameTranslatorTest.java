@@ -1,6 +1,7 @@
-package it.gdhi.service.internationalization;
+package it.gdhi.internationalization;
 
-import it.gdhi.repository.ICategoryTranslationRepository;
+import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
+import it.gdhi.internationalization.service.CategoryNameTranslator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

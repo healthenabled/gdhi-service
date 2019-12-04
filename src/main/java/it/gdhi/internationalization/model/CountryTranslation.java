@@ -1,5 +1,6 @@
-package it.gdhi.model;
+package it.gdhi.internationalization.model;
 
+import it.gdhi.model.Country;
 import it.gdhi.model.id.CountryTranslationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

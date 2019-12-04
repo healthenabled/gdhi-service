@@ -1,12 +1,12 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
+import it.gdhi.internationalization.service.CategoryNameTranslator;
 import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
-import it.gdhi.service.internationalization.CategoryNameTranslator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

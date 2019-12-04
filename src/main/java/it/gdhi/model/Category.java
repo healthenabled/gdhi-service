@@ -30,8 +30,4 @@ public class Category {
         this.id = categoryId;
         this.name = name;
     }
-
-    public Category makeWithName(String categoryTranslationForLanguage) {
-        return new Category(this.id, categoryTranslationForLanguage);
-    }
 }

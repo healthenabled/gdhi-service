@@ -1,6 +1,6 @@
-package it.gdhi.repository;
+package it.gdhi.internationalization.repository;
 
-import it.gdhi.model.CountryTranslation;
+import it.gdhi.internationalization.model.CountryTranslation;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;

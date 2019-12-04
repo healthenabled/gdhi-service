@@ -1,6 +1,6 @@
-package it.gdhi.service.internationalization;
+package it.gdhi.internationalization.service;
 
-import it.gdhi.repository.ICategoryTranslationRepository;
+import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
