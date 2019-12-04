@@ -1,6 +1,6 @@
 package it.gdhi.model;
 
-import it.gdhi.model.id.CountryTranslationId;
+import it.gdhi.model.id.CategoryTranslationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class CategoryTranslation {
 
     @EmbeddedId
-    private CountryTranslationId id;
+    private CategoryTranslationId id;
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

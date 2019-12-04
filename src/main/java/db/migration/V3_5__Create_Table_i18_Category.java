@@ -10,7 +10,7 @@ public class V3_5__Create_Table_i18_Category extends BaseMigration {
                                 "language_id VARCHAR, " +
                                 "name VARCHAR, " +
                                 "PRIMARY KEY (category_id, language_id), " +
-                                "FOREIGN KEY(language_id) REFERENCES i18n.language (id));" +
+                                "FOREIGN KEY(language_id) REFERENCES i18n.language (id)" +
                                  ");"
         );
     }

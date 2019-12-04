@@ -1,9 +1,6 @@
 package it.gdhi.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Category {
 
     @Id
@@ -31,5 +29,9 @@ public class Category {
     public Category(Integer categoryId, String name) {
         this.id = categoryId;
         this.name = name;
+    }
+
+    public Category makeWithName(String categoryTranslationForLanguage) {
+        return new Category(this.id, categoryTranslationForLanguage);
     }
 }
