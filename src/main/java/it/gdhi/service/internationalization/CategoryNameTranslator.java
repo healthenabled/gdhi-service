@@ -1,15 +1,11 @@
 package it.gdhi.service.internationalization;
 
-import it.gdhi.model.Category;
 import it.gdhi.repository.ICategoryTranslationRepository;
 import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 import static it.gdhi.utils.LanguageCode.en;
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class CategoryNameTranslator {
@@ -21,18 +17,15 @@ public class CategoryNameTranslator {
         this.translationRepository = translationRepository;
     }
 
-    public List<Category> translate(List<Category> categories, LanguageCode languageCode) {
-        if (languageCode == en || languageCode == null) return categories;
+    public String translate(String categoryName, LanguageCode languageCode) {
+        if (languageCode == en || languageCode == null) return categoryName;
 
-        List<Category> collect = categories.stream()
-                .map(category -> category.makeWithName(getCategoryTranslationForLanguage(languageCode, category)))
-                .collect(toList());
-        return collect;
+        return getCategoryTranslationForLanguage(languageCode, categoryName);
     }
 
-    private String getCategoryTranslationForLanguage(LanguageCode languageCode, Category c) {
-        String newName = translationRepository.findTranslationForLanguage(languageCode.toString(), c.getId());
-        return (newName == null || newName.isEmpty()) ? c.getName() : newName ;
+    private String getCategoryTranslationForLanguage(LanguageCode languageCode, String categoryName) {
+        String translationCategoryName = translationRepository.findTranslationForLanguage(languageCode.toString(), categoryName);
+        return (translationCategoryName == null || translationCategoryName.isEmpty()) ? categoryName : translationCategoryName ;
     }
 
 }

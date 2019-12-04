@@ -24,12 +24,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.DRAFT;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 
 @RestController
 @Slf4j
 public class CountryController {
-
-    public static final String USER_LANGUAGE = "user_language";
 
     @Autowired
     private CountryService countryService;

@@ -43,4 +43,7 @@ public class CategoryHealthScoreDto {
                 .collect(Collectors.toList());
     }
 
+    public void setTranslatedName(String name) {
+        this.name = name;
+    }
 }

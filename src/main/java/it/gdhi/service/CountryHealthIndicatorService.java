@@ -8,6 +8,8 @@ import it.gdhi.model.*;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.service.internationalization.CategoryNameTranslator;
+import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,9 @@ public class CountryHealthIndicatorService {
     @Autowired
     private ExcelUtilService excelUtilService;
 
+    @Autowired
+    private CategoryNameTranslator categoryTranslator;
+
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
                 .findByCountryIdAndStatus(countryId, PUBLISHED.name()));
@@ -68,7 +73,7 @@ public class CountryHealthIndicatorService {
         return new CountriesHealthScoreDto(globalHealthScores);
     }
 
-    public GlobalHealthScoreDto getGlobalHealthIndicator(Integer categoryId, Integer phase) {
+    public GlobalHealthScoreDto getGlobalHealthIndicator(Integer categoryId, Integer phase, LanguageCode languageCode) {
         CountriesHealthScoreDto countries = this.fetchCountriesHealthScores(categoryId, phase);
         List<CategoryHealthScoreDto> categories = getCategoriesInCountries(countries);
         Map<Integer, List<CategoryHealthScoreDto>> groupByCategory = categories.stream()
@@ -77,7 +82,17 @@ public class CountryHealthIndicatorService {
                 .map(this::getCategoryHealthScoreDto).collect(toList());
         Score averageCategoryScore = new Score(getAverageCategoryScore(categoryHealthScores));
         Integer globalPhase = averageCategoryScore.convertToPhase();
-        return new GlobalHealthScoreDto(globalPhase, categoryHealthScores);
+        GlobalHealthScoreDto globalHealthScoreDto = new GlobalHealthScoreDto(globalPhase, categoryHealthScores);
+        return translateCategoryNames(globalHealthScoreDto,languageCode);
+    }
+
+    private GlobalHealthScoreDto translateCategoryNames(GlobalHealthScoreDto globalHealthScoreDto, LanguageCode languageCode) {
+        globalHealthScoreDto.getCategories()
+                            .forEach( (category) -> {
+                                String translatedCategoryName = categoryTranslator.translate(category.getName(), languageCode);
+                                category.setTranslatedName(translatedCategoryName);
+                            });
+        return globalHealthScoreDto;
     }
 
     public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,

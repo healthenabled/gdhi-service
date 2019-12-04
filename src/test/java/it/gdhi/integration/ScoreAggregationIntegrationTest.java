@@ -9,6 +9,7 @@ import it.gdhi.model.CountrySummary;
 import it.gdhi.model.id.CountrySummaryId;
 import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +131,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(LanguageCode.USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators");
 
@@ -197,6 +199,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(LanguageCode.USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?categoryId="+categoryId1+"&phase=1");
 
@@ -264,6 +267,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(LanguageCode.USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?categoryId="+categoryId1);
 
@@ -331,6 +335,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(LanguageCode.USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?phase=4");
 

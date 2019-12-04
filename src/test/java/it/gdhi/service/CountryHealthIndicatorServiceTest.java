@@ -6,6 +6,7 @@ import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryPhaseRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.service.internationalization.CategoryNameTranslator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,8 +23,11 @@ import java.util.List;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.PUBLISHED;
+import static it.gdhi.utils.LanguageCode.ar;
+import static it.gdhi.utils.LanguageCode.en;
 import static it.gdhi.utils.ListUtils.findFirst;
 import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -46,6 +50,9 @@ public class CountryHealthIndicatorServiceTest {
 
     @Mock
     private ICountrySummaryRepository iCountrySummaryRepository;
+
+    @Mock
+    private CategoryNameTranslator categoryTranslator;
 
     private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
         Integer score1 = 3;
@@ -581,7 +588,7 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryPhaseRepository.findOne("USA")).thenReturn(countryPhaseUSA);
         when(iCountryPhaseRepository.findOne("UK")).thenReturn(countryPhaseUK);
 
-        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(null, null);
+        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(null, null, en);
 
         assertEquals(2,globalHealthIndicator.getCategories().size());
         CategoryHealthScoreDto actualCategory = globalHealthIndicator.getCategories().stream().filter(cat -> cat.getId().equals(category.getId())).findFirst().get();
@@ -648,7 +655,7 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
         when(iCountryPhaseRepository.findOne("USA")).thenReturn(countryPhaseUSA);
 
-        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(1, 2);
+        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(1, 2, en);
 
         assertEquals(1,globalHealthIndicator.getCategories().size());
         assertThat(globalHealthIndicator.getOverAllScore(), is(2));
@@ -699,7 +706,7 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryPhaseRepository.findOne("USA")).thenReturn(countryPhaseUSA);
         when(iCountryPhaseRepository.findOne("Ind")).thenReturn(countryPhaseIND);
 
-        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(category.getId(), 2);
+        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(category.getId(), 2, null);
 
         assertEquals(2, globalHealthIndicator.getOverAllScore().intValue());
         assertEquals(1, globalHealthIndicator.getCategories().size());
@@ -746,6 +753,33 @@ public class CountryHealthIndicatorServiceTest {
         verify(excelUtilService).downloadFile(request, response);
     }
 
+    @Test
+    public void shouldTranslateCategoryNameToGivenUserLanguageForGlobalHealthIndicators() {
+        Category category = Category.builder().id(9).name("Legislation, Policy, and Compliance").build();
+        CountryHealthIndicator countryHealthIndicator = CountryHealthIndicator.builder()
+                .country(new Country("IND", "India",UUID.randomUUID(), "IN"))
+                .indicator(Indicator.builder().indicatorId(1).build())
+                .category(category).score(5).build();
+        Category category1 = Category.builder().id(3).name("Workforce").build();
+        CountryHealthIndicator countryHealthIndicator1 = CountryHealthIndicator.builder()
+                .country(new Country("IND", "India",UUID.randomUUID(), "IN"))
+                .indicator(Indicator.builder().indicatorId(1).build())
+                .category(category1).score(2).build();
+
+        List<CountryHealthIndicator> countryHealthIndicators = asList(countryHealthIndicator, countryHealthIndicator1);
+        CountryPhase countryPhaseIND = buildCountryPhase("IND", 4 );
+
+        when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null,PUBLISHED.name())).thenReturn(countryHealthIndicators);
+        when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
+        when(categoryTranslator.translate("Legislation, Policy, and Compliance", ar)).thenReturn("التشريعات والسياسات والامتثال");
+        when(categoryTranslator.translate("Workforce", ar)).thenReturn("الأيدي العاملة");
+
+        GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService.getGlobalHealthIndicator(null, null, ar);
+        globalHealthIndicator.getCategories().sort(comparing(CategoryHealthScoreDto::getId));
+
+        assertEquals("الأيدي العاملة", globalHealthIndicator.getCategories().get(0).getName());
+        assertEquals("التشريعات والسياسات والامتثال", globalHealthIndicator.getCategories().get(1).getName());
+    }
 
 
 }

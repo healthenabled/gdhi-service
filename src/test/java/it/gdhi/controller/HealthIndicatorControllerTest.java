@@ -9,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import static it.gdhi.utils.LanguageCode.ar;
+import static it.gdhi.utils.LanguageCode.en;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -27,11 +30,25 @@ public class HealthIndicatorControllerTest {
     @Test
     public void shouldInvokeGetGlobalHealthIndicator() {
         GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
 
-        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2)).thenReturn(expected);
-        GlobalHealthScoreDto actual = healthIndicatorController.getGlobalHealthIndicator(null, 2);
+        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2, en)).thenReturn(expected);
+        GlobalHealthScoreDto actual = healthIndicatorController.getGlobalHealthIndicator(request, null, 2);
         assertThat(expected, is(actual));
-        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2);
+        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2, en);
+    }
+
+    @Test
+    public void shouldGetLanguageCodeOfArabicFromHeader() {
+        GlobalHealthScoreDto expected = mock(GlobalHealthScoreDto.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "ar");
+
+        when(countryHealthIndicatorService.getGlobalHealthIndicator(null, 2, ar)).thenReturn(expected);
+        GlobalHealthScoreDto actual = healthIndicatorController.getGlobalHealthIndicator(request, null, 2);
+
+        verify(countryHealthIndicatorService).getGlobalHealthIndicator(null, 2, ar);
     }
 
     @Test
