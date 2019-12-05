@@ -4,7 +4,7 @@ import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountriesHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.GlobalHealthScoreDto;
-import it.gdhi.internationalization.service.CategoryNameTranslator;
+import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.*;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryPhaseRepository;
@@ -46,7 +46,7 @@ public class CountryHealthIndicatorService {
     private ExcelUtilService excelUtilService;
 
     @Autowired
-    private CategoryNameTranslator categoryTranslator;
+    private HealthIndicatorTranslator categoryTranslator;
 
     public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository

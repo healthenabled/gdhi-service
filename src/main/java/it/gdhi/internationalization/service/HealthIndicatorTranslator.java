@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 import static it.gdhi.utils.LanguageCode.en;
 
 @Component
-public class CategoryNameTranslator {
+public class HealthIndicatorTranslator {
 
     private final ICategoryTranslationRepository categoryTranslationRepository;
     private final IIndicatorTranslationRepository indicatorTranslationRepo;
 
     @Autowired
-    public CategoryNameTranslator(ICategoryTranslationRepository categoryTranslationRepository,
-                                  IIndicatorTranslationRepository indicatorTranslationRepo) {
+    public HealthIndicatorTranslator(ICategoryTranslationRepository categoryTranslationRepository,
+                                     IIndicatorTranslationRepository indicatorTranslationRepo) {
         this.categoryTranslationRepository = categoryTranslationRepository;
         this.indicatorTranslationRepo = indicatorTranslationRepo;
     }

@@ -1,7 +1,7 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.*;
-import it.gdhi.internationalization.service.CategoryNameTranslator;
+import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
@@ -52,7 +52,7 @@ public class CountryHealthIndicatorServiceTest {
     private ICountrySummaryRepository iCountrySummaryRepository;
 
     @Mock
-    private CategoryNameTranslator categoryTranslator;
+    private HealthIndicatorTranslator categoryTranslator;
 
     private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
         Integer score1 = 3;

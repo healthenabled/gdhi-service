@@ -4,7 +4,7 @@ import it.gdhi.dto.CategoryIndicatorDto;
 import it.gdhi.internationalization.model.IndicatorTranslation;
 import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
-import it.gdhi.internationalization.service.CategoryNameTranslator;
+import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.Category;
 import it.gdhi.model.Indicator;
 import it.gdhi.model.id.HealthIndicatorTranslationId;
@@ -23,9 +23,9 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CategoryNameTranslatorTest {
+public class HealthIndicatorTranslatorTest {
     @InjectMocks
-    private CategoryNameTranslator translator;
+    private HealthIndicatorTranslator translator;
     @Mock
     private ICategoryTranslationRepository categoryTranslationRepository;
     @Mock
