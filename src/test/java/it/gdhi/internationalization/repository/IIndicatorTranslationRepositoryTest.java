@@ -23,9 +23,14 @@ public class IIndicatorTranslationRepositoryTest {
 
     @Test
     public void shouldReturnIndicatorInFrench() {
+        String name = "Priorité accordée à la santé numérique au niveau national par l'intermédiaire d'organes et de " +
+                "mécanismes de gouvernance dédiés";
+        String definition = "Le pays dispose-t-il d'un ministère, d'un organisme ou d'un groupe de travail national " +
+                "distinct pour la santé numérique ?";
+
         IndicatorTranslation translatedIndicator = repository.findTranslationForLanguage("fr", 1);
 
-        assertEquals(translatedIndicator.getName(), "Priorité accordée à la santé numérique au niveau national par l'intermédiaire d'organes et de mécanismes de gouvernance dédiés");
-        assertEquals(translatedIndicator.getDefinition(), "Le pays dispose-t-il d'un ministère, d'un organisme ou d'un groupe de travail national distinct pour la santé numérique ?");
+        assertEquals(translatedIndicator.getName(), name);
+        assertEquals(translatedIndicator.getDefinition(), definition);
     }
 }

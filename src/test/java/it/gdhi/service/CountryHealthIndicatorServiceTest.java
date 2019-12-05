@@ -54,7 +54,8 @@ public class CountryHealthIndicatorServiceTest {
     @Mock
     private HealthIndicatorTranslator categoryTranslator;
 
-    private void dataSet(String countryId1, int categoryId1, int categoryId2,  int indicatorId1, int indicatorId2, int indicatorId3) {
+    private void dataSet(String countryId1, int categoryId1, int categoryId2,
+                         int indicatorId1, int indicatorId2, int indicatorId3) {
         Integer score1 = 3;
         Integer score2 = 4;
         Integer score3 = 1;
@@ -772,7 +773,8 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null,PUBLISHED.name()))
                                                     .thenReturn(countryHealthIndicators);
         when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
-        when(categoryTranslator.getTranslatedCategoryName("Legislation, Policy, and Compliance", ar)).thenReturn("التشريعات والسياسات والامتثال");
+        when(categoryTranslator.getTranslatedCategoryName("Legislation, Policy, and Compliance", ar))
+                                .thenReturn("التشريعات والسياسات والامتثال");
         when(categoryTranslator.getTranslatedCategoryName("Workforce", ar)).thenReturn("الأيدي العاملة");
 
         GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService

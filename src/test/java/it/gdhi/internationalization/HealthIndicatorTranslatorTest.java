@@ -63,7 +63,8 @@ public class HealthIndicatorTranslatorTest {
         String workforceEN = "Workforce";
         String workforceFR = "Lois, politiques et conformité";
 
-        when(categoryTranslationRepository.findTranslationForLanguage("fr", workforceEN)).thenReturn("Lois, politiques et conformité");
+        when(categoryTranslationRepository.findTranslationForLanguage("fr", workforceEN))
+                                            .thenReturn("Lois, politiques et conformité");
 
         String actualCategory = translator.getTranslatedCategoryName(workforceEN, fr);
 
@@ -94,16 +95,30 @@ public class HealthIndicatorTranslatorTest {
 
     @Test
     public void shouldTranslateCategoryIndicatorToFrench() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1, "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance", "Does the country have a separate department / agency / national working group for digital health?", 4)));
+        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1,
+        "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
+        "Does the country have a separate department / agency / national working group for digital health?",
+                4)));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
 
         HealthIndicatorTranslationId indicatorId = new HealthIndicatorTranslationId(1, "fr");
-        IndicatorTranslation indicatorFR = new IndicatorTranslation(indicatorId, "Priorité accordée à la santé numérique au niveau national par l''intermédiaire d''organes et de mécanismes de gouvernance dédiés/ mechanisms for governance", "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de travail national distinct pour la santé numérique ?", null);
-        Category categoryFR = new Category(2, "Stratégie et investissement", of(new Indicator(1, "Priorité accordée à la santé numérique au niveau national par l''intermédiaire d''organes et de mécanismes de gouvernance dédiés/ mechanisms for governance", "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de travail national distinct pour la santé numérique ?", 4)));
+        IndicatorTranslation indicatorFR = new IndicatorTranslation(indicatorId,
+        "Priorité accordée à la santé numérique au niveau national par l''intermédiaire d''organes et de " +
+                "mécanismes de gouvernance dédiés/ mechanisms for governance", "Le pays dispose-t-il d''un " +
+                "ministère, d''un organisme ou d''un groupe de travail national distinct pour la santé numérique ?",
+                null);
+        Category categoryFR = new Category(2, "Stratégie et investissement", of(new Indicator(1,
+                "Priorité accordée à la santé numérique au niveau national par l''intermédiaire d''organes et " +
+                        "de mécanismes de gouvernance dédiés/ mechanisms for governance",
+                "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de travail national " +
+                        "distinct pour la santé numérique ?", 4)));
         CategoryIndicatorDto categoryIndicatorFR = new CategoryIndicatorDto(categoryFR);
 
-        when(categoryTranslationRepository.findTranslationForLanguage("fr", "Strategy and Investment")).thenReturn("Stratégie et investissement");
-        when(indicatorTranslationRepository.findTranslationForLanguage("fr", 1)).thenReturn(indicatorFR);
+        when(categoryTranslationRepository
+                .findTranslationForLanguage("fr", "Strategy and Investment"))
+                .thenReturn("Stratégie et investissement");
+        when(indicatorTranslationRepository.findTranslationForLanguage("fr", 1))
+                .thenReturn(indicatorFR);
 
         CategoryIndicatorDto translatedIndicator = translator.translate(categoryIndicatorEN, LanguageCode.fr);
 
@@ -112,7 +127,10 @@ public class HealthIndicatorTranslatorTest {
 
     @Test
     public void shouldNotTranslateCategoryIndicatorGivenLanguageCodeIsEN() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1, "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance", "Does the country have a separate department / agency / national working group for digital health?", 4)));
+        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1,
+        "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
+        "Does the country have a separate department / agency / national working group for digital health?",
+                4)));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
 
         translator.translate(categoryIndicatorEN, en);
@@ -123,7 +141,10 @@ public class HealthIndicatorTranslatorTest {
 
     @Test
     public void shouldNotTranslateCategoryIndicatorGivenLanguageCodeIsNull() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1, "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance", "Does the country have a separate department / agency / national working group for digital health?", 4)));
+        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1,
+        "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
+        "Does the country have a separate department / agency / national working group for digital health?",
+                4)));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
 
         translator.translate(categoryIndicatorEN, null);

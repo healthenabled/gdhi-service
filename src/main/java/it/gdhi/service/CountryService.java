@@ -34,7 +34,10 @@ public class CountryService {
     private final CountryNameTranslator translator;
 
     @Autowired
-    public CountryService(ICountryRepository iCountryRepository, ICountrySummaryRepository iCountrySummaryRepository, ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository, CountryNameTranslator translator) {
+    public CountryService(ICountryRepository iCountryRepository,
+                          ICountrySummaryRepository iCountrySummaryRepository,
+                          ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository,
+                          CountryNameTranslator translator) {
         this.iCountryRepository = iCountryRepository;
         this.iCountrySummaryRepository = iCountrySummaryRepository;
         this.iCountryHealthIndicatorRepository = iCountryHealthIndicatorRepository;
