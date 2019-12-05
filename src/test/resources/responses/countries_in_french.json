@@ -1,1166 +1,584 @@
 [
   {
-    "id": "ALB",
-    "name": "Albania",
-    "uniqueId": "a588a834-da0a-43a2-af3c-19ee4b91cdc3",
-    "alpha2Code": "AL"
+    "ALB": "Albania"
   },
   {
-    "id": "DZA",
-    "name": "Algeria",
-    "uniqueId": "90a18a2b-e5b1-4a1b-a00b-d917ad3b598a",
-    "alpha2Code": "DZ"
+    "DZA": "Algeria"
   },
   {
-    "id": "AND",
-    "name": "Andorra",
-    "uniqueId": "8ba35033-6b78-416a-9b59-e25a37bc1aee",
-    "alpha2Code": "AD"
+    "AND": "Andorra"
   },
   {
-    "id": "AGO",
-    "name": "Angola",
-    "uniqueId": "52d6cca7-e775-41f4-b946-cca3051cd68b",
-    "alpha2Code": "AO"
+    "AGO": "Angola"
   },
   {
-    "id": "ATG",
-    "name": "Antigua and Barbuda",
-    "uniqueId": "edb87ec4-9d63-4517-b3b9-10196fda0981",
-    "alpha2Code": "AG"
+    "ATG": "Antigua and Barbuda"
   },
   {
-    "id": "ARG",
-    "name": "Argentina",
-    "uniqueId": "9c9a027c-2849-4e4a-ba4a-fc163ec9c848",
-    "alpha2Code": "AR"
+    "ARG": "Argentina"
   },
   {
-    "id": "ARM",
-    "name": "Armenia",
-    "uniqueId": "945010f1-54f8-40ec-acc4-34ea04aa3175",
-    "alpha2Code": "AM"
+    "ARM": "Armenia"
   },
   {
-    "id": "AUS",
-    "name": "Australia",
-    "uniqueId": "7a1045aa-ef5f-4754-8f2a-4b4cbdb6c009",
-    "alpha2Code": "AU"
+    "AUS": "Australia"
   },
   {
-    "id": "AUT",
-    "name": "Austria",
-    "uniqueId": "0d1553aa-7e6d-43fb-8757-814f0375da7b",
-    "alpha2Code": "AT"
+    "AUT": "Austria"
   },
   {
-    "id": "AZE",
-    "name": "Azerbaijan",
-    "uniqueId": "189c04f1-4a08-45f0-92af-0888054c26c1",
-    "alpha2Code": "AZ"
+    "AZE": "Azerbaijan"
   },
   {
-    "id": "BHS",
-    "name": "Bahamas",
-    "uniqueId": "ec1323b5-0ae8-4158-8f41-0bbe8555834d",
-    "alpha2Code": "BS"
+    "BHS": "Bahamas"
   },
   {
-    "id": "BHR",
-    "name": "Bahrain",
-    "uniqueId": "85f7f514-3453-43d5-989c-8450a4b5a05a",
-    "alpha2Code": "BH"
+    "BHR": "Bahrain"
   },
   {
-    "id": "BRB",
-    "name": "Barbados",
-    "uniqueId": "69d6fc6d-79d9-465e-86ef-bb7ea41e82bb",
-    "alpha2Code": "BB"
+    "BRB": "Barbados"
   },
   {
-    "id": "BLR",
-    "name": "Belarus",
-    "uniqueId": "19b526fd-670a-402c-9ca4-ad05f998de4a",
-    "alpha2Code": "BY"
+    "BLR": "Belarus"
   },
   {
-    "id": "BEL",
-    "name": "Belgium",
-    "uniqueId": "520dae63-ee4d-41d1-97b6-de97aee485d2",
-    "alpha2Code": "BE"
+    "BEL": "Belgium"
   },
   {
-    "id": "BLZ",
-    "name": "Belize",
-    "uniqueId": "5fd4ed7c-2467-4b0f-aa53-1eeef90fb3e6",
-    "alpha2Code": "BZ"
+    "BLZ": "Belize"
   },
   {
-    "id": "BTN",
-    "name": "Bhutan",
-    "uniqueId": "e6e35d44-1ab9-4b6f-89ec-078380fb1cc3",
-    "alpha2Code": "BT"
+    "BTN": "Bhutan"
   },
   {
-    "id": "BOL",
-    "name": "Bolivia",
-    "uniqueId": "afde8071-6528-451c-b9bb-121f259d8d37",
-    "alpha2Code": "BO"
+    "BOL": "Bolivia"
   },
   {
-    "id": "BIH",
-    "name": "Bosnia and Herzegovina",
-    "uniqueId": "7df6c60f-5c10-4588-94f6-ec04e8974e48",
-    "alpha2Code": "BA"
+    "BIH": "Bosnia and Herzegovina"
   },
   {
-    "id": "BWA",
-    "name": "Botswana",
-    "uniqueId": "a551d75b-042f-4dd9-b6db-ae0a3e21c4c7",
-    "alpha2Code": "BW"
+    "BWA": "Botswana"
   },
   {
-    "id": "BRA",
-    "name": "Brazil",
-    "uniqueId": "4c6cb479-f9b0-463b-aadc-29404c38fcbf",
-    "alpha2Code": "BR"
+    "BRA": "Brazil"
   },
   {
-    "id": "BRN",
-    "name": "Brunei Darussalam",
-    "uniqueId": "d551bfac-cebb-46b8-8493-e26a62a6f137",
-    "alpha2Code": "BN"
+    "BRN": "Brunei Darussalam"
   },
   {
-    "id": "BGR",
-    "name": "Bulgaria",
-    "uniqueId": "b640d8d8-d2d6-4be7-ab82-33f58d44c66c",
-    "alpha2Code": "BG"
+    "BGR": "Bulgaria"
   },
   {
-    "id": "BFA",
-    "name": "Burkina Faso",
-    "uniqueId": "92dd26fa-d07c-434d-9068-c047f7d79fe9",
-    "alpha2Code": "BF"
+    "BFA": "Burkina Faso"
   },
   {
-    "id": "BDI",
-    "name": "Burundi",
-    "uniqueId": "6e399a9f-c734-419a-8d21-b2649a8fe5ff",
-    "alpha2Code": "BI"
+    "BDI": "Burundi"
   },
   {
-    "id": "KHM",
-    "name": "Cambodia",
-    "uniqueId": "51d31443-06d3-4e6a-8294-07349107e16e",
-    "alpha2Code": "KH"
+    "KHM": "Cambodia"
   },
   {
-    "id": "CMR",
-    "name": "Cameroon",
-    "uniqueId": "04e263e0-a1c5-49bf-ad89-47738c18ec58",
-    "alpha2Code": "CM"
+    "CMR": "Cameroon"
   },
   {
-    "id": "CAN",
-    "name": "Canada",
-    "uniqueId": "f348b6ae-54e0-4f12-815f-961fcc1f8331",
-    "alpha2Code": "CA"
+    "CAN": "Canada"
   },
   {
-    "id": "CPV",
-    "name": "Cape Verde",
-    "uniqueId": "734cb241-b143-4756-b41f-e2aefb6b53f8",
-    "alpha2Code": "CV"
+    "CPV": "Cape Verde"
   },
   {
-    "id": "CAF",
-    "name": "Central African Republic",
-    "uniqueId": "0ef9e83f-2a1c-4197-9130-4b20dd8ad2c8",
-    "alpha2Code": "CF"
+    "CAF": "Central African Republic"
   },
   {
-    "id": "TCD",
-    "name": "Chad",
-    "uniqueId": "4c47bda3-d93a-412d-90f3-74f2aa7556a7",
-    "alpha2Code": "TD"
+    "TCD": "Chad"
   },
   {
-    "id": "CHN",
-    "name": "China",
-    "uniqueId": "c64be956-8496-462c-9f3c-2e947c059eaa",
-    "alpha2Code": "CN"
+    "CHN": "China"
   },
   {
-    "id": "COL",
-    "name": "Colombia",
-    "uniqueId": "df545fb7-26f9-49c0-8b1c-d61161f3d866",
-    "alpha2Code": "CO"
+    "COL": "Colombia"
   },
   {
-    "id": "COM",
-    "name": "Comoros",
-    "uniqueId": "54bf034e-a3ae-47ca-9a28-7aeeaecba6e5",
-    "alpha2Code": "KM"
+    "COM": "Comoros"
   },
   {
-    "id": "COG",
-    "name": "Congo",
-    "uniqueId": "f1cac7d4-511a-40be-8ed2-15f7e60d49ae",
-    "alpha2Code": "CG"
+    "COG": "Congo"
   },
   {
-    "id": "COD",
-    "name": "Democratic Republic of the Congo",
-    "uniqueId": "7368c9cd-4cdc-4898-b077-2fb4c40d88aa",
-    "alpha2Code": "CD"
+    "COD": "Democratic Republic of the Congo"
   },
   {
-    "id": "COK",
-    "name": "Cook Islands",
-    "uniqueId": "309a041e-0505-402f-a913-6786a00e183f",
-    "alpha2Code": "CK"
+    "COK": "Cook Islands"
   },
   {
-    "id": "CRI",
-    "name": "Costa Rica",
-    "uniqueId": "46827f2c-75e5-47d0-b8f0-d08980e317f1",
-    "alpha2Code": "CR"
+    "CRI": "Costa Rica"
   },
   {
-    "id": "HRV",
-    "name": "Croatia",
-    "uniqueId": "9a081690-74f5-4dac-a206-6fa37ba504fa",
-    "alpha2Code": "HR"
+    "HRV": "Croatia"
   },
   {
-    "id": "CUB",
-    "name": "Cuba",
-    "uniqueId": "a0f85123-6075-4bb2-addf-07cb8a6b5461",
-    "alpha2Code": "CU"
+    "CUB": "Cuba"
   },
   {
-    "id": "CYP",
-    "name": "Cyprus",
-    "uniqueId": "aa4f0c48-4bf1-40e2-8650-55c788961812",
-    "alpha2Code": "CY"
+    "CYP": "Cyprus"
   },
   {
-    "id": "CZE",
-    "name": "Czech Republic",
-    "uniqueId": "e104ea4e-0962-4000-bc25-8ea1fe35fc5c",
-    "alpha2Code": "CZ"
+    "CZE": "Czech Republic"
   },
   {
-    "id": "CIV",
-    "name": "Côte d'Ivoire",
-    "uniqueId": "b5127272-5d52-4cc5-87ec-5a0079f3daa6",
-    "alpha2Code": "CI"
+    "CIV": "Côte d'Ivoire"
   },
   {
-    "id": "DNK",
-    "name": "Denmark",
-    "uniqueId": "6455e453-5e55-43c7-89b5-7ac05009fa8a",
-    "alpha2Code": "DK"
+    "DNK": "Denmark"
   },
   {
-    "id": "DJI",
-    "name": "Djibouti",
-    "uniqueId": "fbc68272-ecab-4850-9680-0b26b4a0bf3a",
-    "alpha2Code": "DJ"
+    "DJI": "Djibouti"
   },
   {
-    "id": "DMA",
-    "name": "Dominica",
-    "uniqueId": "5160fd20-8526-44ed-bbb4-3cf8b0e9328d",
-    "alpha2Code": "DM"
+    "DMA": "Dominica"
   },
   {
-    "id": "DOM",
-    "name": "Dominican Republic",
-    "uniqueId": "3e3fefe2-1c34-4765-a125-37c230044fb1",
-    "alpha2Code": "DO"
+    "DOM": "Dominican Republic"
   },
   {
-    "id": "ECU",
-    "name": "Ecuador",
-    "uniqueId": "e2226106-ce44-4142-8dab-e39b517a41d6",
-    "alpha2Code": "EC"
+    "ECU": "Ecuador"
   },
   {
-    "id": "EGY",
-    "name": "Egypt",
-    "uniqueId": "4b73dfca-937b-4c9a-b6c4-290d815184aa",
-    "alpha2Code": "EG"
+    "EGY": "Egypt"
   },
   {
-    "id": "SLV",
-    "name": "El Salvador",
-    "uniqueId": "50841c34-581d-43a5-a0ac-6cdb17d31c5b",
-    "alpha2Code": "SV"
+    "SLV": "El Salvador"
   },
   {
-    "id": "GNQ",
-    "name": "Equatorial Guinea",
-    "uniqueId": "73613f3b-48c2-48a8-8a3f-f91a677f3f2a",
-    "alpha2Code": "GQ"
+    "GNQ": "Equatorial Guinea"
   },
   {
-    "id": "ERI",
-    "name": "Eritrea",
-    "uniqueId": "f4ea5fa4-d153-46e0-9c4c-84af2adc8199",
-    "alpha2Code": "ER"
+    "ERI": "Eritrea"
   },
   {
-    "id": "EST",
-    "name": "Estonia",
-    "uniqueId": "81b00624-5ee1-445e-9000-204b2731d4ef",
-    "alpha2Code": "EE"
+    "EST": "Estonia"
   },
   {
-    "id": "FJI",
-    "name": "Fiji",
-    "uniqueId": "82ff80af-0c4d-4774-8d0f-e8800bbc2ed7",
-    "alpha2Code": "FJ"
+    "FJI": "Fiji"
   },
   {
-    "id": "FIN",
-    "name": "Finland",
-    "uniqueId": "29a39bea-601e-481c-977b-8efee55862dc",
-    "alpha2Code": "FI"
+    "FIN": "Finland"
   },
   {
-    "id": "FRA",
-    "name": "France",
-    "uniqueId": "e05d199c-c3a3-4e6b-9545-07d77c2cdf1e",
-    "alpha2Code": "FR"
+    "FRA": "France"
   },
   {
-    "id": "GAB",
-    "name": "Gabon",
-    "uniqueId": "c9b44841-6d13-48f4-a6e2-def71e39a392",
-    "alpha2Code": "GA"
+    "GAB": "Gabon"
   },
   {
-    "id": "GMB",
-    "name": "Gambia",
-    "uniqueId": "5a65cc5e-264a-46b5-bae0-6c6f664462e8",
-    "alpha2Code": "GM"
+    "GMB": "Gambia"
   },
   {
-    "id": "GEO",
-    "name": "Georgia",
-    "uniqueId": "31a6d99d-4867-4573-b1fe-e50626e93745",
-    "alpha2Code": "GE"
+    "GEO": "Georgia"
   },
   {
-    "id": "DEU",
-    "name": "Germany",
-    "uniqueId": "7d51ff34-c615-4581-9562-75376e7c3e01",
-    "alpha2Code": "DE"
+    "DEU": "Germany"
   },
   {
-    "id": "GHA",
-    "name": "Ghana",
-    "uniqueId": "2dabc3bc-4ee6-436d-aec2-c6bb117ebb8e",
-    "alpha2Code": "GH"
+    "GHA": "Ghana"
   },
   {
-    "id": "GRC",
-    "name": "Greece",
-    "uniqueId": "3bd4210f-17c8-4d64-9535-2d2529987a85",
-    "alpha2Code": "GR"
+    "GRC": "Greece"
   },
   {
-    "id": "GRD",
-    "name": "Grenada",
-    "uniqueId": "b5340632-5615-44ea-8041-48d8ca585671",
-    "alpha2Code": "GD"
+    "GRD": "Grenada"
   },
   {
-    "id": "GTM",
-    "name": "Guatemala",
-    "uniqueId": "5dd39fe4-c7fa-4506-94f2-220af2e3e257",
-    "alpha2Code": "GT"
+    "GTM": "Guatemala"
   },
   {
-    "id": "GIN",
-    "name": "Guinea",
-    "uniqueId": "6ead02a4-6158-4aac-95b8-9c46d5d91eea",
-    "alpha2Code": "GN"
+    "GIN": "Guinea"
   },
   {
-    "id": "GNB",
-    "name": "Guinea-Bissau",
-    "uniqueId": "1532c43d-1d8d-447f-b864-057cede17ce3",
-    "alpha2Code": "GW"
+    "GNB": "Guinea-Bissau"
   },
   {
-    "id": "PRK",
-    "name": "Democratic Peoples Republic of Korea",
-    "uniqueId": "afba0c8b-fbab-4ca5-a57b-f7db92a0f0e6",
-    "alpha2Code": "KP"
+    "PRK": "Democratic Peoples Republic of Korea"
   },
   {
-    "id": "GUY",
-    "name": "Guyana",
-    "uniqueId": "623fba7d-9887-49ce-9d32-14dfe21554f8",
-    "alpha2Code": "GY"
+    "GUY": "Guyana"
   },
   {
-    "id": "HTI",
-    "name": "Haiti",
-    "uniqueId": "9c476cc5-d1ec-4ef8-87eb-e92f430c05bf",
-    "alpha2Code": "HT"
+    "HTI": "Haiti"
   },
   {
-    "id": "HND",
-    "name": "Honduras",
-    "uniqueId": "f1837b28-483d-4573-9522-3bde1b6f584e",
-    "alpha2Code": "HN"
+    "HND": "Honduras"
   },
   {
-    "id": "HUN",
-    "name": "Hungary",
-    "uniqueId": "5807ea3c-e131-4239-b2ec-30b20e8af115",
-    "alpha2Code": "HU"
+    "HUN": "Hungary"
   },
   {
-    "id": "ISL",
-    "name": "Iceland",
-    "uniqueId": "5789534a-2487-4a86-94d3-506584307083",
-    "alpha2Code": "IS"
+    "ISL": "Iceland"
   },
   {
-    "id": "IND",
-    "name": "India",
-    "uniqueId": "50b68ad4-a059-45ac-8902-1464a492f3e1",
-    "alpha2Code": "IN"
+    "IND": "India"
   },
   {
-    "id": "IRN",
-    "name": "Iran, Islamic Republic of",
-    "uniqueId": "74dd95dd-d863-485e-9ba4-88a5d87b689c",
-    "alpha2Code": "IR"
+    "IRN": "Iran, Islamic Republic of"
   },
   {
-    "id": "IRQ",
-    "name": "Iraq",
-    "uniqueId": "4650fc65-beb0-4ee5-886c-70d5982280d1",
-    "alpha2Code": "IQ"
+    "IRQ": "Iraq"
   },
   {
-    "id": "IRL",
-    "name": "Ireland",
-    "uniqueId": "b50a9c5e-cbe0-41de-bc69-a7491a2568e0",
-    "alpha2Code": "IE"
+    "IRL": "Ireland"
   },
   {
-    "id": "ISR",
-    "name": "Israel",
-    "uniqueId": "a01b92f9-48c5-4091-8125-4e694d248b87",
-    "alpha2Code": "IL"
+    "ISR": "Israel"
   },
   {
-    "id": "ITA",
-    "name": "Italy",
-    "uniqueId": "7d15a52f-6395-4a0c-923c-0bb281d36397",
-    "alpha2Code": "IT"
+    "ITA": "Italy"
   },
   {
-    "id": "JAM",
-    "name": "Jamaica",
-    "uniqueId": "52311150-471c-4ec1-b6bb-c7e9766c1174",
-    "alpha2Code": "JM"
+    "JAM": "Jamaica"
   },
   {
-    "id": "JPN",
-    "name": "Japan",
-    "uniqueId": "b768e96b-84ca-4259-b716-4adc2bbcc698",
-    "alpha2Code": "JP"
+    "JPN": "Japan"
   },
   {
-    "id": "KAZ",
-    "name": "Kazakhstan",
-    "uniqueId": "52279e09-e6d0-4b5a-bdd4-5a19b9097f4c",
-    "alpha2Code": "KZ"
+    "KAZ": "Kazakhstan"
   },
   {
-    "id": "KEN",
-    "name": "Kenya",
-    "uniqueId": "0aba1be0-293f-4065-85fb-5da987b4d883",
-    "alpha2Code": "KE"
+    "KEN": "Kenya"
   },
   {
-    "id": "KIR",
-    "name": "Kiribati",
-    "uniqueId": "718c9313-e786-4619-8688-d95cfe57e474",
-    "alpha2Code": "KI"
+    "KIR": "Kiribati"
   },
   {
-    "id": "KOR",
-    "name": "Korea, Republic of",
-    "uniqueId": "81222e29-d47f-469a-b892-990d71ceeac0",
-    "alpha2Code": "KR"
+    "KOR": "Korea, Republic of"
   },
   {
-    "id": "KGZ",
-    "name": "Kyrgyzstan",
-    "uniqueId": "b72c1474-a3a6-40a4-b0af-3e6009f2b251",
-    "alpha2Code": "KG"
+    "KGZ": "Kyrgyzstan"
   },
   {
-    "id": "LVA",
-    "name": "Latvia",
-    "uniqueId": "8d1ef833-9964-457f-92be-6b035ed59d6b",
-    "alpha2Code": "LV"
+    "LVA": "Latvia"
   },
   {
-    "id": "LBN",
-    "name": "Lebanon",
-    "uniqueId": "9b865dfa-b5a9-480f-9f92-aaac14365c85",
-    "alpha2Code": "LB"
+    "LBN": "Lebanon"
   },
   {
-    "id": "LSO",
-    "name": "Lesotho",
-    "uniqueId": "edc40987-b3c6-4a8b-b734-2823ed78a21d",
-    "alpha2Code": "LS"
+    "LSO": "Lesotho"
   },
   {
-    "id": "LBR",
-    "name": "Liberia",
-    "uniqueId": "6d9d91de-1f0d-47fe-bac9-e0fec72bc491",
-    "alpha2Code": "LR"
+    "LBR": "Liberia"
   },
   {
-    "id": "LBY",
-    "name": "Libya",
-    "uniqueId": "0c783f61-e3ed-4e89-8987-1ed4e3dfa391",
-    "alpha2Code": "LY"
+    "LBY": "Libya"
   },
   {
-    "id": "LTU",
-    "name": "Lithuania",
-    "uniqueId": "0a8e28ce-2962-47c2-90d9-44fd99d38a02",
-    "alpha2Code": "LT"
+    "LTU": "Lithuania"
   },
   {
-    "id": "LUX",
-    "name": "Luxembourg",
-    "uniqueId": "cd4753ad-dec0-4cd0-903f-d24356c75134",
-    "alpha2Code": "LU"
+    "LUX": "Luxembourg"
   },
   {
-    "id": "MKD",
-    "name": "Macedonia, the former Yugoslav Republic of",
-    "uniqueId": "8c83fe00-dd14-4743-8b13-1b3789a8610c",
-    "alpha2Code": "MK"
+    "MKD": "Macedonia, the former Yugoslav Republic of"
   },
   {
-    "id": "MDG",
-    "name": "Madagascar",
-    "uniqueId": "ab3e75bb-4a1a-4422-bc6c-58056fd6189f",
-    "alpha2Code": "MG"
+    "MDG": "Madagascar"
   },
   {
-    "id": "MWI",
-    "name": "Malawi",
-    "uniqueId": "244cec8c-fc94-4941-b759-007368a99180",
-    "alpha2Code": "MW"
+    "MWI": "Malawi"
   },
   {
-    "id": "MDV",
-    "name": "Maldives",
-    "uniqueId": "7f57ee98-a0f3-451e-8068-47198aecd118",
-    "alpha2Code": "MV"
+    "MDV": "Maldives"
   },
   {
-    "id": "MLT",
-    "name": "Malta",
-    "uniqueId": "83001316-f2a9-44d0-841a-769ea867596f",
-    "alpha2Code": "MT"
+    "MLT": "Malta"
   },
   {
-    "id": "MHL",
-    "name": "Marshall Islands",
-    "uniqueId": "07627c65-16f7-4a7f-af42-1d076654e673",
-    "alpha2Code": "MH"
+    "MHL": "Marshall Islands"
   },
   {
-    "id": "MRT",
-    "name": "Mauritania",
-    "uniqueId": "fe061686-38f4-4e9a-9532-ba3300fd1f1b",
-    "alpha2Code": "MR"
+    "MRT": "Mauritania"
   },
   {
-    "id": "MUS",
-    "name": "Mauritius",
-    "uniqueId": "6332da74-6e70-42cc-a4ef-0bbfc4770d95",
-    "alpha2Code": "MU"
+    "MUS": "Mauritius"
   },
   {
-    "id": "MEX",
-    "name": "Mexico",
-    "uniqueId": "5f287cdf-e7de-47e1-b020-a038663988f2",
-    "alpha2Code": "MX"
+    "MEX": "Mexico"
   },
   {
-    "id": "FSM",
-    "name": "Micronesia, Federated States of",
-    "uniqueId": "dbd10396-d6ff-4af5-be60-7336549d5251",
-    "alpha2Code": "FM"
+    "FSM": "Micronesia, Federated States of"
   },
   {
-    "id": "MDA",
-    "name": "Moldova, Republic of",
-    "uniqueId": "833062d2-1e82-4a53-96c3-5a60dd555f9b",
-    "alpha2Code": "MD"
+    "MDA": "Moldova, Republic of"
   },
   {
-    "id": "MCO",
-    "name": "Monaco",
-    "uniqueId": "1b3b4441-d3a3-4b4c-9c5f-4ed10bac30f4",
-    "alpha2Code": "MC"
+    "MCO": "Monaco"
   },
   {
-    "id": "MNE",
-    "name": "Montenegro",
-    "uniqueId": "d1644e3d-3e53-464e-b2b2-159cf2647594",
-    "alpha2Code": "ME"
+    "MNE": "Montenegro"
   },
   {
-    "id": "MAR",
-    "name": "Morocco",
-    "uniqueId": "fd04940f-dd90-445a-ae57-a425e50e59db",
-    "alpha2Code": "MA"
+    "MAR": "Morocco"
   },
   {
-    "id": "MOZ",
-    "name": "Mozambique",
-    "uniqueId": "f1a8ec5b-e0f7-45f3-b474-e783af281a24",
-    "alpha2Code": "MZ"
+    "MOZ": "Mozambique"
   },
   {
-    "id": "MMR",
-    "name": "Myanmar",
-    "uniqueId": "ba73af6f-b337-4e5b-8903-4658a9ffbd84",
-    "alpha2Code": "MM"
+    "MMR": "Myanmar"
   },
   {
-    "id": "NAM",
-    "name": "Namibia",
-    "uniqueId": "f0e27343-7864-480f-8161-cb5d7343fe18",
-    "alpha2Code": "NA"
+    "NAM": "Namibia"
   },
   {
-    "id": "NRU",
-    "name": "Nauru",
-    "uniqueId": "4eaf1365-b7af-4ab4-a48a-0baaea191ee6",
-    "alpha2Code": "NR"
+    "NRU": "Nauru"
   },
   {
-    "id": "NPL",
-    "name": "Nepal",
-    "uniqueId": "307534a5-5c0f-425a-8135-97cc3ccf5d0c",
-    "alpha2Code": "NP"
+    "NPL": "Nepal"
   },
   {
-    "id": "NLD",
-    "name": "Netherlands",
-    "uniqueId": "018d3528-0476-4684-82ae-ea6d6d03a9e4",
-    "alpha2Code": "NL"
+    "NLD": "Netherlands"
   },
   {
-    "id": "NIC",
-    "name": "Nicaragua",
-    "uniqueId": "7915fc7b-9e87-4607-9645-889672d9e8d9",
-    "alpha2Code": "NI"
+    "NIC": "Nicaragua"
   },
   {
-    "id": "NER",
-    "name": "Niger",
-    "uniqueId": "7e27f6e1-9f0e-492f-9ae5-55908d7fc106",
-    "alpha2Code": "NE"
+    "NER": "Niger"
   },
   {
-    "id": "NIU",
-    "name": "Niue",
-    "uniqueId": "9213d55b-b82c-42d7-adbb-9d1890990408",
-    "alpha2Code": "NU"
+    "NIU": "Niue"
   },
   {
-    "id": "NOR",
-    "name": "Norway",
-    "uniqueId": "e8ac1aef-b703-4595-9e04-03475ac50819",
-    "alpha2Code": "NO"
+    "NOR": "Norway"
   },
   {
-    "id": "OMN",
-    "name": "Oman",
-    "uniqueId": "b3ae18b5-288b-43ef-89b9-cc384b0b9053",
-    "alpha2Code": "OM"
+    "OMN": "Oman"
   },
   {
-    "id": "PLW",
-    "name": "Palau",
-    "uniqueId": "1f6b0344-6d6d-481d-a7c7-d6888878c861",
-    "alpha2Code": "PW"
+    "PLW": "Palau"
   },
   {
-    "id": "PAN",
-    "name": "Panama",
-    "uniqueId": "15f49c51-17a5-4f9d-9445-821dd8d97386",
-    "alpha2Code": "PA"
+    "PAN": "Panama"
   },
   {
-    "id": "PNG",
-    "name": "Papua New Guinea",
-    "uniqueId": "0b36e6f4-9847-4103-ba91-9b22ec6205c4",
-    "alpha2Code": "PG"
+    "PNG": "Papua New Guinea"
   },
   {
-    "id": "PRY",
-    "name": "Paraguay",
-    "uniqueId": "b876d551-c581-4f26-8aed-395c0c14c8ec",
-    "alpha2Code": "PY"
+    "PRY": "Paraguay"
   },
   {
-    "id": "POL",
-    "name": "Poland",
-    "uniqueId": "6dcb6cc2-6888-458c-bc71-e2f407ed4e55",
-    "alpha2Code": "PL"
+    "POL": "Poland"
   },
   {
-    "id": "QAT",
-    "name": "Qatar",
-    "uniqueId": "45530f5d-5a1a-40f8-b285-da79281301ed",
-    "alpha2Code": "QA"
+    "QAT": "Qatar"
   },
   {
-    "id": "ROU",
-    "name": "Romania",
-    "uniqueId": "1e349859-afc9-4f0d-a60a-41ff4b8c612e",
-    "alpha2Code": "RO"
+    "ROU": "Romania"
   },
   {
-    "id": "RUS",
-    "name": "Russian Federation",
-    "uniqueId": "f46e5f99-4582-49ac-9aa5-bd8a4130e31c",
-    "alpha2Code": "RU"
+    "RUS": "Russian Federation"
   },
   {
-    "id": "RWA",
-    "name": "Rwanda",
-    "uniqueId": "82616d4a-7ccc-4f52-9bed-acec6ec0ee5f",
-    "alpha2Code": "RW"
+    "RWA": "Rwanda"
   },
   {
-    "id": "KNA",
-    "name": "Saint Kitts and Nevis",
-    "uniqueId": "506ec5f3-c4b4-46b7-9396-2a6968f5a9fa",
-    "alpha2Code": "KN"
+    "KNA": "Saint Kitts and Nevis"
   },
   {
-    "id": "LCA",
-    "name": "Saint Lucia",
-    "uniqueId": "20801505-dfda-47ef-b3b6-e887c7438f1e",
-    "alpha2Code": "LC"
+    "LCA": "Saint Lucia"
   },
   {
-    "id": "VCT",
-    "name": "Saint Vincent and the Grenadines",
-    "uniqueId": "7369b44b-9c12-4100-82e5-980d5c3a777f",
-    "alpha2Code": "VC"
+    "VCT": "Saint Vincent and the Grenadines"
   },
   {
-    "id": "WSM",
-    "name": "Samoa",
-    "uniqueId": "36b288f7-43d7-4233-a8af-033f1baad0e8",
-    "alpha2Code": "WS"
+    "WSM": "Samoa"
   },
   {
-    "id": "SMR",
-    "name": "San Marino",
-    "uniqueId": "e7109c28-3a26-4c52-9b5b-4c57fae9e42b",
-    "alpha2Code": "SM"
+    "SMR": "San Marino"
   },
   {
-    "id": "STP",
-    "name": "Sao Tome and Principe",
-    "uniqueId": "c72f5239-d786-4fe7-9b07-a8f2bd0b0b55",
-    "alpha2Code": "ST"
+    "STP": "Sao Tome and Principe"
   },
   {
-    "id": "SAU",
-    "name": "Saudi Arabia",
-    "uniqueId": "e77a4c80-7388-4682-b97a-40470f7ea9c3",
-    "alpha2Code": "SA"
+    "SAU": "Saudi Arabia"
   },
   {
-    "id": "SEN",
-    "name": "Senegal",
-    "uniqueId": "bcd22fef-9976-4c32-9d8e-8bedebb175b4",
-    "alpha2Code": "SN"
+    "SEN": "Senegal"
   },
   {
-    "id": "SRB",
-    "name": "Serbia",
-    "uniqueId": "e0e6ff31-b09b-4ab1-8632-b75ba976cb5f",
-    "alpha2Code": "RS"
+    "SRB": "Serbia"
   },
   {
-    "id": "SYC",
-    "name": "Seychelles",
-    "uniqueId": "d6910b25-3a41-47ae-800f-1319309f373f",
-    "alpha2Code": "SC"
+    "SYC": "Seychelles"
   },
   {
-    "id": "SGP",
-    "name": "Singapore",
-    "uniqueId": "6e54b640-6cf9-4306-9814-ca59fce7344d",
-    "alpha2Code": "SG"
+    "SGP": "Singapore"
   },
   {
-    "id": "SVK",
-    "name": "Slovakia",
-    "uniqueId": "0ad4cb0b-e4c4-4e2e-8dd9-69dbcabbe9f0",
-    "alpha2Code": "SK"
+    "SVK": "Slovakia"
   },
   {
-    "id": "SVN",
-    "name": "Slovenia",
-    "uniqueId": "d4c6a00c-2a79-433b-90ca-deacad8bf255",
-    "alpha2Code": "SI"
+    "SVN": "Slovenia"
   },
   {
-    "id": "SLB",
-    "name": "Solomon Islands",
-    "uniqueId": "900fde9f-1143-48e9-a39b-7a7bfc220e1d",
-    "alpha2Code": "SB"
+    "SLB": "Solomon Islands"
   },
   {
-    "id": "SOM",
-    "name": "Somalia",
-    "uniqueId": "4f7fc5f5-0660-4862-a74f-a7663cd22feb",
-    "alpha2Code": "SO"
+    "SOM": "Somalia"
   },
   {
-    "id": "ZAF",
-    "name": "South Africa",
-    "uniqueId": "4323d28d-b093-4dad-91f9-93f1ca97dc53",
-    "alpha2Code": "ZA"
+    "ZAF": "South Africa"
   },
   {
-    "id": "SSD",
-    "name": "South Sudan",
-    "uniqueId": "33c930ab-f2d9-4f30-84e4-d4b9e9d71c70",
-    "alpha2Code": "SS"
+    "SSD": "South Sudan"
   },
   {
-    "id": "ESP",
-    "name": "Spain",
-    "uniqueId": "334550c9-952d-4e03-8a08-acbd6188ff0d",
-    "alpha2Code": "ES"
+    "ESP": "Spain"
   },
   {
-    "id": "SDN",
-    "name": "Sudan",
-    "uniqueId": "fcca12e1-baea-4d09-a290-529ce87b362e",
-    "alpha2Code": "SD"
+    "SDN": "Sudan"
   },
   {
-    "id": "SUR",
-    "name": "Suriname",
-    "uniqueId": "c276dfdf-c554-4b90-b90d-7139ab49e06f",
-    "alpha2Code": "SR"
+    "SUR": "Suriname"
   },
   {
-    "id": "SWZ",
-    "name": "Swaziland",
-    "uniqueId": "1f3af232-1481-46df-96e6-7410f6a6b40c",
-    "alpha2Code": "SZ"
+    "SWZ": "Swaziland"
   },
   {
-    "id": "SWE",
-    "name": "Sweden",
-    "uniqueId": "cb42b9da-eecd-43f2-af88-d4cb86422c1d",
-    "alpha2Code": "SE"
+    "SWE": "Sweden"
   },
   {
-    "id": "CHE",
-    "name": "Switzerland",
-    "uniqueId": "64cc3df5-bc17-4863-9430-477e7d5e318b",
-    "alpha2Code": "CH"
+    "CHE": "Switzerland"
   },
   {
-    "id": "SYR",
-    "name": "Syrian Arab Republic",
-    "uniqueId": "9c02ad91-a1b6-45bd-8f35-30eefbf347fe",
-    "alpha2Code": "SY"
+    "SYR": "Syrian Arab Republic"
   },
   {
-    "id": "TJK",
-    "name": "Tajikistan",
-    "uniqueId": "3f949367-b553-4fc2-84dd-d33198198186",
-    "alpha2Code": "TJ"
+    "TJK": "Tajikistan"
   },
   {
-    "id": "TZA",
-    "name": "Tanzania, United Republic of",
-    "uniqueId": "bbdcf21b-b1d6-430d-96da-1fa70404a644",
-    "alpha2Code": "TZ"
+    "TZA": "Tanzania, United Republic of"
   },
   {
-    "id": "TLS",
-    "name": "Timor-Leste",
-    "uniqueId": "cfab2567-da20-4b32-8219-93e51ecb973c",
-    "alpha2Code": "TL"
+    "TLS": "Timor-Leste"
   },
   {
-    "id": "TGO",
-    "name": "Togo",
-    "uniqueId": "93f51361-bd85-4be7-a9f9-3d9a1c6f391c",
-    "alpha2Code": "TG"
+    "TGO": "Togo"
   },
   {
-    "id": "TON",
-    "name": "Tonga",
-    "uniqueId": "8056004a-1c2a-4302-aa85-d80051243855",
-    "alpha2Code": "TO"
+    "TON": "Tonga"
   },
   {
-    "id": "TTO",
-    "name": "Trinidad and Tobago",
-    "uniqueId": "55241f9c-5973-4a1a-8065-0700f5031be1",
-    "alpha2Code": "TT"
+    "TTO": "Trinidad and Tobago"
   },
   {
-    "id": "TUN",
-    "name": "Tunisia",
-    "uniqueId": "45ecaf07-7234-4c04-b89b-7a6f5ffcc3bf",
-    "alpha2Code": "TN"
+    "TUN": "Tunisia"
   },
   {
-    "id": "TUR",
-    "name": "Turkey",
-    "uniqueId": "e5ecbacf-69a2-4c75-a75e-978532ff69c7",
-    "alpha2Code": "TR"
+    "TUR": "Turkey"
   },
   {
-    "id": "TKM",
-    "name": "Turkmenistan",
-    "uniqueId": "f3a8e4e4-69b9-4c53-b6e7-844445737dd0",
-    "alpha2Code": "TM"
+    "TKM": "Turkmenistan"
   },
   {
-    "id": "TUV",
-    "name": "Tuvalu",
-    "uniqueId": "48c61623-db0b-43e9-8166-fd3b89a18c59",
-    "alpha2Code": "TV"
+    "TUV": "Tuvalu"
   },
   {
-    "id": "UKR",
-    "name": "Ukraine",
-    "uniqueId": "c47bf935-31e2-40f7-a266-0e937f041dec",
-    "alpha2Code": "UA"
+    "UKR": "Ukraine"
   },
   {
-    "id": "ARE",
-    "name": "United Arab Emirates",
-    "uniqueId": "76d2e7e1-701e-4309-bcc1-da2ca6e66ee7",
-    "alpha2Code": "AE"
+    "ARE": "United Arab Emirates"
   },
   {
-    "id": "GBR",
-    "name": "United Kingdom",
-    "uniqueId": "512e1365-b7c9-454c-8d81-36734ba77c6e",
-    "alpha2Code": "GB"
+    "GBR": "United Kingdom"
   },
   {
-    "id": "USA",
-    "name": "United States of America",
-    "uniqueId": "7082dc6e-0b10-44af-b37d-f44b5eefca8a",
-    "alpha2Code": "US"
+    "USA": "United States of America"
   },
   {
-    "id": "URY",
-    "name": "Uruguay",
-    "uniqueId": "ae0d938d-7fb3-491c-bd5c-63590ed966d6",
-    "alpha2Code": "UY"
+    "URY": "Uruguay"
   },
   {
-    "id": "UZB",
-    "name": "Uzbekistan",
-    "uniqueId": "da2ad0cc-8696-4e95-b7a4-5b13d611b9cd",
-    "alpha2Code": "UZ"
+    "UZB": "Uzbekistan"
   },
   {
-    "id": "VUT",
-    "name": "Vanuatu",
-    "uniqueId": "1f07b7d4-4905-4516-9674-b9b9ebd47cd5",
-    "alpha2Code": "VU"
+    "VUT": "Vanuatu"
   },
   {
-    "id": "VEN",
-    "name": "Venezuela",
-    "uniqueId": "76c98c9b-8830-4965-a9b2-8dc3cf829018",
-    "alpha2Code": "VE"
+    "VEN": "Venezuela"
   },
   {
-    "id": "VNM",
-    "name": "Viet Nam",
-    "uniqueId": "4cfa4236-f5e1-4211-9f0b-de6869b31dcd",
-    "alpha2Code": "VN"
+    "VNM": "Viet Nam"
   },
   {
-    "id": "YEM",
-    "name": "Yemen",
-    "uniqueId": "6b0edca5-0a24-427b-a929-7a3b0682d6c0",
-    "alpha2Code": "YE"
+    "YEM": "Yemen"
   },
   {
-    "id": "ZMB",
-    "name": "Zambia",
-    "uniqueId": "59033bde-4f9c-4b24-ba59-9dc4ff7cecd9",
-    "alpha2Code": "ZM"
+    "ZMB": "Zambia"
   },
   {
-    "id": "ZWE",
-    "name": "Zimbabwe",
-    "uniqueId": "f35a3cd8-a604-40a3-ab21-de0748b28af1",
-    "alpha2Code": "ZW"
+    "ZWE": "Zimbabwe"
   },
   {
-    "id": "AFG",
-    "name": "Afghanistan",
-    "uniqueId": "6925a47e-b126-4010-90e2-ba9a59178ef0",
-    "alpha2Code": "AF"
+    "AFG": "Afghanistan"
   },
   {
-    "id": "BGD",
-    "name": "Bangladesh",
-    "uniqueId": "a6082b0b-a4e6-4a4c-bedb-fa26b587b1bf",
-    "alpha2Code": "BD"
+    "BGD": "Bangladesh"
   },
   {
-    "id": "BEN",
-    "name": "Bénin",
-    "uniqueId": "93a088ec-b850-4a8d-8696-2e34e5ce72ae",
-    "alpha2Code": "BJ"
+    "BEN": "Bénin"
   },
   {
-    "id": "CHL",
-    "name": "Chili",
-    "uniqueId": "a59f8008-897a-49fa-8d6e-24f7d5277805",
-    "alpha2Code": "CL"
+    "CHL": "Chili"
   },
   {
-    "id": "ETH",
-    "name": "Éthiopie",
-    "uniqueId": "c0893948-3423-4325-b4bd-cc50c7065c34",
-    "alpha2Code": "ET"
+    "ETH": "Éthiopie"
   },
   {
-    "id": "IDN",
-    "name": "Indonésie",
-    "uniqueId": "60f3f514-ba42-4b2e-9943-a0f3488d8a79",
-    "alpha2Code": "ID"
+    "IDN": "Indonésie"
   },
   {
-    "id": "JOR",
-    "name": "Jordanie",
-    "uniqueId": "ea40f007-e7e8-409a-93c9-16200c1f0789",
-    "alpha2Code": "JO"
+    "JOR": "Jordanie"
   },
   {
-    "id": "KWT",
-    "name": "Koweït",
-    "uniqueId": "82c8dbf8-f5ed-4886-82ab-b38c5319186c",
-    "alpha2Code": "KW"
+    "KWT": "Koweït"
   },
   {
-    "id": "LAO",
-    "name": "République démocratique populaire lao",
-    "uniqueId": "61e6a107-a1f1-47d0-9ad6-117d6106c736",
-    "alpha2Code": "LA"
+    "LAO": "République démocratique populaire lao"
   },
   {
-    "id": "MYS",
-    "name": "Malaisie",
-    "uniqueId": "2edcc7f2-504c-4e40-8782-79a74e7d23f1",
-    "alpha2Code": "MY"
+    "MYS": "Malaisie"
   },
   {
-    "id": "MLI",
-    "name": "Mali",
-    "uniqueId": "e0f8df30-c939-48df-9f57-5b787c8742da",
-    "alpha2Code": "ML"
+    "MLI": "Mali"
   },
   {
-    "id": "MNG",
-    "name": "Mongolie",
-    "uniqueId": "633849b0-9428-4e81-a883-b176cf65fbc2",
-    "alpha2Code": "MN"
+    "MNG": "Mongolie"
   },
   {
-    "id": "NZL",
-    "name": "Nouvelle-Zélande",
-    "uniqueId": "be4be84e-77f5-4aa9-aa39-f3c5b31ea788",
-    "alpha2Code": "NZ"
+    "NZL": "Nouvelle-Zélande"
   },
   {
-    "id": "NGA",
-    "name": "Nigéria",
-    "uniqueId": "f2f62627-e74b-4dcb-a774-e1493f3eb468",
-    "alpha2Code": "NG"
+    "NGA": "Nigéria"
   },
   {
-    "id": "PAK",
-    "name": "Pakistan",
-    "uniqueId": "47215d5a-a276-48fc-a183-935007dc345c",
-    "alpha2Code": "PK"
+    "PAK": "Pakistan"
   },
   {
-    "id": "PER",
-    "name": "Pérou",
-    "uniqueId": "31f0af93-975f-4ee2-8641-5e365c84fe14",
-    "alpha2Code": "PE"
+    "PER": "Pérou"
   },
   {
-    "id": "PHL",
-    "name": "Philippines",
-    "uniqueId": "bc30506e-c8ee-4d5e-936c-1eb70ed06a7e",
-    "alpha2Code": "PH"
+    "PHL": "Philippines"
   },
   {
-    "id": "PRT",
-    "name": "Portugal",
-    "uniqueId": "151f1be6-a475-4cb1-9659-f876eda8297f",
-    "alpha2Code": "PT"
+    "PRT": "Portugal"
   },
   {
-    "id": "SLE",
-    "name": "Sierra Leone",
-    "uniqueId": "3ae0d577-d7fc-4f93-94d0-3a11d0ee1b09",
-    "alpha2Code": "SL"
+    "SLE": "Sierra Leone"
   },
   {
-    "id": "LKA",
-    "name": "Sri Lanka",
-    "uniqueId": "8de88b1c-0cda-436d-aec3-414aaad30aa1",
-    "alpha2Code": "LK"
+    "LKA": "Sri Lanka"
   },
   {
-    "id": "THA",
-    "name": "Thaïlande",
-    "uniqueId": "d7882cd8-49f4-46b3-adde-094fff5cbb8f",
-    "alpha2Code": "TH"
+    "THA": "Thaïlande"
   },
   {
-    "id": "UGA",
-    "name": "Ouganda",
-    "uniqueId": "296cbb51-9bb6-464f-b847-097be57d4977",
-    "alpha2Code": "UG"
+    "UGA": "Ouganda"
   }
 ]

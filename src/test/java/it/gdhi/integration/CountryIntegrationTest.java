@@ -3,6 +3,7 @@ package it.gdhi.integration;
 import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.internationalization.repository.ICountryTranslationRepository;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryPhase;
 import it.gdhi.model.CountryResourceLink;
@@ -14,6 +15,8 @@ import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.MailerService;
+import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +27,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -56,6 +57,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     private ICountryPhaseRepository countryPhaseRepository;
 
     @Autowired
+    private ICountryTranslationRepository translationRepository;
+
+    @Autowired
     private MailerService mailerService;
 
     @Autowired
@@ -69,6 +73,12 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         INDIA_UUID = iCountryRepository.find(INDIA_ID).getUniqueId();
     }
 
+    @AllArgsConstructor
+    private class CountryOutput {
+        private Integer id;
+        private String name;
+    }
+
     @Test
     public void shouldGetCountryListInGivenUserLanguage() throws Exception {
         Response response = given()
@@ -78,9 +88,14 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .get("http://localhost:" + port + "/countries");
 
         String expectedJSON = expectedResponseJson("countries_in_french.json");
+        ArrayList expectedCountries = getMapper().readValue(expectedJSON, ArrayList.class);
         ArrayList actualList = getMapper().readValue(response.asString(), ArrayList.class);
-        ArrayList expectedList = getMapper().readValue(expectedJSON, ArrayList.class);
-        assertEquals(expectedList, actualList);
+
+        List countriesWithIdAndName = getCountriesWithIdAndName(actualList);
+        String translatedCountriesJson = getMapper().writeValueAsString(countriesWithIdAndName);
+        ArrayList actualCountries = getMapper().readValue(translatedCountriesJson, ArrayList.class);
+
+        assertEquals(expectedCountries, actualCountries);
     }
 
     @Test
@@ -471,6 +486,15 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .countryResourceLinks(countryResourceLinks)
                 .build();
         countrySummaryRepository.save(countrySummary);
+    }
+
+    /* Country UUID is auto generated and different in all environments, hence comparing only id and name. */
+    private List getCountriesWithIdAndName(ArrayList actualList) {
+        return (List) actualList.stream().map(c -> {
+            HashMap c1 = (HashMap) c;
+            Pair<Object, Object> pair = Pair.of(c1.get("id"), c1.get("name"));
+            return pair;
+        }).collect(Collectors.toList());
     }
 
 }
