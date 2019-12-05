@@ -1,4 +1,4 @@
-package it.gdhi.model.id;
+package it.gdhi.internationalization.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +12,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CategoryTranslationId implements Serializable {
+public class HealthIndicatorTranslationId implements Serializable {
 
-    @Column(name = "category_id")
-    private String categoryId;
+    @Column(name = "indicator_id")
+    private Integer indicatorId;
 
     @Column(name = "language_id")
     private String languageId;

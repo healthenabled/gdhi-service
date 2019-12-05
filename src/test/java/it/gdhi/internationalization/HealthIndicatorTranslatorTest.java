@@ -1,13 +1,13 @@
 package it.gdhi.internationalization;
 
 import it.gdhi.dto.CategoryIndicatorDto;
+import it.gdhi.internationalization.model.HealthIndicatorTranslationId;
 import it.gdhi.internationalization.model.IndicatorTranslation;
 import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
 import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.Category;
 import it.gdhi.model.Indicator;
-import it.gdhi.model.id.HealthIndicatorTranslationId;
 import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;

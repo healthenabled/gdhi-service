@@ -1,7 +1,6 @@
 package it.gdhi.internationalization.model;
 
 import it.gdhi.model.Category;
-import it.gdhi.model.id.CategoryTranslationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

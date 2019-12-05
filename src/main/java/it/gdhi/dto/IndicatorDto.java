@@ -21,17 +21,14 @@ import static java.util.stream.Collectors.toList;
 public class IndicatorDto {
 
     private Integer indicatorId;
-
     private String indicatorCode;
-
     private String indicatorName;
-
     private String indicatorDefinition;
 
     @JsonIgnore
     private Integer indicatorRank;
-
     private List<ScoreDto> scores;
+
 
     IndicatorDto(Indicator indicator) {
         this.indicatorId = indicator.getIndicatorId();
@@ -44,7 +41,8 @@ public class IndicatorDto {
 
     private List<ScoreDto> getScores(Indicator indicator) {
         List<IndicatorScore> options = indicator.getOptions();
-        return options != null ? options.stream().map(ScoreDto::new)
+        return options != null ? options.stream()
+                                    .map(ScoreDto::new)
                                    .collect(toList()) : null;
     }
 

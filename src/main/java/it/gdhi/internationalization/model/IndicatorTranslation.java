@@ -1,7 +1,6 @@
 package it.gdhi.internationalization.model;
 
 import it.gdhi.model.Indicator;
-import it.gdhi.model.id.HealthIndicatorTranslationId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
