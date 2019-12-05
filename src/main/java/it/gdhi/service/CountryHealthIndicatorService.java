@@ -89,7 +89,7 @@ public class CountryHealthIndicatorService {
     private GlobalHealthScoreDto translateCategoryNames(GlobalHealthScoreDto globalHealthScoreDto, LanguageCode languageCode) {
         globalHealthScoreDto.getCategories()
                             .forEach( (category) -> {
-                                String translatedCategoryName = categoryTranslator.translate(category.getName(), languageCode);
+                                String translatedCategoryName = categoryTranslator.getTranslatedCategoryName(category.getName(), languageCode);
                                 category.setTranslatedName(translatedCategoryName);
                             });
         return globalHealthScoreDto;

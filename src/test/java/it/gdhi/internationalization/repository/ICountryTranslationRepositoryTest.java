@@ -1,6 +1,5 @@
-package it.gdhi.repository;
+package it.gdhi.internationalization.repository;
 
-import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +15,16 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ActiveProfiles("test")
-public class ICategoryTranslationRepositoryTest {
+public class ICountryTranslationRepositoryTest {
 
     @Autowired
-    private ICategoryTranslationRepository repository;
+    private ICountryTranslationRepository repository;
 
     @Test
-    public void shouldReturnCountryNameInArabic() {
-        String category = repository.findTranslationForLanguage("ar",
-                                                            "Services and Applications");
+    public void shouldReturnCountryNameInSpanish() {
+        String country = repository.findTranslationForLanguage("es", "AFG");
 
-        assertEquals(category, "الخدمات والتطبيقات");
+        assertEquals(country, "Afganistán");
     }
+
 }

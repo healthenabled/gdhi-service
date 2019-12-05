@@ -772,9 +772,8 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null,PUBLISHED.name()))
                                                     .thenReturn(countryHealthIndicators);
         when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
-        when(categoryTranslator.translate("Legislation, Policy, and Compliance", ar))
-                                                    .thenReturn("التشريعات والسياسات والامتثال");
-        when(categoryTranslator.translate("Workforce", ar)).thenReturn("الأيدي العاملة");
+        when(categoryTranslator.getTranslatedCategoryName("Legislation, Policy, and Compliance", ar)).thenReturn("التشريعات والسياسات والامتثال");
+        when(categoryTranslator.getTranslatedCategoryName("Workforce", ar)).thenReturn("الأيدي العاملة");
 
         GlobalHealthScoreDto globalHealthIndicator = countryHealthIndicatorService
                                                         .getGlobalHealthIndicator(null, null, ar);
