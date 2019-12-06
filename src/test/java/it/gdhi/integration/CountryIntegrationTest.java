@@ -15,7 +15,6 @@ import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.MailerService;
-import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,12 +73,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         INDIA_UUID = iCountryRepository.find(INDIA_ID).getUniqueId();
     }
 
-    @AllArgsConstructor
-    private class CountryOutput {
-        private Integer id;
-        private String name;
-    }
-
     @Test
     public void shouldGetCountryListInGivenUserLanguage() throws Exception {
         Response response = given()
@@ -93,12 +86,9 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         ArrayList countryResponseList = getMapper().readValue(response.asString(), ArrayList.class);
         List countriesWithIdAndName = mapToCountryIdAndName(countryResponseList);
-        System.out.println("Pair: " + countriesWithIdAndName);
-
         String translatedCountriesJson = getMapper().writeValueAsString(countriesWithIdAndName);
         ArrayList actualCountries = getMapper().readValue(translatedCountriesJson, ArrayList.class);
 
-        System.out.println("expectedCountries: " + expectedCountries + ";; actualCountries: " + actualCountries);
         assertTrue(expectedCountries.containsAll(actualCountries));
     }
 

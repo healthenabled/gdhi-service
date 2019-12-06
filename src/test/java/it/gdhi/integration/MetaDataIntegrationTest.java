@@ -2,6 +2,7 @@ package it.gdhi.integration;
 
 import io.restassured.response.Response;
 import it.gdhi.Application;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -33,6 +35,34 @@ public class MetaDataIntegrationTest extends BaseIntegrationTest{
 
         assertEquals(200, response.getStatusCode());
         assertResponse(response.asString(), "phases.json");
+    }
+
+    @Test
+    @Ignore("Only for local")
+    public void shouldReturnHealthIndicatorOptions() throws IOException {
+        Response response = given()
+                .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
+                .when()
+                .get("http://localhost:" + port + "/health_indicator_options");
+
+        assertEquals(200, response.getStatusCode());
+        assertResponse(response.asString(), "health_indicator_options_en.json");
+    }
+
+    @Test
+    @Ignore("Only for local")
+    public void shouldReturnHealthIndicatorOptionsInFrench() throws IOException {
+        Response response = given()
+                .contentType("application/json")
+                .header(USER_LANGUAGE, "fr")
+                .when()
+                .get("http://localhost:" + port + "/health_indicator_options");
+
+        System.out.println(response.asString());
+
+        assertEquals(200, response.getStatusCode());
+        assertResponse(response.asString(), "health_indicator_options_fr.json");
     }
 
     @Override

@@ -6,6 +6,7 @@ import it.gdhi.dto.ScoreDto;
 import it.gdhi.internationalization.model.IndicatorTranslation;
 import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
+import it.gdhi.internationalization.repository.IScoreDefinitionTranslationRepository;
 import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,15 @@ public class HealthIndicatorTranslator {
 
     private final ICategoryTranslationRepository categoryTranslationRepository;
     private final IIndicatorTranslationRepository indicatorTranslationRepo;
+    private final IScoreDefinitionTranslationRepository scoreTranslationRepository;
 
     @Autowired
     public HealthIndicatorTranslator(ICategoryTranslationRepository categoryTranslationRepository,
-                                     IIndicatorTranslationRepository indicatorTranslationRepo) {
+                                     IIndicatorTranslationRepository indicatorTranslationRepo,
+                                     IScoreDefinitionTranslationRepository scoreTranslationRepository) {
         this.categoryTranslationRepository = categoryTranslationRepository;
         this.indicatorTranslationRepo = indicatorTranslationRepo;
+        this.scoreTranslationRepository = scoreTranslationRepository;
     }
 
     public CategoryIndicatorDto translate(CategoryIndicatorDto categoryIndicatorDto, LanguageCode languageCode) {
@@ -35,6 +39,8 @@ public class HealthIndicatorTranslator {
                 .getIndicators()
                 .forEach(indicator -> {
                     translateIndicator(languageCode, indicator);
+                    indicator.getScores()
+                            .forEach(score -> translateScore(languageCode, indicator.getIndicatorId(), score));
                 });
         return categoryIndicatorDto;
     }
@@ -61,8 +67,10 @@ public class HealthIndicatorTranslator {
         indicator.translateDefinition(translatedIndicator.getDefinition());
     }
 
-    private void translateScore(LanguageCode languageCode, ScoreDto score) {
-        //TODO
+    private void translateScore(LanguageCode languageCode, Integer indicatorId, ScoreDto score) {
+        String translatedDefinition = scoreTranslationRepository.findTranslationForLanguage(languageCode.toString(),
+                                                                                        indicatorId, score.getScore());
+        score.translateDefinition(translatedDefinition);
     }
 
 }

@@ -5,6 +5,7 @@ import it.gdhi.model.Indicator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class CategoryIndicatorDto {
 
     private Integer categoryId;
