@@ -34,6 +34,7 @@ import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -89,16 +90,16 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         String expectedJSON = expectedResponseJson("countries_in_french.json");
         ArrayList expectedCountries = getMapper().readValue(expectedJSON, ArrayList.class);
-        ArrayList actualList = getMapper().readValue(response.asString(), ArrayList.class);
 
-        List countriesWithIdAndName = getCountriesWithIdAndName(actualList);
+        ArrayList countryResponseList = getMapper().readValue(response.asString(), ArrayList.class);
+        List countriesWithIdAndName = mapToCountryIdAndName(countryResponseList);
         System.out.println("Pair: " + countriesWithIdAndName);
 
         String translatedCountriesJson = getMapper().writeValueAsString(countriesWithIdAndName);
         ArrayList actualCountries = getMapper().readValue(translatedCountriesJson, ArrayList.class);
 
         System.out.println("expectedCountries: " + expectedCountries + ";; actualCountries: " + actualCountries);
-        assertEquals(expectedCountries, actualCountries);
+        assertTrue(expectedCountries.containsAll(actualCountries));
     }
 
     @Test
@@ -492,12 +493,14 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     }
 
     /* Country UUID is auto generated and different in all environments, hence comparing only id and name. */
-    private List getCountriesWithIdAndName(ArrayList actualList) {
+    private List mapToCountryIdAndName(ArrayList actualList) {
         return (List) actualList.stream().map(c -> {
             HashMap c1 = (HashMap) c;
             Pair<Object, Object> pair = Pair.of(c1.get("id"), c1.get("name"));
             return pair;
-        }).collect(Collectors.toList());
+        })
+        .sorted(Comparator.naturalOrder())
+        .collect(Collectors.toList());
     }
 
 }
