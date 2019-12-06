@@ -92,9 +92,12 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
         ArrayList actualList = getMapper().readValue(response.asString(), ArrayList.class);
 
         List countriesWithIdAndName = getCountriesWithIdAndName(actualList);
+        System.out.println("Pair: " + countriesWithIdAndName);
+
         String translatedCountriesJson = getMapper().writeValueAsString(countriesWithIdAndName);
         ArrayList actualCountries = getMapper().readValue(translatedCountriesJson, ArrayList.class);
 
+        System.out.println("expectedCountries: " + expectedCountries + ";; actualCountries: " + actualCountries);
         assertEquals(expectedCountries, actualCountries);
     }
 
