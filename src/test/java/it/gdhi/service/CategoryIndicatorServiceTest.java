@@ -47,8 +47,8 @@ public class CategoryIndicatorServiceTest {
         CategoryIndicatorDto categoryIndicator2 = new CategoryIndicatorDto(category2);
 
         when(iCategoryRepository.findAll()).thenReturn(categories);
-        when(translator.translate(categoryIndicator1, en)).thenReturn(categoryIndicator1);
-        when(translator.translate(categoryIndicator2, en)).thenReturn(categoryIndicator2);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator1, en)).thenReturn(categoryIndicator1);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator2, en)).thenReturn(categoryIndicator2);
 
         List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions(en);
         assertThat(categoryIndicatorMapping.size(), is(2));
@@ -84,8 +84,8 @@ public class CategoryIndicatorServiceTest {
         CategoryIndicatorDto categoryIndicator2 = new CategoryIndicatorDto(category2);
 
         when(iCategoryRepository.findAll()).thenReturn(categories);
-        when(translator.translate(categoryIndicator1, en)).thenReturn(categoryIndicator1);
-        when(translator.translate(categoryIndicator2, en)).thenReturn(categoryIndicator2);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator1, en)).thenReturn(categoryIndicator1);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator2, en)).thenReturn(categoryIndicator2);
 
         List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions(en);
 
@@ -122,8 +122,8 @@ public class CategoryIndicatorServiceTest {
         when(iCategoryRepository.findAll()).thenReturn(categories);
         CategoryIndicatorDto categoryIndicator1 = new CategoryIndicatorDto(category1);
         CategoryIndicatorDto categoryIndicator2 = new CategoryIndicatorDto(category2);
-        when(translator.translate(categoryIndicator1, en)).thenReturn(categoryIndicator1);
-        when(translator.translate(categoryIndicator2, en)).thenReturn(categoryIndicator2);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator1, en)).thenReturn(categoryIndicator1);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator2, en)).thenReturn(categoryIndicator2);
 
 
         when(iCategoryRepository.findAll()).thenReturn(categories);
@@ -158,7 +158,7 @@ public class CategoryIndicatorServiceTest {
         Category category1 = Category.builder().id(1).name("Cat 1").indicators(null).build();
         when(iCategoryRepository.findAll()).thenReturn(asList(category1));
         CategoryIndicatorDto categoryIndicator1 = new CategoryIndicatorDto(category1);
-        when(translator.translate(categoryIndicator1, en)).thenReturn(categoryIndicator1);
+        when(translator.translateHealthIndicatorOptions(categoryIndicator1, en)).thenReturn(categoryIndicator1);
 
         List<CategoryIndicatorDto> categoryIndicatorMapping = categoryIndicatorService.getHealthIndicatorOptions(en);
         assertThat(categoryIndicatorMapping.size(), is(1));
@@ -178,7 +178,7 @@ public class CategoryIndicatorServiceTest {
 
         List<Category> categories= asList(categoryEN);
         when(iCategoryRepository.findAll()).thenReturn(categories);
-        when(translator.translate(categoryIndicatorEN, pt)).thenReturn(categoryIndicatorPT);
+        when(translator.translateHealthIndicatorOptions(categoryIndicatorEN, pt)).thenReturn(categoryIndicatorPT);
 
         List<CategoryIndicatorDto> healthIndicatorOptions = categoryIndicatorService.getHealthIndicatorOptions(pt);
 

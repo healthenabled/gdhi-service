@@ -1,8 +1,6 @@
 package it.gdhi.internationalization.service;
 
-import it.gdhi.dto.CategoryIndicatorDto;
-import it.gdhi.dto.IndicatorDto;
-import it.gdhi.dto.ScoreDto;
+import it.gdhi.dto.*;
 import it.gdhi.internationalization.model.IndicatorTranslation;
 import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
@@ -19,58 +17,98 @@ public class HealthIndicatorTranslator {
     private final ICategoryTranslationRepository categoryTranslationRepository;
     private final IIndicatorTranslationRepository indicatorTranslationRepo;
     private final IScoreDefinitionTranslationRepository scoreTranslationRepository;
+    private final CountryNameTranslator countryNameTranslator;
 
     @Autowired
     public HealthIndicatorTranslator(ICategoryTranslationRepository categoryTranslationRepository,
                                      IIndicatorTranslationRepository indicatorTranslationRepo,
-                                     IScoreDefinitionTranslationRepository scoreTranslationRepository) {
+                                     IScoreDefinitionTranslationRepository scoreTranslationRepository,
+                                     CountryNameTranslator countryNameTranslator) {
         this.categoryTranslationRepository = categoryTranslationRepository;
         this.indicatorTranslationRepo = indicatorTranslationRepo;
         this.scoreTranslationRepository = scoreTranslationRepository;
+        this.countryNameTranslator = countryNameTranslator;
     }
 
-    public CategoryIndicatorDto translate(CategoryIndicatorDto categoryIndicatorDto, LanguageCode languageCode) {
-        if (languageCode == en || languageCode == null) return categoryIndicatorDto;
+    public CategoryIndicatorDto translateHealthIndicatorOptions(CategoryIndicatorDto categoryIndicatorDto,
+                                                                LanguageCode languageCode) {
+        if (isLocalizationNotRequired(languageCode)) return categoryIndicatorDto;
 
-        String translatedCategoryName = getCategoryTranslationForLanguage(languageCode,
-                                                                          categoryIndicatorDto.getCategoryName());
+        String translatedCategoryName = getTranslatedCategory(categoryIndicatorDto.getCategoryName(), languageCode);
         categoryIndicatorDto
                 .translateCategoryName(translatedCategoryName)
                 .getIndicators()
                 .forEach(indicator -> {
-                    translateIndicator(languageCode, indicator);
+                    translateIndicatorDto(languageCode, indicator);
                     indicator.getScores()
-                            .forEach(score -> translateScore(languageCode, indicator.getIndicatorId(), score));
+                            .forEach(score -> translateScoreDto(languageCode, indicator.getIndicatorId(), score));
                 });
         return categoryIndicatorDto;
     }
 
-    public String getTranslatedCategoryName(String categoryName, LanguageCode languageCode) {
-        if (languageCode == en || languageCode == null) return categoryName;
+    public String getTranslatedCategory(String categoryName, LanguageCode languageCode) {
+        if (isLocalizationNotRequired(languageCode)) return categoryName;
 
-        return getCategoryTranslationForLanguage(languageCode, categoryName);
-    }
-
-    private String getCategoryTranslationForLanguage(LanguageCode languageCode, String categoryName) {
         String translationCategoryName = categoryTranslationRepository.findTranslationForLanguage(
-                                                                                            languageCode.toString(),
-                                                                                            categoryName);
-        return (translationCategoryName == null || translationCategoryName.isEmpty()) ?
-                categoryName : translationCategoryName;
+                                                                                languageCode.toString(), categoryName);
+
+        return (translationCategoryName == null || translationCategoryName.isEmpty()) ? categoryName
+                                                                                        : translationCategoryName;
     }
 
-    private void translateIndicator(LanguageCode languageCode, IndicatorDto indicator) {
-        IndicatorTranslation translatedIndicator = indicatorTranslationRepo.findTranslationForLanguage(
-                languageCode.toString(),
-                indicator.getIndicatorId());
+    private void translateIndicatorDto(LanguageCode languageCode, IndicatorDto indicator) {
+        IndicatorTranslation translatedIndicator = getTranslatedIndicator(languageCode, indicator.getIndicatorId());
         indicator.translateName(translatedIndicator.getName());
         indicator.translateDefinition(translatedIndicator.getDefinition());
     }
 
-    private void translateScore(LanguageCode languageCode, Integer indicatorId, ScoreDto score) {
-        String translatedDefinition = scoreTranslationRepository.findTranslationForLanguage(languageCode.toString(),
-                                                                                        indicatorId, score.getScore());
-        score.translateDefinition(translatedDefinition);
+    private IndicatorTranslation getTranslatedIndicator(LanguageCode languageCode, Integer indicatorId) {
+        return indicatorTranslationRepo.findTranslationForLanguage(languageCode.toString(), indicatorId);
     }
 
+    private void translateScoreDto(LanguageCode languageCode, Integer indicatorId, ScoreDto scoreDto) {
+        String translatedDefinition = getTranslatedScoreDefinition(languageCode, indicatorId, scoreDto.getScore());
+        scoreDto.translateDefinition(translatedDefinition);
+    }
+
+    private String getTranslatedScoreDefinition(LanguageCode languageCode, Integer indicatorId, Integer score) {
+        return scoreTranslationRepository.findTranslationForLanguage(languageCode.toString(), indicatorId, score);
+    }
+
+    public CountryHealthScoreDto translateCountryHealthScores(LanguageCode languageCode,
+                                                              CountryHealthScoreDto countryHealthScore) {
+        if(isLocalizationNotRequired(languageCode)) return countryHealthScore;
+
+        translateCountry(languageCode, countryHealthScore);
+        countryHealthScore.getCategories()
+                .forEach(category -> {
+                    translateCategory(languageCode, category);
+                    category.getIndicators()
+                            .forEach(indicatorScore -> translateIndicatorScore(languageCode, indicatorScore));
+                });
+
+        return countryHealthScore;
+    }
+
+    private void translateCountry(LanguageCode languageCode, CountryHealthScoreDto countryHealthScore) {
+        String translatedCountryName = countryNameTranslator.getCountryTranslationForLanguage(languageCode, countryHealthScore.getCountryId());
+        countryHealthScore.translateCountryName(translatedCountryName);
+    }
+
+    private void translateCategory(LanguageCode languageCode, CategoryHealthScoreDto category) {
+        String translatedCategoryName = getTranslatedCategory(category.getName(), languageCode);
+        category.translateCategoryName(translatedCategoryName);
+    }
+
+    private void translateIndicatorScore(LanguageCode languageCode, IndicatorScoreDto indicatorScore) {
+        IndicatorTranslation translatedIndicator = getTranslatedIndicator(languageCode, indicatorScore.getId());
+        String translatedScore = getTranslatedScoreDefinition(languageCode, indicatorScore.getId(),
+                                                                indicatorScore.getScore());
+        indicatorScore.translateIndicator(translatedIndicator.getName(), translatedIndicator.getDefinition());
+        indicatorScore.translateScoreDefinition(translatedScore);
+    }
+
+    private boolean isLocalizationNotRequired(LanguageCode languageCode) {
+        return languageCode == en || languageCode == null;
+    }
 }

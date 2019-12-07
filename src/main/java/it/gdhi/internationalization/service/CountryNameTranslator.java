@@ -29,9 +29,13 @@ public class CountryNameTranslator {
                         .collect(toList());
     }
 
-    private String getCountryTranslationForLanguage(LanguageCode languageCode, Country c) {
-        String newName = translationRepository.findTranslationForLanguage(languageCode.toString(), c.getId());
-        return (newName == null || newName.isEmpty()) ? c.getName() : newName ;
+    public String getCountryTranslationForLanguage(LanguageCode languageCode, String countryId) {
+        return translationRepository.findTranslationForLanguage(languageCode.toString(), countryId);
+    }
+
+    private String getCountryTranslationForLanguage(LanguageCode languageCode, Country country) {
+        String newName = translationRepository.findTranslationForLanguage(languageCode.toString(), country.getId());
+        return (newName == null || newName.isEmpty()) ? country.getName() : newName ;
     }
 
 }

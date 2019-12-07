@@ -30,7 +30,7 @@ public class CategoryIndicatorService {
     public List<CategoryIndicatorDto> getHealthIndicatorOptions(LanguageCode languageCode) {
         return iCategoryRepository.findAll().stream()
                                     .map(CategoryIndicatorDto::new)
-                                    .map(dto -> translator.translate(dto, languageCode))
+                                    .map(dto -> translator.translateHealthIndicatorOptions(dto, languageCode))
                                     .collect(toList());
     }
 

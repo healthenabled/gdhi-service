@@ -1,11 +1,15 @@
 package it.gdhi.internationalization;
 
+import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CategoryIndicatorDto;
+import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.IndicatorScoreDto;
 import it.gdhi.internationalization.model.HealthIndicatorTranslationId;
 import it.gdhi.internationalization.model.IndicatorTranslation;
 import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
 import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
 import it.gdhi.internationalization.repository.IScoreDefinitionTranslationRepository;
+import it.gdhi.internationalization.service.CountryNameTranslator;
 import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.Category;
 import it.gdhi.model.Indicator;
@@ -31,50 +35,75 @@ public class HealthIndicatorTranslatorTest {
     @InjectMocks
     private HealthIndicatorTranslator translator;
     @Mock
-    private ICategoryTranslationRepository categoryTranslationRepository;
+    private ICategoryTranslationRepository categoryTranslationRepo;
     @Mock
-    private IIndicatorTranslationRepository indicatorTranslationRepository;
+    private IIndicatorTranslationRepository indicatorTranslationRepo;
     @Mock
-    private IScoreDefinitionTranslationRepository scoreTranslationRepository;
+    private IScoreDefinitionTranslationRepository scoreTranslationRepo;
+    @Mock
+    private CountryNameTranslator countryNameTranslator;
 
-    private IndicatorScore scoreEN;
+    private String categoryNameEN;
+    private String categoryNameFR;
+
+    private String indicatorNameEN;
+    private String indicatorDefEN;
     private Indicator indicatorEN;
-    private IndicatorTranslation indicatorTranslationFR;
+    private String indicatorNameFR;
+    private String indicatorDefFR;
     private Indicator indicatorFR;
-    private String scoreDefinitionFR;
+    private IndicatorTranslation indicatorTranslationFR;
+
+    private String scoreDefEN;
+    private IndicatorScore scoreEN;
+    private String scoreDefFR;
+    private IndicatorScore scoreFR;
+
+    private CategoryHealthScoreDto categoryScoreEN;
+    private IndicatorScoreDto indicatorScoreEN;
+    private CountryHealthScoreDto countryHealthScoreEN;
 
     @Before
-    public void setUp() throws Exception {
-        String scoreDefinitionEN = "Governance structure is fully-functional, government-led, consults with other " +
-                                    "ministries, and monitors implementation of digital health based on a work plan.";
-        scoreEN = new IndicatorScore(22L, 1, 4,
-                scoreDefinitionEN);
-        String indicatorNameEN = "Digital health prioritized at the national level through dedicated bodies / " +
-                                "mechanisms for governance";
-        String indicatorDefinitionEN = "Does the country have a separate department / agency / national working group for digital health?";
+    public void setUp() {
+        categoryNameEN = "Strategy and Investment";
+        categoryNameFR = "Stratégie et investissement";
+
+        scoreDefEN = "Governance structure is fully-functional, government-led, consults with other " +
+                            "ministries, and monitors implementation of digital health based on a work plan.";
+        scoreEN = new IndicatorScore(22L, 1, 4, scoreDefEN);
+        indicatorNameEN = "Digital health prioritized at the national level through dedicated bodies / " +
+                        "mechanisms for governance";
+        indicatorDefEN = "Does the country have a separate department / agency / national working group for digital health?";
         indicatorEN = new Indicator(1, indicatorNameEN, "1", 4, 1,
-                                    of(scoreEN), indicatorDefinitionEN);
+                                            of(scoreEN), indicatorDefEN);
 
         HealthIndicatorTranslationId indicatorId = new HealthIndicatorTranslationId(1, "fr");
-        String indicatorNameFR = "Priorité accordée à la santé numérique au niveau national par l''intermédiaire " +
+        indicatorNameFR = "Priorité accordée à la santé numérique au niveau national par l''intermédiaire " +
                                 "d''organes et de mécanismes de gouvernance dédiés/ mechanisms for governance";
-        String indicatorDefinitionFR = "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de " +
+        indicatorDefFR = "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de " +
                                         "travail national distinct pour la santé numérique ?";
         indicatorTranslationFR = new IndicatorTranslation(indicatorId, indicatorNameFR,
-                                                            indicatorDefinitionFR, indicatorEN);
-        scoreDefinitionFR = "La structure de gouvernance est completement fonctionnelle, dirigée par le " +
+                indicatorDefFR, indicatorEN);
+        scoreDefFR = "La structure de gouvernance est completement fonctionnelle, dirigée par le " +
                                     "gouvernement, consulte les autres ministères et surveille la mise en œuvre de " +
                                     "la santé numérique en fonction d'un plan de travail.";
-        IndicatorScore indicatorScoreFR = new IndicatorScore(22L, 1, 4, scoreDefinitionFR);
+        scoreFR = new IndicatorScore(22L, 1, 4, scoreDefFR);
         indicatorFR = new Indicator(1, indicatorNameFR, "1", 4, 1,
-                                            of(indicatorScoreFR), indicatorDefinitionFR);
+                                            of(scoreFR), indicatorDefFR);
+
+        indicatorScoreEN = new IndicatorScoreDto(3, "3", indicatorNameEN, indicatorDefEN,
+                3, 4, "Supporting text", scoreDefEN);
+        categoryScoreEN = new CategoryHealthScoreDto(1, categoryNameEN, 3.0,
+                3, of(indicatorScoreEN));
+        countryHealthScoreEN = new CountryHealthScoreDto("IND", "India",
+                "IN", of(categoryScoreEN), 4, "Date");
     }
 
     @Test
     public void shouldReturnCategoryNamesInEnglishGivenUserLanguageIsNull() {
         String workforceEN = "Workforce";
 
-        String actualCategory = translator.getTranslatedCategoryName(workforceEN, null);
+        String actualCategory = translator.getTranslatedCategory(workforceEN, null);
 
         assertEquals(workforceEN, actualCategory);
     }
@@ -83,18 +112,18 @@ public class HealthIndicatorTranslatorTest {
     public void shouldReturnCategoryNamesInEnglishGivenUserLanguageIsEnglish() {
         String workforceEN = "Workforce";
 
-        String actualCategory = translator.getTranslatedCategoryName(workforceEN, en);
+        String actualCategory = translator.getTranslatedCategory(workforceEN, en);
 
         assertEquals(workforceEN, actualCategory);
     }
 
     @Test
-    public void shouldNotInvokeTranslationRepositoryGivenUserLanguageIsNull() {
+    public void shouldNotInvokeCategoryTranslationRepositoryGivenUserLanguageIsNull() {
         String workforceEN = "Workforce";
 
-        translator.getTranslatedCategoryName(workforceEN, en);
+        translator.getTranslatedCategory(workforceEN, en);
 
-        verify(categoryTranslationRepository, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
     }
 
     @Test
@@ -102,10 +131,10 @@ public class HealthIndicatorTranslatorTest {
         String workforceEN = "Workforce";
         String workforceFR = "Lois, politiques et conformité";
 
-        when(categoryTranslationRepository.findTranslationForLanguage("fr", workforceEN))
+        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN))
                                             .thenReturn("Lois, politiques et conformité");
 
-        String actualCategory = translator.getTranslatedCategoryName(workforceEN, fr);
+        String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
 
         assertEquals(workforceFR, actualCategory);
     }
@@ -114,9 +143,9 @@ public class HealthIndicatorTranslatorTest {
     public void shouldReturnCategoryNameInEnglishGivenCategoryNameInUserLanguageIsNull() {
         String workforceEN = "Workforce";
 
-        when(categoryTranslationRepository.findTranslationForLanguage("fr", workforceEN)).thenReturn(null);
+        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN)).thenReturn(null);
 
-        String actualCategory = translator.getTranslatedCategoryName(workforceEN, fr);
+        String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
 
         assertEquals(workforceEN, actualCategory);
     }
@@ -125,60 +154,103 @@ public class HealthIndicatorTranslatorTest {
     public void shouldReturnCategoryNameInEnglishGivenCategoryNameInUserLanguageIsEmptyString() {
         String workforceEN = "Workforce";
 
-        when(categoryTranslationRepository.findTranslationForLanguage("fr", workforceEN)).thenReturn("");
+        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN)).thenReturn("");
 
-        String actualCategory = translator.getTranslatedCategoryName(workforceEN, fr);
+        String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
 
         assertEquals(workforceEN, actualCategory);
     }
 
     @Test
     public void shouldNotTranslateCategoryIndicatorGivenLanguageCodeIsEN() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1,
+        Category categoryEN = new Category(2, categoryNameEN, of(new Indicator(1,
         "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
         "Does the country have a separate department / agency / national working group for digital health?",
                 4)));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
 
-        translator.translate(categoryIndicatorEN, en);
+        translator.translateHealthIndicatorOptions(categoryIndicatorEN, en);
 
-        verify(categoryTranslationRepository, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepository, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepository, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
     }
 
     @Test
     public void shouldNotTranslateCategoryIndicatorGivenLanguageCodeIsNull() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(new Indicator(1,
+        Category categoryEN = new Category(2, categoryNameEN, of(new Indicator(1,
         "Digital health prioritized at the national level through dedicated bodies / mechanisms for governance",
         "Does the country have a separate department / agency / national working group for digital health?",
                 4)));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
 
-        translator.translate(categoryIndicatorEN, null);
+        translator.translateHealthIndicatorOptions(categoryIndicatorEN, null);
 
-        verify(categoryTranslationRepository, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepository, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepository, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
     }
 
     @Test
     public void shouldTranslateCategoryIndicatorToFrench() {
-        Category categoryEN = new Category(2, "Strategy and Investment", of(indicatorEN));
+        Category categoryEN = new Category(2, categoryNameEN, of(indicatorEN));
         CategoryIndicatorDto categoryIndicatorEN = new CategoryIndicatorDto(categoryEN);
         Category categoryFR = new Category(2, "Stratégie et investissement", of(indicatorFR));
         CategoryIndicatorDto categoryIndicatorFR = new CategoryIndicatorDto(categoryFR);
 
-        when(categoryTranslationRepository
-                .findTranslationForLanguage("fr", "Strategy and Investment"))
+        when(categoryTranslationRepo
+                .findTranslationForLanguage("fr", categoryNameEN))
                 .thenReturn("Stratégie et investissement");
-        when(indicatorTranslationRepository.findTranslationForLanguage("fr", 1))
+        when(indicatorTranslationRepo.findTranslationForLanguage("fr", 1))
                 .thenReturn(indicatorTranslationFR);
-        when(scoreTranslationRepository.findTranslationForLanguage("fr", 1, 4))
-                .thenReturn(scoreDefinitionFR);
+        when(scoreTranslationRepo.findTranslationForLanguage("fr", 1, 4))
+                .thenReturn(scoreDefFR);
 
-        CategoryIndicatorDto translatedIndicator = translator.translate(categoryIndicatorEN, LanguageCode.fr);
+        CategoryIndicatorDto translatedIndicator = translator.translateHealthIndicatorOptions(categoryIndicatorEN, LanguageCode.fr);
 
         assertEquals(categoryIndicatorFR, translatedIndicator);
+    }
+
+    @Test
+    public void shouldTranslateCountryHealthScoreToFrench() {
+        IndicatorScoreDto indicatorScoreFR = new IndicatorScoreDto(3, "3", indicatorNameFR, indicatorDefFR,
+                                                3, 4, "Supporting text", scoreDefFR);
+        CategoryHealthScoreDto categoryScoreFR = new CategoryHealthScoreDto(1, categoryNameFR, 3.0,
+                                                                        3, of(indicatorScoreFR));
+        CountryHealthScoreDto countryHealthScoreFR = new CountryHealthScoreDto("IND", "Inde",
+                                    "IN", of(categoryScoreFR), 4, "Date");
+
+        when(countryNameTranslator.getCountryTranslationForLanguage(fr, "IND"))
+                .thenReturn("Inde");
+        when(categoryTranslationRepo.findTranslationForLanguage("fr", categoryNameEN))
+                .thenReturn("Stratégie et investissement");
+        when(indicatorTranslationRepo.findTranslationForLanguage("fr", 3))
+                .thenReturn(indicatorTranslationFR);
+        when(scoreTranslationRepo.findTranslationForLanguage("fr", 3, 4))
+                .thenReturn(scoreDefFR);
+
+        CountryHealthScoreDto translatedHealthScore = translator.translateCountryHealthScores(fr, countryHealthScoreEN);
+
+        assertEquals(countryHealthScoreFR, translatedHealthScore);
+    }
+
+    @Test
+    public void shouldNotTranslateCountryHealthIndicatorGivenLanguageCodeIsEN() {
+        translator.translateCountryHealthScores(en, countryHealthScoreEN);
+
+        verify(countryNameTranslator, never()).getCountryTranslationForLanguage(any(), anyString());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+    }
+
+    @Test
+    public void shouldNotTranslateCountryHealthIndicatorGivenLanguageCodeIsNull() {
+        translator.translateCountryHealthScores(null, countryHealthScoreEN);
+
+        verify(countryNameTranslator, never()).getCountryTranslationForLanguage(any(), anyString());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
     }
 }
