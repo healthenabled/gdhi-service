@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import static it.gdhi.controller.strategy.FilterStrategy.getCategoryPhaseFilter;
 import static it.gdhi.controller.strategy.FilterStrategy.getCountryPhaseFilter;
 import static it.gdhi.utils.FormStatus.PUBLISHED;
+import static it.gdhi.utils.LanguageCode.en;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Objects.isNull;
@@ -48,11 +49,13 @@ public class CountryHealthIndicatorService {
     @Autowired
     private HealthIndicatorTranslator healthIndicatorTranslator;
 
-    public CountryHealthScoreDto fetchCountryHealthScore(String countryId) {
+    public CountryHealthScoreDto fetchCountryHealthScore(String countryId, LanguageCode languageCode) {
         CountryHealthIndicators countryHealthIndicators = new CountryHealthIndicators(iCountryHealthIndicatorRepository
-                .findByCountryIdAndStatus(countryId, PUBLISHED.name()));
-        return constructCountryHealthScore(countryId, countryHealthIndicators,
-                getCategoryPhaseFilter(null, null));
+                                                            .findByCountryIdAndStatus(countryId, PUBLISHED.name()));
+        CountryHealthScoreDto countryHealthScoreDto = constructCountryHealthScore(countryId, countryHealthIndicators,
+                                                                getCategoryPhaseFilter(null, null));
+        System.out.println(">>>>>>>>> "+ countryHealthScoreDto);
+        return healthIndicatorTranslator.translateCountryHealthScores(languageCode, countryHealthScoreDto);
     }
 
     public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase, LanguageCode languageCode) {
@@ -77,7 +80,6 @@ public class CountryHealthIndicatorService {
     }
 
     private CountriesHealthScoreDto getTranslatedCountriesHealthScore(CountriesHealthScoreDto countriesHealthScoreDto, LanguageCode code) {
-        System.out.println(">>>>>>>>>> "+countriesHealthScoreDto.getCountryHealthScores());
         List<CountryHealthScoreDto> countryHealthScores = countriesHealthScoreDto.getCountryHealthScores().stream()
                                         .map(dto -> healthIndicatorTranslator.translateCountryHealthScores(code, dto))
                                         .collect(toList());
@@ -116,7 +118,7 @@ public class CountryHealthIndicatorService {
     public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
                                                 HttpServletResponse response) throws IOException {
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
-        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId));
+        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId, en));
         excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
         excelUtilService.downloadFile(request, response);
     }

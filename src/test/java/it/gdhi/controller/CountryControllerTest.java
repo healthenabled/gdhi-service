@@ -9,6 +9,7 @@ import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
+import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -71,10 +72,29 @@ public class CountryControllerTest {
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
-        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
-        CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(countryId);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
+
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId, LanguageCode.en)).thenReturn(countryHealthScoreMock);
+
+        CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(request, countryId);
+
         assertThat(healthIndicatorForGivenCountryCode, is(countryHealthScoreMock));
-        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId);
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId, LanguageCode.en);
+    }
+
+    @Test
+    public void shouldInvokeHealthIndicatorServiceWithGivenLanguageCode() {
+        String countryId = "ARG";
+        CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "ar");
+
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId, LanguageCode.ar)).thenReturn(countryHealthScoreMock);
+
+        countryController.getHealthIndicatorForGivenCountryCode(request, countryId);
+
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId, LanguageCode.ar);
     }
 
     @Test

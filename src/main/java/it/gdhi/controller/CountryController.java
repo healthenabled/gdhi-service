@@ -55,8 +55,10 @@ public class CountryController {
     }
 
     @RequestMapping("/countries/{id}/health_indicators")
-    public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
-        return countryHealthIndicatorService.fetchCountryHealthScore(countryId);
+    public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(HttpServletRequest request,
+                                                                       @PathVariable("id") String countryId) {
+        LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        return countryHealthIndicatorService.fetchCountryHealthScore(countryId, languageCode);
     }
 
     @RequestMapping("/countries/{id}/country_summary")
