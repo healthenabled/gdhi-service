@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.util.List;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
 import static java.util.stream.Collectors.toList;
 
 @Getter
@@ -44,13 +45,11 @@ public class IndicatorDto {
                                    .collect(toList()) : null;
     }
 
-    public IndicatorDto translateName(String translatedName) {
-        this.indicatorName = translatedName;
-        return this;
+    public void translateName(String translatedName) {
+        if(isNonNullAndNonEmpty(translatedName)) this.indicatorName = translatedName;
     }
 
-    public IndicatorDto translateDefinition(String translatedDefinition) {
-        this.indicatorDefinition = translatedDefinition;
-        return this;
+    public void  translateDefinition(String translatedDefinition) {
+        if(isNonNullAndNonEmpty(translatedDefinition)) this.indicatorDefinition = translatedDefinition;
     }
 }

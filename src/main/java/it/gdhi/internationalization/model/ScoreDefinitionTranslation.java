@@ -20,7 +20,7 @@ public class ScoreDefinitionTranslation {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false),
-            @JoinColumn(name = "score", referencedColumnName = "score", insertable = false, updatable = false)})
+        @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false,updatable = false),
+        @JoinColumn(name = "score", referencedColumnName = "score", insertable = false, updatable = false)})
     private IndicatorScore score;
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.gdhi.model.CountryHealthIndicator;
 import lombok.*;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,14 +34,15 @@ public class IndicatorScoreDto {
     }
 
     public void translateIndicator(String translatedName, String translatedDefinition) {
-        if(translatedName != null && !translatedName.isEmpty())
+        if(isNonNullAndNonEmpty(translatedName))
             this.name = translatedName;
 
-        if(translatedDefinition != null && !translatedDefinition.isEmpty())
+        if(isNonNullAndNonEmpty(translatedDefinition))
             this.indicatorDescription = translatedDefinition;
     }
 
     public void translateScoreDefinition(String translatedScore) {
-        if(translatedScore != null && !translatedScore.isEmpty()) this.scoreDescription = translatedScore;
+        if(isNonNullAndNonEmpty(translatedScore)) this.scoreDescription = translatedScore;
     }
+
 }

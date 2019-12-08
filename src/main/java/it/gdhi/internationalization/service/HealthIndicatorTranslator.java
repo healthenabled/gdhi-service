@@ -91,7 +91,8 @@ public class HealthIndicatorTranslator {
     }
 
     private void translateCountry(LanguageCode languageCode, CountryHealthScoreDto countryHealthScore) {
-        String translatedCountryName = countryNameTranslator.getCountryTranslationForLanguage(languageCode, countryHealthScore.getCountryId());
+        String translatedCountryName = countryNameTranslator.getCountryTranslationForLanguage(languageCode,
+                                                                                    countryHealthScore.getCountryId());
         countryHealthScore.translateCountryName(translatedCountryName);
     }
 

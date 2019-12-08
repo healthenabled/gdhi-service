@@ -8,6 +8,7 @@ import lombok.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
 import static java.util.Comparator.comparing;
 
 @Getter
@@ -45,6 +46,6 @@ public class CategoryHealthScoreDto {
     }
 
     public void translateCategoryName(String translatedName) {
-        if(translatedName != null && !translatedName.isEmpty()) this.name = translatedName;
+        if(isNonNullAndNonEmpty(translatedName)) this.name = translatedName;
     }
 }

@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.util.List;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +32,6 @@ public class CountryHealthScoreDto {
     }
 
     public void translateCountryName(String translatedCountryName) {
-        if(translatedCountryName != null && translatedCountryName != "")
-            this.countryName = translatedCountryName;
+        if(isNonNullAndNonEmpty(translatedCountryName)) this.countryName = translatedCountryName;
     }
 }

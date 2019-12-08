@@ -3,6 +3,8 @@ package it.gdhi.dto;
 import it.gdhi.model.IndicatorScore;
 import lombok.*;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,6 +22,6 @@ public class ScoreDto {
     }
 
     public void translateDefinition(String translatedScoreDefinition) {
-        this.scoreDefinition = translatedScoreDefinition;
+        if(isNonNullAndNonEmpty(translatedScoreDefinition)) this.scoreDefinition = translatedScoreDefinition;
     }
 }

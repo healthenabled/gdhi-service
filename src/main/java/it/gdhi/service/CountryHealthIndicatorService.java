@@ -54,11 +54,10 @@ public class CountryHealthIndicatorService {
                                                             .findByCountryIdAndStatus(countryId, PUBLISHED.name()));
         CountryHealthScoreDto countryHealthScoreDto = constructCountryHealthScore(countryId, countryHealthIndicators,
                                                                 getCategoryPhaseFilter(null, null));
-        System.out.println(">>>>>>>>> "+ countryHealthScoreDto);
         return healthIndicatorTranslator.translateCountryHealthScores(languageCode, countryHealthScoreDto);
     }
 
-    public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase, LanguageCode languageCode) {
+    public CountriesHealthScoreDto fetchCountriesHealthScores(Integer categoryId, Integer phase, LanguageCode code) {
         List<CountryHealthIndicator> countryHealthIndicators = iCountryHealthIndicatorRepository
                 .findByCategoryAndStatus(categoryId, PUBLISHED.name());
 
@@ -76,10 +75,11 @@ public class CountryHealthIndicatorService {
                 .collect(toList());
 
         CountriesHealthScoreDto countriesHealthScoreDto = new CountriesHealthScoreDto(globalHealthScores);
-        return getTranslatedCountriesHealthScore(countriesHealthScoreDto, languageCode);
+        return getTranslatedCountriesHealthScore(countriesHealthScoreDto, code);
     }
 
-    private CountriesHealthScoreDto getTranslatedCountriesHealthScore(CountriesHealthScoreDto countriesHealthScoreDto, LanguageCode code) {
+    private CountriesHealthScoreDto getTranslatedCountriesHealthScore(CountriesHealthScoreDto countriesHealthScoreDto,
+                                                                      LanguageCode code) {
         List<CountryHealthScoreDto> countryHealthScores = countriesHealthScoreDto.getCountryHealthScores().stream()
                                         .map(dto -> healthIndicatorTranslator.translateCountryHealthScores(code, dto))
                                         .collect(toList());
@@ -101,11 +101,11 @@ public class CountryHealthIndicatorService {
 
     private GlobalHealthScoreDto translateCategoryNames(GlobalHealthScoreDto globalHealthScoreDto, LanguageCode code) {
         globalHealthScoreDto
-                .getCategories()
-                .forEach( (category) -> {
-                    String translatedCategory = healthIndicatorTranslator.getTranslatedCategory(category.getName(), code);
-                    category.translateCategoryName(translatedCategory);
-                });
+            .getCategories()
+            .forEach( (category) -> {
+                String translatedCategory = healthIndicatorTranslator.getTranslatedCategory(category.getName(), code);
+                category.translateCategoryName(translatedCategory);
+            });
         return globalHealthScoreDto;
     }
 
