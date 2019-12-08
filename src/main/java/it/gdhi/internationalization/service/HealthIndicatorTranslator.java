@@ -49,8 +49,8 @@ public class HealthIndicatorTranslator {
     public String getTranslatedCategory(String categoryName, LanguageCode languageCode) {
         if (isLocalizationNotRequired(languageCode)) return categoryName;
 
-        String translationCategoryName = categoryTranslationRepository.findTranslationForLanguage(
-                                                                                languageCode.toString(), categoryName);
+        String translationCategoryName = categoryTranslationRepository.findTranslationForLanguage(  languageCode,
+                                                                                                    categoryName);
 
         return (translationCategoryName == null || translationCategoryName.isEmpty()) ? categoryName
                                                                                         : translationCategoryName;
@@ -63,7 +63,7 @@ public class HealthIndicatorTranslator {
     }
 
     private IndicatorTranslation getTranslatedIndicator(LanguageCode languageCode, Integer indicatorId) {
-        return indicatorTranslationRepo.findTranslationForLanguage(languageCode.toString(), indicatorId);
+        return indicatorTranslationRepo.findTranslationForLanguage(languageCode, indicatorId);
     }
 
     private void translateScoreDto(LanguageCode languageCode, Integer indicatorId, ScoreDto scoreDto) {
@@ -72,7 +72,7 @@ public class HealthIndicatorTranslator {
     }
 
     private String getTranslatedScoreDefinition(LanguageCode languageCode, Integer indicatorId, Integer score) {
-        return scoreTranslationRepository.findTranslationForLanguage(languageCode.toString(), indicatorId, score);
+        return scoreTranslationRepository.findTranslationForLanguage(languageCode, indicatorId, score);
     }
 
     public CountryHealthScoreDto translateCountryHealthScores(LanguageCode languageCode,

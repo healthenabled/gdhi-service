@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transactional;
 
+import static it.gdhi.utils.LanguageCode.fr;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -26,7 +27,7 @@ public class IScoreDefinitionTranslationRepositoryTest {
                 "gouvernement, consulte les autres ministères et surveille la mise en œuvre de la santé numérique en " +
                 "fonction d'un plan de travail.";
 
-        String scoreDefinitionFR = repository.findTranslationForLanguage("fr", 1, 4);
+        String scoreDefinitionFR = repository.findTranslationForLanguage(fr, 1, 4);
 
         assertEquals(expectedScoreDefinition, scoreDefinitionFR);
     }

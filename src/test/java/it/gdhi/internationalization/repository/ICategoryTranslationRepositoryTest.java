@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transactional;
 
+import static it.gdhi.utils.LanguageCode.ar;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -22,8 +23,7 @@ public class ICategoryTranslationRepositoryTest {
 
     @Test
     public void shouldReturnCategoryNameInArabic() {
-        String category = repository.findTranslationForLanguage("ar",
-                                                            "Services and Applications");
+        String category = repository.findTranslationForLanguage(ar, "Services and Applications");
 
         assertEquals(category, "الخدمات والتطبيقات");
     }

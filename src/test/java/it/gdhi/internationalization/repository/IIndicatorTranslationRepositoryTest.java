@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transactional;
 
+import static it.gdhi.utils.LanguageCode.fr;
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
@@ -28,7 +29,7 @@ public class IIndicatorTranslationRepositoryTest {
         String definition = "Le pays dispose-t-il d'un ministère, d'un organisme ou d'un groupe de travail national " +
                 "distinct pour la santé numérique ?";
 
-        IndicatorTranslation translatedIndicator = repository.findTranslationForLanguage("fr", 1);
+        IndicatorTranslation translatedIndicator = repository.findTranslationForLanguage(fr, 1);
 
         assertEquals(translatedIndicator.getName(), name);
         assertEquals(translatedIndicator.getDefinition(), definition);

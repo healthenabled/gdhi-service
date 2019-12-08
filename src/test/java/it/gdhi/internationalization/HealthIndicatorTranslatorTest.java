@@ -77,7 +77,7 @@ public class HealthIndicatorTranslatorTest {
         indicatorEN = new Indicator(1, indicatorNameEN, "1", 4, 1,
                                             of(scoreEN), indicatorDefEN);
 
-        HealthIndicatorTranslationId indicatorId = new HealthIndicatorTranslationId(1, "fr");
+        HealthIndicatorTranslationId indicatorId = new HealthIndicatorTranslationId(1, fr);
         indicatorNameFR = "Priorité accordée à la santé numérique au niveau national par l''intermédiaire " +
                                 "d''organes et de mécanismes de gouvernance dédiés/ mechanisms for governance";
         indicatorDefFR = "Le pays dispose-t-il d''un ministère, d''un organisme ou d''un groupe de " +
@@ -123,7 +123,7 @@ public class HealthIndicatorTranslatorTest {
 
         translator.getTranslatedCategory(workforceEN, en);
 
-        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(any(), anyString());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class HealthIndicatorTranslatorTest {
         String workforceEN = "Workforce";
         String workforceFR = "Lois, politiques et conformité";
 
-        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN))
+        when(categoryTranslationRepo.findTranslationForLanguage(fr, workforceEN))
                                             .thenReturn("Lois, politiques et conformité");
 
         String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
@@ -143,7 +143,7 @@ public class HealthIndicatorTranslatorTest {
     public void shouldReturnCategoryNameInEnglishGivenCategoryNameInUserLanguageIsNull() {
         String workforceEN = "Workforce";
 
-        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN)).thenReturn(null);
+        when(categoryTranslationRepo.findTranslationForLanguage(fr, workforceEN)).thenReturn(null);
 
         String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
 
@@ -154,7 +154,7 @@ public class HealthIndicatorTranslatorTest {
     public void shouldReturnCategoryNameInEnglishGivenCategoryNameInUserLanguageIsEmptyString() {
         String workforceEN = "Workforce";
 
-        when(categoryTranslationRepo.findTranslationForLanguage("fr", workforceEN)).thenReturn("");
+        when(categoryTranslationRepo.findTranslationForLanguage(fr, workforceEN)).thenReturn("");
 
         String actualCategory = translator.getTranslatedCategory(workforceEN, fr);
 
@@ -171,9 +171,9 @@ public class HealthIndicatorTranslatorTest {
 
         translator.translateHealthIndicatorOptions(categoryIndicatorEN, en);
 
-        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(any(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(any(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(any(), anyInt(), anyInt());
     }
 
     @Test
@@ -186,9 +186,9 @@ public class HealthIndicatorTranslatorTest {
 
         translator.translateHealthIndicatorOptions(categoryIndicatorEN, null);
 
-        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(any(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(any(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(any(), anyInt(), anyInt());
     }
 
     @Test
@@ -199,11 +199,11 @@ public class HealthIndicatorTranslatorTest {
         CategoryIndicatorDto categoryIndicatorFR = new CategoryIndicatorDto(categoryFR);
 
         when(categoryTranslationRepo
-                .findTranslationForLanguage("fr", categoryNameEN))
+                .findTranslationForLanguage(fr, categoryNameEN))
                 .thenReturn("Stratégie et investissement");
-        when(indicatorTranslationRepo.findTranslationForLanguage("fr", 1))
+        when(indicatorTranslationRepo.findTranslationForLanguage(fr, 1))
                 .thenReturn(indicatorTranslationFR);
-        when(scoreTranslationRepo.findTranslationForLanguage("fr", 1, 4))
+        when(scoreTranslationRepo.findTranslationForLanguage(fr, 1, 4))
                 .thenReturn(scoreDefFR);
 
         CategoryIndicatorDto translatedIndicator = translator.translateHealthIndicatorOptions(categoryIndicatorEN, LanguageCode.fr);
@@ -222,11 +222,11 @@ public class HealthIndicatorTranslatorTest {
 
         when(countryNameTranslator.getCountryTranslationForLanguage(fr, "IND"))
                 .thenReturn("Inde");
-        when(categoryTranslationRepo.findTranslationForLanguage("fr", categoryNameEN))
+        when(categoryTranslationRepo.findTranslationForLanguage(fr, categoryNameEN))
                 .thenReturn("Stratégie et investissement");
-        when(indicatorTranslationRepo.findTranslationForLanguage("fr", 3))
+        when(indicatorTranslationRepo.findTranslationForLanguage(fr, 3))
                 .thenReturn(indicatorTranslationFR);
-        when(scoreTranslationRepo.findTranslationForLanguage("fr", 3, 4))
+        when(scoreTranslationRepo.findTranslationForLanguage(fr, 3, 4))
                 .thenReturn(scoreDefFR);
 
         CountryHealthScoreDto translatedHealthScore = translator.translateCountryHealthScores(fr, countryHealthScoreEN);
@@ -239,9 +239,9 @@ public class HealthIndicatorTranslatorTest {
         translator.translateCountryHealthScores(en, countryHealthScoreEN);
 
         verify(countryNameTranslator, never()).getCountryTranslationForLanguage(any(), anyString());
-        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(any(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(any(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(any(), anyInt(), anyInt());
     }
 
     @Test
@@ -249,8 +249,8 @@ public class HealthIndicatorTranslatorTest {
         translator.translateCountryHealthScores(null, countryHealthScoreEN);
 
         verify(countryNameTranslator, never()).getCountryTranslationForLanguage(any(), anyString());
-        verify(categoryTranslationRepo, never()).findTranslationForLanguage(anyString(), anyString());
-        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt());
-        verify(scoreTranslationRepo, never()).findTranslationForLanguage(anyString(), anyInt(), anyInt());
+        verify(categoryTranslationRepo, never()).findTranslationForLanguage(any(), anyString());
+        verify(indicatorTranslationRepo, never()).findTranslationForLanguage(any(), anyInt());
+        verify(scoreTranslationRepo, never()).findTranslationForLanguage(any(), anyInt(), anyInt());
     }
 }
