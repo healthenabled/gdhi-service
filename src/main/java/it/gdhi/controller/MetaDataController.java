@@ -26,7 +26,7 @@ public class MetaDataController {
 
     @RequestMapping("/health_indicator_options")
     public List<CategoryIndicatorDto> getHealthIndicatorOptions(HttpServletRequest request) {
-        LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         return categoryIndicatorService.getHealthIndicatorOptions(languageCode);
     }
 

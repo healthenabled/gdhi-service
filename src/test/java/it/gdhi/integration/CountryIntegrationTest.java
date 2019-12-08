@@ -3,7 +3,6 @@ package it.gdhi.integration;
 import io.restassured.response.Response;
 import it.gdhi.Application;
 import it.gdhi.dto.HealthIndicatorDto;
-import it.gdhi.internationalization.repository.ICountryTranslationRepository;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryPhase;
 import it.gdhi.model.CountryResourceLink;
@@ -58,9 +57,6 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     private ICountryPhaseRepository countryPhaseRepository;
 
     @Autowired
-    private ICountryTranslationRepository translationRepository;
-
-    @Autowired
     private MailerService mailerService;
 
     @Autowired
@@ -94,14 +90,13 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void shouldReturnNotAcceptableGivenInvalidLanguageInRequest() {
+    public void shouldNotReturnErrorIfUserLanguageCodeNotFound() {
         Response response = given()
                 .contentType("application/json")
-                .header("USER_LANGUAGE","LS")
-                .when()
+                .header(USER_LANGUAGE, "ls")
                 .get("http://localhost:" + port + "/countries");
 
-        assertEquals(response.statusCode(), 406);
+        assertEquals(response.statusCode(), 200);
     }
 
     @Test

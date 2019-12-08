@@ -40,7 +40,7 @@ public class HealthIndicatorController {
     }
 
     private LanguageCode getLanguageCode(HttpServletRequest request) {
-        return LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        return LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
     }
 
 

@@ -44,7 +44,7 @@ public class CountryController {
 
     @RequestMapping("/countries")
     public List<Country> getCountries(HttpServletRequest request) {
-        LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         return countryService.fetchCountries(languageCode);
     }
 
@@ -57,7 +57,7 @@ public class CountryController {
     @RequestMapping("/countries/{id}/health_indicators")
     public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(HttpServletRequest request,
                                                                        @PathVariable("id") String countryId) {
-        LanguageCode languageCode = LanguageCode.valueOf(request.getHeader(USER_LANGUAGE));
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         return countryHealthIndicatorService.fetchCountryHealthScore(countryId, languageCode);
     }
 
