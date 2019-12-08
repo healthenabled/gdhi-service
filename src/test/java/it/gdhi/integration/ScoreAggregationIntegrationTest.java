@@ -650,8 +650,6 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
                 .when()
                 .get("http://localhost:" + port + "/countries_health_indicator_scores");
 
-        System.out.println(">>>>>> "+response.asString());
-        System.out.println(">>>>>> "+response);
         assertResponse(response.asString(), "countries_health_indicators_fr.json");
     }
 }

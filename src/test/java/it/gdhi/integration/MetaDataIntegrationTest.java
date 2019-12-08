@@ -59,8 +59,6 @@ public class MetaDataIntegrationTest extends BaseIntegrationTest{
                 .when()
                 .get("http://localhost:" + port + "/health_indicator_options");
 
-        System.out.println(response.asString());
-
         assertEquals(200, response.getStatusCode());
         assertResponse(response.asString(), "health_indicator_options_fr.json");
     }
