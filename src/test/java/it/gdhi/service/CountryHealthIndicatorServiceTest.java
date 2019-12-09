@@ -886,7 +886,7 @@ public class CountryHealthIndicatorServiceTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
 
-        when(request.getHeader(USER_LANGUAGE)).thenReturn("fr");
+        when(request.getParameter(USER_LANGUAGE)).thenReturn("fr");
 
         countryHealthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
 
@@ -940,7 +940,7 @@ public class CountryHealthIndicatorServiceTest {
         CountryHealthScoreDto countryHealthScoreDto = new CountryHealthScoreDto("IND", "India", "IN", of(categoryScore), 1, "");
 
         when(indicatorTranslator.translateCountryHealthScores(fr, countryHealthScoreDto)).thenReturn(countryHealthScoreDto);
-        when(request.getHeader(USER_LANGUAGE)).thenReturn("fr");
+        when(request.getParameter(USER_LANGUAGE)).thenReturn("fr");
 
         CountryPhase countryPhase = buildCountryPhase(country.getId(), 1 );
         when(iCountryPhaseRepository.findOne(country.getId())).thenReturn(countryPhase);

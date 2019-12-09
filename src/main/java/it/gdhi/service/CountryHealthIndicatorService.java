@@ -111,7 +111,7 @@ public class CountryHealthIndicatorService {
 
     public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,
                                                    HttpServletResponse response) throws IOException {
-        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getParameter(USER_LANGUAGE));
         List<CountryHealthScoreDto> countryHealthScores = fetchCountriesHealthScoresForPDF(languageCode)
                                                             .getCountryHealthScores();
 
@@ -121,7 +121,7 @@ public class CountryHealthIndicatorService {
 
     public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
                                                 HttpServletResponse response) throws IOException {
-        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getParameter(USER_LANGUAGE));
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
 
         countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId, languageCode));
