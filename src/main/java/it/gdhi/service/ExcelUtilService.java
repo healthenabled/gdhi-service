@@ -3,8 +3,14 @@ package it.gdhi.service;
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.IndicatorScoreDto;
+import it.gdhi.internationalization.model.CategoryTranslation;
+import it.gdhi.internationalization.model.IndicatorTranslation;
+import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
+import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
+import it.gdhi.internationalization.translations.NOT_AVAILABLE;
 import it.gdhi.model.Category;
 import it.gdhi.repository.ICategoryRepository;
+import it.gdhi.utils.LanguageCode;
 import lombok.Getter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -25,7 +31,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static it.gdhi.model.CountryHealthIndicator.SCORE_DESCRIPTION_NOT_AVAILABLE;
+import static it.gdhi.utils.LanguageCode.en;
+import static java.util.stream.Collectors.toMap;
 
 
 @Service
@@ -46,10 +53,24 @@ public class ExcelUtilService {
     @Getter
     private String fileWithPath;
 
-    @Autowired
-    private ICategoryRepository iCategoryRepository;
+    /* Default English */
+    private LanguageCode languageCode = en;
 
-    void convertListToExcel(List<CountryHealthScoreDto> countryHealthScoreDtos) {
+    private final ICategoryRepository iCategoryRepository;
+    private final ICategoryTranslationRepository categoryTranslationRepository;
+    private final IIndicatorTranslationRepository indicatorTranslationRepository;
+
+    @Autowired
+    public ExcelUtilService(ICategoryRepository iCategoryRepository,
+                            ICategoryTranslationRepository categoryTranslationRepository,
+                            IIndicatorTranslationRepository indicatorTranslationRepository) {
+        this.iCategoryRepository = iCategoryRepository;
+        this.categoryTranslationRepository = categoryTranslationRepository;
+        this.indicatorTranslationRepository = indicatorTranslationRepository;
+    }
+
+    void convertListToExcel(List<CountryHealthScoreDto> countryHealthScoreDtos, LanguageCode languageCode) {
+        this.languageCode = languageCode;
         List<Category> categories = iCategoryRepository.findAll();
 
         try {
@@ -79,12 +100,17 @@ public class ExcelUtilService {
     int populateHeaderNames(XSSFWorkbook workBook, XSSFSheet sheet, int rownum,
                             List<Category> categories) {
         Map<String, String> headerDef = new LinkedHashMap<>();
+        String indicatorHeading = translateINDICATOR();
+        String categoryHeading = translateCATEGORY();
+
         headerDef.put("Blank Cell", "");
 
         categories.forEach(category -> {
-            category.getIndicators().forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
-                    INDICATOR + indicator.getCode()));
-            headerDef.put(CATEGORY + category.getId(), CATEGORY + category.getId());
+            category.getIndicators()
+                    .forEach(indicator -> headerDef.put(  INDICATOR + indicator.getIndicatorId(),
+                                                          indicatorHeading + indicator.getCode()));
+            headerDef.put(  CATEGORY + category.getId(),
+                            categoryHeading + category.getId());
         });
         Row row = sheet.createRow(rownum);
         addRow(headerDef, row, getFontStyle(workBook));
@@ -94,17 +120,30 @@ public class ExcelUtilService {
 
     Map<String, String> populateHeaderDefinitions(XSSFWorkbook workBook, XSSFSheet sheet, int rownum,
                                                   List<Category> categories) {
+        Map<Integer, String> categoryNameTranslations = getTranslatedCategories().stream()
+                                    .collect(toMap(CategoryTranslation::getCategoryId, CategoryTranslation::getName));
+        Map<Integer, String> indicatorNameTranslations = getTranslatedIndicators().stream()
+                                .collect(toMap(IndicatorTranslation::getIndicatorId, IndicatorTranslation::getName));
+
         Map<String, String> headerDef = new LinkedHashMap<>();
-        headerDef.put(COUNTRY_NAME, COUNTRY_NAME);
+        headerDef.put(COUNTRY_NAME, translatedCOUNTRY_NAME());
+
         categories.forEach(category -> {
-            category.getIndicators().forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
-                    indicator.getName()));
-            headerDef.put(CATEGORY + category.getId(), category.getName());
+            category.getIndicators()
+                    .forEach(indicator -> headerDef.put(INDICATOR + indicator.getIndicatorId(),
+                                                        indicatorNameTranslations.get(indicator.getIndicatorId())));
+            headerDef.put(CATEGORY + category.getId(), categoryNameTranslations.get(category.getId()));
         });
-        headerDef.put(OVERALL_PHASE, OVERALL_PHASE);
+
+        headerDef.put(OVERALL_PHASE, translateOVERALL());
         Row row = sheet.createRow(rownum);
         addRow(headerDef, row, getFontStyle(workBook));
         return headerDef;
+    }
+
+    private String translatedCOUNTRY_NAME() {
+        return it.gdhi.internationalization.translations.COUNTRY_NAME.valueOf(languageCode.toString())
+                                                                    .getTranslatedText();
     }
 
     void populateHealthIndicatorsWithDefinitionsAndScores(XSSFSheet sheet,
@@ -115,24 +154,25 @@ public class ExcelUtilService {
         for (CountryHealthScoreDto countryHealthScoreDto : countryHealthScoreDtos) {
             row = sheet.createRow(rownum++);
             Map<String, String> content = new LinkedHashMap<>();
-            for (String header : headerDef.keySet()) {
-                content.put(header, SCORE_DESCRIPTION_NOT_AVAILABLE);
-            }
+            for (String header : headerDef.keySet())
+                content.put(header, translateNOTAVAILABLE());
+
             content.put(COUNTRY_NAME, countryHealthScoreDto.getCountryName());
             List<CategoryHealthScoreDto> categories = countryHealthScoreDto.getCategories();
             for (CategoryHealthScoreDto category : categories) {
                 List<IndicatorScoreDto> indicators = category.getIndicators();
                 for (IndicatorScoreDto indicator : indicators) {
                     content.put(INDICATOR + indicator.getId(),
-                            indicator.getScore() != null && indicator.getScore() >=0 ?
-                            PHASE + indicator.getScore() : SCORE_DESCRIPTION_NOT_AVAILABLE);
+                                    isValidScore(indicator) ? translatePHASE() + indicator.getScore()
+                                                            : translateNOTAVAILABLE());
 
                 }
-                content.put(CATEGORY + category.getId(), category.getPhase() != null ?
-                        PHASE + category.getPhase() : SCORE_DESCRIPTION_NOT_AVAILABLE);
+                content.put(CATEGORY + category.getId(),
+                                category.getPhase() != null ? translatePHASE() + category.getPhase()
+                                                            : translateNOTAVAILABLE());
             }
             content.put(OVERALL_PHASE, countryHealthScoreDto.getCountryPhase() != null ?
-                    PHASE + countryHealthScoreDto.getCountryPhase() : SCORE_DESCRIPTION_NOT_AVAILABLE);
+                    translatePHASE() + countryHealthScoreDto.getCountryPhase() : translateNOTAVAILABLE());
             addRow(content, row, null);
         }
     }
@@ -173,6 +213,35 @@ public class ExcelUtilService {
         }
     }
 
+    private List<IndicatorTranslation> getTranslatedIndicators() {
+        return indicatorTranslationRepository.findByLanguageId(this.languageCode);
+    }
+
+    private List<CategoryTranslation> getTranslatedCategories() {
+        return categoryTranslationRepository.findByLanguageId(this.languageCode);
+    }
+
+    private String translateCATEGORY() {
+        return it.gdhi.internationalization.translations.CATEGORY.valueOf(languageCode.toString()).getTranslatedText();
+    }
+
+    private String translateINDICATOR() {
+        return it.gdhi.internationalization.translations.INDICATOR.valueOf(languageCode.toString()).getTranslatedText();
+    }
+
+    private String translatePHASE() {
+        return it.gdhi.internationalization.translations.PHASE.valueOf(languageCode.toString()).getTranslatedText();
+    }
+
+    private String translateOVERALL() {
+        return it.gdhi.internationalization.translations.OVERALL_PHASE.valueOf(languageCode.toString())
+                .getTranslatedText();
+    }
+
+    private String translateNOTAVAILABLE() {
+        return NOT_AVAILABLE.valueOf(this.languageCode.toString()).getTranslatedText();
+    }
+
     private XSSFCellStyle getFontStyle(XSSFWorkbook wb) {
         XSSFCellStyle style = wb.createCellStyle();
 
@@ -185,5 +254,9 @@ public class ExcelUtilService {
         style.setAlignment(CellStyle.ALIGN_CENTER);
         style.setFont(font);
         return style;
+    }
+
+    private boolean isValidScore(IndicatorScoreDto indicator) {
+        return indicator.getScore() != null && indicator.getScore() >=0;
     }
 }

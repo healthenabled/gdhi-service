@@ -22,4 +22,8 @@ public class IndicatorTranslation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "indicator_id", referencedColumnName = "indicator_id", insertable = false, updatable = false)
     private Indicator indicator;
+
+    public Integer getIndicatorId() {
+        return this.id.getIndicatorId();
+    }
 }

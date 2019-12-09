@@ -27,4 +27,5 @@ public class ICountryTranslationRepositoryTest {
         assertEquals(country, "Afganistán");
     }
 
+
 }

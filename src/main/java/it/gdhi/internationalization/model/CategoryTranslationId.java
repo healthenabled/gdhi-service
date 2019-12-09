@@ -19,7 +19,7 @@ import static javax.persistence.EnumType.STRING;
 public class CategoryTranslationId implements Serializable {
 
     @Column(name = "category_id")
-    private String categoryId;
+    private Integer categoryId;
 
     @Column(name = "language_id")
     @Enumerated(STRING)

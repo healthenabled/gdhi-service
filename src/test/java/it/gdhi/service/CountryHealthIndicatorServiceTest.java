@@ -317,7 +317,6 @@ public class CountryHealthIndicatorServiceTest {
         assertThat(category2.get(0).getOverallScore(),is(2.0));
     }
 
-
     @Test
     public void shouldReturnCountryHealthScoreGivenCountryIdForNullCountryScore() {
         String countryId = "IND";
@@ -851,7 +850,7 @@ public class CountryHealthIndicatorServiceTest {
 
         countryHealthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
 
-        verify(excelUtilService).convertListToExcel(anyList());
+        verify(excelUtilService).convertListToExcel(anyList(), any());
         verify(excelUtilService).downloadFile(request, response);
     }
 
@@ -869,18 +868,12 @@ public class CountryHealthIndicatorServiceTest {
         CountryPhase countryPhaseIND = buildCountryPhase("IND", 1 );
         when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
 
-        IndicatorScoreDto indicatorScore = new IndicatorScoreDto(1, null, null, null,
-                1, 1, null, "Not Available");
-        CategoryHealthScoreDto categoryScore = new CategoryHealthScoreDto(9, "Category 1", 1.0,
-                1, of(indicatorScore));
-        CountryHealthScoreDto countryHealthScore = new CountryHealthScoreDto("IND", "India",
-                "IN", of(categoryScore), 1, "April 2018");
-        IndicatorScoreDto indicatorScoreFR = new IndicatorScoreDto(1, null, null, null,
-                1, 1, null, "French desc");
-        CategoryHealthScoreDto categoryScoreFR = new CategoryHealthScoreDto(9, "Category 1", 1.0,
-                1, of(indicatorScoreFR));
-        CountryHealthScoreDto countryHealthScoreFR = new CountryHealthScoreDto("IND", "Inde",
-                "IN", of(categoryScoreFR), 1, "April 2018");
+        IndicatorScoreDto indicatorScore = new IndicatorScoreDto(1, null, null, null, 1, 1, null, "Not Available");
+        CategoryHealthScoreDto categoryScore = new CategoryHealthScoreDto(9, "Category 1", 1.0, 1, of(indicatorScore));
+        CountryHealthScoreDto countryHealthScore = new CountryHealthScoreDto("IND", "India", "IN", of(categoryScore), 1, "April 2018");
+        IndicatorScoreDto indicatorScoreFR = new IndicatorScoreDto(1, null, null, null, 1, 1, null, "French desc");
+        CategoryHealthScoreDto categoryScoreFR = new CategoryHealthScoreDto(9, "Category 1", 1.0, 1, of(indicatorScoreFR));
+        CountryHealthScoreDto countryHealthScoreFR = new CountryHealthScoreDto("IND", "Inde", "IN", of(categoryScoreFR), 1, "April 2018");
         when(indicatorTranslator.translateCountryHealthScores(fr, countryHealthScore)).thenReturn(countryHealthScoreFR);
 
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -915,7 +908,7 @@ public class CountryHealthIndicatorServiceTest {
         when(iCountryPhaseRepository.findOne(country.getId())).thenReturn(countryPhase);
 
         countryHealthIndicatorService.createHealthIndicatorInExcelFor("IND", request, response);
-        verify(excelUtilService).convertListToExcel(anyList());
+        verify(excelUtilService).convertListToExcel(anyList(), any());
         verify(excelUtilService).downloadFile(request, response);
     }
 

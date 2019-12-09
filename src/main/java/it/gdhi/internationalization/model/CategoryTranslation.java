@@ -21,4 +21,8 @@ public class CategoryTranslation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Category category;
+
+    public Integer getCategoryId() {
+        return this.id.getCategoryId();
+    }
 }

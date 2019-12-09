@@ -115,17 +115,18 @@ public class CountryHealthIndicatorService {
         List<CountryHealthScoreDto> countryHealthScores = fetchCountriesHealthScoresForPDF(languageCode)
                                                             .getCountryHealthScores();
 
-        excelUtilService.convertListToExcel(countryHealthScores);
+        excelUtilService.convertListToExcel(countryHealthScores, languageCode);
         excelUtilService.downloadFile(request, response);
     }
 
-    public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
+    public void createHealthIndicatorInExcelFor(String countryId,
+                                                HttpServletRequest request,
                                                 HttpServletResponse response) throws IOException {
         LanguageCode languageCode = LanguageCode.getValueFor(request.getParameter(USER_LANGUAGE));
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
 
         countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId, languageCode));
-        excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
+        excelUtilService.convertListToExcel(countryHealthScoreDtoAsList, languageCode);
         excelUtilService.downloadFile(request, response);
     }
 

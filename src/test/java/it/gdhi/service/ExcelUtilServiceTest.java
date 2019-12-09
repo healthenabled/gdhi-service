@@ -3,6 +3,12 @@ package it.gdhi.service;
 import it.gdhi.dto.CategoryHealthScoreDto;
 import it.gdhi.dto.CountryHealthScoreDto;
 import it.gdhi.dto.IndicatorScoreDto;
+import it.gdhi.internationalization.model.CategoryTranslation;
+import it.gdhi.internationalization.model.CategoryTranslationId;
+import it.gdhi.internationalization.model.HealthIndicatorTranslationId;
+import it.gdhi.internationalization.model.IndicatorTranslation;
+import it.gdhi.internationalization.repository.ICategoryTranslationRepository;
+import it.gdhi.internationalization.repository.IIndicatorTranslationRepository;
 import it.gdhi.model.Category;
 import it.gdhi.model.Indicator;
 import it.gdhi.repository.ICategoryRepository;
@@ -25,7 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+import static com.google.common.collect.ImmutableList.of;
 import static it.gdhi.service.ExcelUtilService.*;
+import static it.gdhi.utils.LanguageCode.en;
+import static it.gdhi.utils.LanguageCode.fr;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -42,7 +51,10 @@ public class ExcelUtilServiceTest {
     private ExcelUtilService excelUtilService;
     @Mock
     private ICategoryRepository iCategoryRepository;
-
+    @Mock
+    private ICategoryTranslationRepository categoryTranslationRepository;
+    @Mock
+    private IIndicatorTranslationRepository indicatorTranslationRepository;
     @Before
     public void setUp() throws Exception {
         doReturn("/tmp/Digital Health Data.xlsx").when(excelUtilService).getFileWithPath();
@@ -73,7 +85,12 @@ public class ExcelUtilServiceTest {
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
 
-        excelUtilService.convertListToExcel(countryHealthScores);
+        CategoryTranslation categoryTranslation = new CategoryTranslation(new CategoryTranslationId(1, fr), "Cat 1", categories.get(0));
+        IndicatorTranslation indicatorTranslation = new IndicatorTranslation(new HealthIndicatorTranslationId(1, fr), "Ind 1", "Ind Def 1", indicators.get(0));
+        when(categoryTranslationRepository.findByLanguageId(en)).thenReturn(of(categoryTranslation));
+        when(indicatorTranslationRepository.findByLanguageId(en)).thenReturn(of(indicatorTranslation));
+
+        excelUtilService.convertListToExcel(countryHealthScores, en);
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
@@ -94,7 +111,12 @@ public class ExcelUtilServiceTest {
                 indicators));
         when(iCategoryRepository.findAll()).thenReturn(categories);
 
-        excelUtilService.convertListToExcel(countryHealthScores);
+        CategoryTranslation categoryTranslation = new CategoryTranslation(new CategoryTranslationId(1, fr), "Cat 1", categories.get(0));
+        IndicatorTranslation indicatorTranslation = new IndicatorTranslation(new HealthIndicatorTranslationId(1, fr), "Ind 1", "Ind Def 1", indicators.get(0));
+        when(categoryTranslationRepository.findByLanguageId(en)).thenReturn(of(categoryTranslation));
+        when(indicatorTranslationRepository.findByLanguageId(en)).thenReturn(of(indicatorTranslation));
+
+        excelUtilService.convertListToExcel(countryHealthScores, en);
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
@@ -111,11 +133,16 @@ public class ExcelUtilServiceTest {
         List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
         countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN", emptyList(), 4,null));
         List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
-        List<Category> categories = singletonList(new Category(1, "Cat 1",
-                indicators));
+        List<Category> categories = singletonList(new Category(1, "Cat 1", indicators));
+
         when(iCategoryRepository.findAll()).thenReturn(categories);
 
-        excelUtilService.convertListToExcel(countryHealthScores);
+        CategoryTranslation categoryTranslation = new CategoryTranslation(new CategoryTranslationId(1, fr), "Cat 1", categories.get(0));
+        IndicatorTranslation indicatorTranslation = new IndicatorTranslation(new HealthIndicatorTranslationId(1, fr), "Ind 1", "Ind Def 1", indicators.get(0));
+        when(categoryTranslationRepository.findByLanguageId(en)).thenReturn(of(categoryTranslation));
+        when(indicatorTranslationRepository.findByLanguageId(en)).thenReturn(of(indicatorTranslation));
+
+        excelUtilService.convertListToExcel(countryHealthScores, en);
 
         ArgumentCaptor<XSSFSheet> sheetArgumentCaptor = ArgumentCaptor.forClass(XSSFSheet.class);
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
@@ -168,4 +195,30 @@ public class ExcelUtilServiceTest {
         assertThat(values[3], is("Phase 4"));
     }
 
+    @Test
+    public void shouldPopulateHeaderDefinitionAndHealthScoresInFrench() throws IOException {
+        List<CountryHealthScoreDto> countryHealthScores = new ArrayList<>();
+        countryHealthScores.add(new CountryHealthScoreDto("IND", "INDIA", "IN", emptyList(), 4,null));
+        List<Indicator> indicators = singletonList(new Indicator(1, "Ind 1", "Ind Def 1", 1));
+        List<Category> categories = singletonList(new Category(1, "Cat 1", indicators));
+
+        when(iCategoryRepository.findAll()).thenReturn(categories);
+
+        CategoryTranslation categoryTranslation = new CategoryTranslation(new CategoryTranslationId(1, fr), "Cat 1 fr", categories.get(0));
+        IndicatorTranslation indicatorTranslation = new IndicatorTranslation(new HealthIndicatorTranslationId(1, fr), "Ind 1 fr", "Ind Def 1 fr", indicators.get(0));
+        when(categoryTranslationRepository.findByLanguageId(fr)).thenReturn(of(categoryTranslation));
+        when(indicatorTranslationRepository.findByLanguageId(fr)).thenReturn(of(indicatorTranslation));
+
+        excelUtilService.convertListToExcel(countryHealthScores, fr);
+
+        ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(excelUtilService).populateHealthIndicatorsWithDefinitionsAndScores(any(), eq(countryHealthScores), mapArgumentCaptor.capture(), eq(2));
+
+        Set<String> keys = mapArgumentCaptor.getValue().keySet();
+        Collection<String> values =  mapArgumentCaptor.getValue().values();
+        List<String> expectedKeys = asList("Country Name", "Indicator 1", "Category 1", "Overall Phase");
+        List<String> expectedValues = asList("Nom du pays", "Ind 1 fr", "Cat 1 fr", "Dans l'ensemble Phase");
+        assertTrue(keys.containsAll(expectedKeys));
+        assertTrue(values.containsAll(expectedValues));
+    }
 }

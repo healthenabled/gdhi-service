@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 import static it.gdhi.utils.LanguageCode.fr;
 import static org.junit.Assert.assertEquals;
@@ -33,5 +34,20 @@ public class IIndicatorTranslationRepositoryTest {
 
         assertEquals(translatedIndicator.getName(), name);
         assertEquals(translatedIndicator.getDefinition(), definition);
+    }
+
+    @Test
+    public void shouldReturnAllIndicatorsInFrench() {
+        String name = "Priorité accordée à la santé numérique au niveau national par l'intermédiaire d'organes et de " +
+                "mécanismes de gouvernance dédiés";
+        String definition = "Le pays dispose-t-il d'un ministère, d'un organisme ou d'un groupe de travail national " +
+                "distinct pour la santé numérique ?";
+
+        List<IndicatorTranslation> translatedIndicator = repository.findByLanguageId(fr);
+
+        assertEquals(30, translatedIndicator.size());
+        assertEquals(Integer.valueOf(1), translatedIndicator.get(0).getIndicatorId());
+        assertEquals(name, translatedIndicator.get(0).getName());
+        assertEquals(definition, translatedIndicator.get(0).getDefinition());
     }
 }
