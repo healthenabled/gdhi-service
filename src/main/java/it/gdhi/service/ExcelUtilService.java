@@ -126,7 +126,7 @@ public class ExcelUtilService {
                                 .collect(toMap(IndicatorTranslation::getIndicatorId, IndicatorTranslation::getName));
 
         Map<String, String> headerDef = new LinkedHashMap<>();
-        headerDef.put(COUNTRY_NAME, translatedCOUNTRY_NAME());
+        headerDef.put(COUNTRY_NAME, translateCOUNTRYNAME());
 
         categories.forEach(category -> {
             category.getIndicators()
@@ -139,11 +139,6 @@ public class ExcelUtilService {
         Row row = sheet.createRow(rownum);
         addRow(headerDef, row, getFontStyle(workBook));
         return headerDef;
-    }
-
-    private String translatedCOUNTRY_NAME() {
-        return it.gdhi.internationalization.translations.COUNTRY_NAME.valueOf(languageCode.toString())
-                                                                    .getTranslatedText();
     }
 
     void populateHealthIndicatorsWithDefinitionsAndScores(XSSFSheet sheet,
@@ -227,6 +222,11 @@ public class ExcelUtilService {
 
     private String translateINDICATOR() {
         return it.gdhi.internationalization.translations.INDICATOR.valueOf(languageCode.toString()).getTranslatedText();
+    }
+
+    private String translateCOUNTRYNAME() {
+        return it.gdhi.internationalization.translations.COUNTRY_NAME.valueOf(languageCode.toString())
+                .getTranslatedText();
     }
 
     private String translatePHASE() {
