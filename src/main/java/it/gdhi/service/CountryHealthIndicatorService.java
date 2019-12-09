@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import static it.gdhi.controller.strategy.FilterStrategy.getCategoryPhaseFilter;
 import static it.gdhi.controller.strategy.FilterStrategy.getCountryPhaseFilter;
 import static it.gdhi.utils.FormStatus.PUBLISHED;
-import static it.gdhi.utils.LanguageCode.en;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.nullsLast;
 import static java.util.Objects.isNull;
@@ -111,20 +111,26 @@ public class CountryHealthIndicatorService {
 
     public void createGlobalHealthIndicatorInExcel(HttpServletRequest request,
                                                    HttpServletResponse response) throws IOException {
-        excelUtilService.convertListToExcel(fetchCountriesHealthScores().getCountryHealthScores());
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        List<CountryHealthScoreDto> countryHealthScores = fetchCountriesHealthScoresForPDF(languageCode)
+                                                            .getCountryHealthScores();
+
+        excelUtilService.convertListToExcel(countryHealthScores);
         excelUtilService.downloadFile(request, response);
     }
 
     public void createHealthIndicatorInExcelFor(String countryId, HttpServletRequest request,
                                                 HttpServletResponse response) throws IOException {
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         List countryHealthScoreDtoAsList = new ArrayList<CountryHealthScoreDto>();
-        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId, en));
+
+        countryHealthScoreDtoAsList.add(fetchCountryHealthScore(countryId, languageCode));
         excelUtilService.convertListToExcel(countryHealthScoreDtoAsList);
         excelUtilService.downloadFile(request, response);
     }
 
-    private CountriesHealthScoreDto fetchCountriesHealthScores() {
-        return this.fetchCountriesHealthScores(null, null, null);
+    private CountriesHealthScoreDto fetchCountriesHealthScoresForPDF(LanguageCode languageCode) {
+        return this.fetchCountriesHealthScores(null, null, languageCode);
     }
 
     private CategoryHealthScoreDto getCategoryHealthScoreDto(Entry<Integer, List<CategoryHealthScoreDto>> entry) {

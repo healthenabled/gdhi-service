@@ -16,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -847,9 +848,49 @@ public class CountryHealthIndicatorServiceTest {
     public void shouldInvokeConvertExcelOnGlobalExport() throws IOException {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
+
         countryHealthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
+
         verify(excelUtilService).convertListToExcel(anyList());
         verify(excelUtilService).downloadFile(request, response);
+    }
+
+    @Test
+    public void shouldInvokeConvertExcelOnGlobalExportForFrench() throws IOException, ParseException {
+        Category category1 = Category.builder().id(9).name("Category 1").build();
+        Country country1 = new Country("IND", "India",UUID.randomUUID(), "IN");
+        Indicator indicator1 = Indicator.builder().indicatorId(1).rank(1).build();
+        CountryHealthIndicator mock1 = CountryHealthIndicator.builder().country(country1).category(category1).indicator(indicator1).score(1).build();
+
+        when(iCountryHealthIndicatorRepository.findByCategoryAndStatus(null, PUBLISHED.name())).thenReturn(asList(mock1));
+
+        CountrySummary countrySummary = CountrySummary.builder().collectedDate(new SimpleDateFormat("dd-MM-yyyy").parse("04-04-2018")).build();
+        when(iCountrySummaryRepository.findByCountryAndStatus(anyString(),anyString())).thenReturn(countrySummary);
+        CountryPhase countryPhaseIND = buildCountryPhase("IND", 1 );
+        when(iCountryPhaseRepository.findOne("IND")).thenReturn(countryPhaseIND);
+
+        IndicatorScoreDto indicatorScore = new IndicatorScoreDto(1, null, null, null,
+                1, 1, null, "Not Available");
+        CategoryHealthScoreDto categoryScore = new CategoryHealthScoreDto(9, "Category 1", 1.0,
+                1, of(indicatorScore));
+        CountryHealthScoreDto countryHealthScore = new CountryHealthScoreDto("IND", "India",
+                "IN", of(categoryScore), 1, "April 2018");
+        IndicatorScoreDto indicatorScoreFR = new IndicatorScoreDto(1, null, null, null,
+                1, 1, null, "French desc");
+        CategoryHealthScoreDto categoryScoreFR = new CategoryHealthScoreDto(9, "Category 1", 1.0,
+                1, of(indicatorScoreFR));
+        CountryHealthScoreDto countryHealthScoreFR = new CountryHealthScoreDto("IND", "Inde",
+                "IN", of(categoryScoreFR), 1, "April 2018");
+        when(indicatorTranslator.translateCountryHealthScores(fr, countryHealthScore)).thenReturn(countryHealthScoreFR);
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        when(request.getHeader(USER_LANGUAGE)).thenReturn("fr");
+
+        countryHealthIndicatorService.createGlobalHealthIndicatorInExcel(request, response);
+
+        verify(indicatorTranslator).translateCountryHealthScores(fr, countryHealthScore);
     }
 
     @Test
@@ -876,6 +917,37 @@ public class CountryHealthIndicatorServiceTest {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor("IND", request, response);
         verify(excelUtilService).convertListToExcel(anyList());
         verify(excelUtilService).downloadFile(request, response);
+    }
+
+    @Test
+    public void shouldInvokeHealthIndicatorTranslatorWithLanguageAsFrench() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Country country = new Country("IND", "India",UUID.randomUUID(), "IN");
+        Category category = new Category(1, "Leadership and Governance");
+        Indicator indicator = new Indicator(1, "Indicator 1", "Definition1", 1);
+        IndicatorScore indicatorScore = IndicatorScore.builder().id(1L).indicatorId(1).score(1).definition("score 1").build();
+        CountryHealthIndicatorId countryHealthIndicatorId = new CountryHealthIndicatorId(country.getId(), category.getId(),indicator.getIndicatorId() , "PUBLISHED");
+
+        CountryHealthIndicator countryHealthIndicator = new CountryHealthIndicator(countryHealthIndicatorId, country, category, indicator, indicatorScore,  1, "st3", new Date(), null);
+
+        List<CountryHealthIndicator> countryHealthIndicatorsForCountry = asList(countryHealthIndicator);
+        when(iCountryHealthIndicatorRepository.findByCountryIdAndStatus("IND", "PUBLISHED"))
+                .thenReturn(countryHealthIndicatorsForCountry);
+
+        IndicatorScoreDto indicatorScoreDto = new IndicatorScoreDto(1, null, "Indicator 1", "Definition1", 1, 1, "st3", "score 1");
+        CategoryHealthScoreDto categoryScore = new CategoryHealthScoreDto(1, "Leadership and Governance", 1.0, 1, of(indicatorScoreDto));
+        CountryHealthScoreDto countryHealthScoreDto = new CountryHealthScoreDto("IND", "India", "IN", of(categoryScore), 1, "");
+
+        when(indicatorTranslator.translateCountryHealthScores(fr, countryHealthScoreDto)).thenReturn(countryHealthScoreDto);
+        when(request.getHeader(USER_LANGUAGE)).thenReturn("fr");
+
+        CountryPhase countryPhase = buildCountryPhase(country.getId(), 1 );
+        when(iCountryPhaseRepository.findOne(country.getId())).thenReturn(countryPhase);
+
+        countryHealthIndicatorService.createHealthIndicatorInExcelFor("IND", request, response);
+
+        verify(indicatorTranslator).translateCountryHealthScores(fr, countryHealthScoreDto);
     }
 
     @Test
