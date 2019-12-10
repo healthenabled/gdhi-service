@@ -7,7 +7,7 @@ public enum COUNTRY_NAME {
     en("Country Name"),
     es("Nombre del país"),
     fr("Nom du pays"),
-    pt("Nome do país"),
+    pt("País Nome"),
     ar("");
 
     private String translatedText;
