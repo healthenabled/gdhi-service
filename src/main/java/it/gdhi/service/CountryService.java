@@ -3,12 +3,14 @@ package it.gdhi.service;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.internationalization.service.CountryNameTranslator;
 import it.gdhi.model.Country;
 import it.gdhi.model.CountryHealthIndicator;
 import it.gdhi.model.CountrySummary;
 import it.gdhi.repository.ICountryHealthIndicatorRepository;
 import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
+import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +28,25 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class CountryService {
 
-    @Autowired
-    private ICountryRepository iCountryRepository;
+    private final ICountryRepository iCountryRepository;
+    private final ICountrySummaryRepository iCountrySummaryRepository;
+    private final ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+    private final CountryNameTranslator translator;
 
     @Autowired
-    private ICountrySummaryRepository iCountrySummaryRepository;
+    public CountryService(ICountryRepository iCountryRepository,
+                          ICountrySummaryRepository iCountrySummaryRepository,
+                          ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository,
+                          CountryNameTranslator translator) {
+        this.iCountryRepository = iCountryRepository;
+        this.iCountrySummaryRepository = iCountrySummaryRepository;
+        this.iCountryHealthIndicatorRepository = iCountryHealthIndicatorRepository;
+        this.translator = translator;
+    }
 
-    @Autowired
-    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
-
-    public List<Country> fetchCountries() {
-        return iCountryRepository.findAll();
+    public List<Country> fetchCountries(LanguageCode languageCode) {
+        List<Country> countries = iCountryRepository.findAll();
+        return translator.translate(countries, languageCode);
     }
 
     public CountrySummaryDto fetchCountrySummary(String countryId) {

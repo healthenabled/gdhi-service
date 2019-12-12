@@ -1,8 +1,10 @@
 package it.gdhi.service;
 
 import it.gdhi.dto.CategoryIndicatorDto;
+import it.gdhi.internationalization.service.HealthIndicatorTranslator;
 import it.gdhi.model.Category;
 import it.gdhi.repository.ICategoryRepository;
+import it.gdhi.utils.LanguageCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,21 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class CategoryIndicatorService {
 
-    @Autowired
-    private ICategoryRepository iCategoryRepository;
+    private final ICategoryRepository iCategoryRepository;
+    private final HealthIndicatorTranslator translator;
 
-    public List<CategoryIndicatorDto> getHealthIndicatorOptions() {
-        return iCategoryRepository.findAll().stream().map(CategoryIndicatorDto::new)
-                                  .collect(toList());
+    @Autowired
+    public CategoryIndicatorService(ICategoryRepository iCategoryRepository,
+                                    HealthIndicatorTranslator translator) {
+        this.iCategoryRepository = iCategoryRepository;
+        this.translator = translator;
+    }
+
+    public List<CategoryIndicatorDto> getHealthIndicatorOptions(LanguageCode languageCode) {
+        return iCategoryRepository.findAll().stream()
+                                    .map(CategoryIndicatorDto::new)
+                                    .map(dto -> translator.translateHealthIndicatorOptions(dto, languageCode))
+                                    .collect(toList());
     }
 
     Integer getHealthIndicatorCount() {

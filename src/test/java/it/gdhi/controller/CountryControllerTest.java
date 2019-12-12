@@ -1,27 +1,34 @@
 package it.gdhi.controller;
 
-import it.gdhi.dto.*;
+import it.gdhi.dto.CountryHealthScoreDto;
+import it.gdhi.dto.CountrySummaryDto;
+import it.gdhi.dto.CountryUrlGenerationStatusDto;
+import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.model.DevelopmentIndicator;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
+import it.gdhi.utils.LanguageCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static it.gdhi.utils.FormStatus.DRAFT;
+import static it.gdhi.utils.LanguageCode.en;
+import static it.gdhi.utils.LanguageCode.fr;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static it.gdhi.utils.FormStatus.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CountryControllerTest {
@@ -43,18 +50,51 @@ public class CountryControllerTest {
 
     @Test
     public void shouldListCountries() {
-        countryController.getCountries();
-        verify(countryService).fetchCountries();
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(en);
+    }
+
+    @Test
+    public void shouldListCountriesInGivenLanguage() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "fr");
+
+        countryController.getCountries(request);
+
+        verify(countryService).fetchCountries(fr);
     }
 
     @Test
     public void shouldInvokeHealthIndicatorServiceCountryScore() {
         String countryId = "ARG";
         CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
-        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId)).thenReturn(countryHealthScoreMock);
-        CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(countryId);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
+
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId, LanguageCode.en)).thenReturn(countryHealthScoreMock);
+
+        CountryHealthScoreDto healthIndicatorForGivenCountryCode = countryController.getHealthIndicatorForGivenCountryCode(request, countryId);
+
         assertThat(healthIndicatorForGivenCountryCode, is(countryHealthScoreMock));
-        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId);
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId, LanguageCode.en);
+    }
+
+    @Test
+    public void shouldInvokeHealthIndicatorServiceWithGivenLanguageCode() {
+        String countryId = "ARG";
+        CountryHealthScoreDto countryHealthScoreMock = mock(CountryHealthScoreDto.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "ar");
+
+        when(countryHealthIndicatorService.fetchCountryHealthScore(countryId, LanguageCode.ar)).thenReturn(countryHealthScoreMock);
+
+        countryController.getHealthIndicatorForGivenCountryCode(request, countryId);
+
+        verify(countryHealthIndicatorService).fetchCountryHealthScore(countryId, LanguageCode.ar);
     }
 
     @Test

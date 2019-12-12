@@ -8,6 +8,7 @@ import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.CountryHealthIndicatorService;
 import it.gdhi.service.CountryService;
 import it.gdhi.service.DevelopmentIndicatorService;
+import it.gdhi.utils.LanguageCode;
 import it.gdhi.view.DevelopmentIndicatorView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static it.gdhi.utils.FormStatus.DRAFT;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 
 @RestController
 @Slf4j
@@ -41,8 +43,9 @@ public class CountryController {
     private DevelopmentIndicatorService developmentIndicatorService;
 
     @RequestMapping("/countries")
-    public List<Country> getCountries() {
-        return countryService.fetchCountries();
+    public List<Country> getCountries(HttpServletRequest request) {
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        return countryService.fetchCountries(languageCode);
     }
 
     @RequestMapping("/countries/{id}/development_indicators")
@@ -52,8 +55,10 @@ public class CountryController {
     }
 
     @RequestMapping("/countries/{id}/health_indicators")
-    public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(@PathVariable("id") String countryId) {
-        return countryHealthIndicatorService.fetchCountryHealthScore(countryId);
+    public CountryHealthScoreDto getHealthIndicatorForGivenCountryCode(HttpServletRequest request,
+                                                                       @PathVariable("id") String countryId) {
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        return countryHealthIndicatorService.fetchCountryHealthScore(countryId, languageCode);
     }
 
     @RequestMapping("/countries/{id}/country_summary")
@@ -146,5 +151,11 @@ public class CountryController {
     @RequestMapping(value = "/admin/countries/calculate_phase", method = RequestMethod.GET)
     public void calculateCountryPhase() {
         countryHealthDataService.calculatePhaseForAllCountries();
+    }
+
+    @ResponseStatus(value=HttpStatus.NOT_ACCEPTABLE, reason="User language requested not found")
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIOException(){
+        log.error("User language requested not found");
     }
 }

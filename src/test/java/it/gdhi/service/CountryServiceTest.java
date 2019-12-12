@@ -1,8 +1,10 @@
 package it.gdhi.service;
 
+import com.google.common.collect.ImmutableList;
 import it.gdhi.dto.CountrySummaryDto;
 import it.gdhi.dto.GdhiQuestionnaire;
 import it.gdhi.dto.HealthIndicatorDto;
+import it.gdhi.internationalization.service.CountryNameTranslator;
 import it.gdhi.model.*;
 import it.gdhi.model.id.CountryHealthIndicatorId;
 import it.gdhi.model.id.CountryResourceLinkId;
@@ -20,9 +22,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static it.gdhi.utils.LanguageCode.en;
 import static java.util.Arrays.asList;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,17 +35,29 @@ import static org.mockito.Mockito.when;
 public class CountryServiceTest {
 
     @InjectMocks
-    CountryService countryService;
+    private CountryService countryService;
     @Mock
-    ICountryRepository countryDetailRepository;
+    private ICountryRepository countryDetailRepository;
     @Mock
-    ICountrySummaryRepository iCountrySummaryRepository;
+    private ICountrySummaryRepository iCountrySummaryRepository;
     @Mock
-    ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+    private ICountryHealthIndicatorRepository iCountryHealthIndicatorRepository;
+    @Mock
+    private CountryNameTranslator translator;
 
     @Test
     public void shouldInsertTestData() {
-        countryService.fetchCountries();
+        when(countryDetailRepository.findAll()).thenReturn(ImmutableList.of());
+        countryService.fetchCountries(en);
+
+        verify(translator).translate(any(), any());
+    }
+
+    @Test
+    public void shouldInvoke() {
+        countryService.fetchCountries(en);
+
+        verify(countryDetailRepository).findAll();
         verify(countryDetailRepository).findAll();
     }
 
@@ -62,7 +79,7 @@ public class CountryServiceTest {
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, status))
                 .summary(summary)
-                .country(new Country(countryId, "Argentina", UUID.randomUUID(), "AR"))
+                .country(new Country(countryId, "Argentina", randomUUID(), "AR"))
                 .contactName(contactName)
                 .contactDesignation(contactDesignation)
                 .contactOrganization(contactOrganization)
@@ -108,7 +125,7 @@ public class CountryServiceTest {
     public void shouldGetGlobalHealthScoreDto() throws Exception {
         String countryId = "IND";
         String statusValue = "PUBLISHED";
-        UUID countryUUID = UUID.randomUUID();
+        UUID countryUUID = randomUUID();
         Country country = new Country(countryId, "India", countryUUID, "IN");
         CountrySummary countrySummary = CountrySummary.builder()
                 .countrySummaryId(new CountrySummaryId(countryId, statusValue))
@@ -153,7 +170,7 @@ public class CountryServiceTest {
     @Test
     public void shouldHandleCountriesNotAvailable() throws Exception {
         String countryId = "IND";
-        UUID countryUUID = UUID.randomUUID();
+        UUID countryUUID = randomUUID();
         Country country = new Country(countryId, "India", countryUUID, "IN");
 
         when(iCountrySummaryRepository.findAll(countryId)).thenReturn(null);

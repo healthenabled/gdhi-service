@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 import static java.util.Arrays.asList;
 
 @RunWith(SpringRunner.class)
@@ -130,6 +131,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators");
 
@@ -197,6 +199,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?categoryId="+categoryId1+"&phase=1");
 
@@ -264,6 +267,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?categoryId="+categoryId1);
 
@@ -331,6 +335,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/global_health_indicators?phase=4");
 
@@ -393,6 +398,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/countries_health_indicator_scores");
 
@@ -454,6 +460,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/countries_health_indicator_scores?categoryId="+categoryId1+"&phase=2");
 
@@ -515,6 +522,7 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/countries_health_indicator_scores?categoryId="+categoryId1);
 
@@ -576,10 +584,72 @@ public class ScoreAggregationIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/countries_health_indicator_scores?phase=3");
 
         assertResponse(response.asString(), "countries_health_indicators_filter_by_phase.json");
     }
 
+    @Test
+    public void shouldGetOverAllScoreForAllCountriesInFrench() throws Exception {
+        String india = "IND";
+        String uk = "GBR";
+        String pakistan = "PAK";
+        Integer categoryId1 = 1;
+        Integer categoryId2 = 2;
+        Integer categoryId3 = 3;
+        Integer indicatorId1_1 = 1;
+        Integer indicatorId1_2 = 2;
+        Integer indicatorId2_1 = 3;
+        Integer indicatorId2_2 = 4;
+        Integer indicatorId3_1 = 5;
+        Integer indicatorId3_2 = 6;
+
+        String status = "PUBLISHED";
+        addCountrySummary(india, status, "IN");
+        addCountrySummary(uk, status, "UK");
+        addCountrySummary(pakistan, status, "PK");
+
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp2").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp3").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp4").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp5").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp6").build());
+
+        setupHealthIndicatorsForCountry(india, healthIndicatorDtos);
+        addCountryPhase(india, 2);
+
+        healthIndicatorDtos = asList(
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(4).supportingText("sp7").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(5).supportingText("sp8").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp9").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp10").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp11").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp12").build());
+
+        setupHealthIndicatorsForCountry(uk, healthIndicatorDtos);
+        addCountryPhase(uk, 4);
+
+        healthIndicatorDtos = asList(
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(null).supportingText("sp13").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(null).supportingText("sp14").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(null).supportingText("sp15").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp16").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp17").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp18").build());
+
+        setupHealthIndicatorsForCountry(pakistan, healthIndicatorDtos);
+        addCountryPhase(pakistan, null);
+
+        Response response = given()
+                .contentType("application/json")
+                .header(USER_LANGUAGE, "fr")
+                .when()
+                .get("http://localhost:" + port + "/countries_health_indicator_scores");
+
+        assertResponse(response.asString(), "countries_health_indicators_fr.json");
+    }
 }

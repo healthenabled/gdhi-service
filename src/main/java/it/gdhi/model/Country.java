@@ -1,6 +1,10 @@
 package it.gdhi.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Slf4j
+@EqualsAndHashCode
 public class Country {
 
     @Id
@@ -23,4 +29,7 @@ public class Country {
     @Column(name = "alpha_2_code")
     private String alpha2Code;
 
+    public Country makeWithName(String name) {
+        return new Country(this.id, name, this.getUniqueId(), this.alpha2Code);
+    }
 }

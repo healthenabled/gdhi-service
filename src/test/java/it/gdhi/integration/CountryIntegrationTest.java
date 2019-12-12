@@ -14,6 +14,7 @@ import it.gdhi.repository.ICountryRepository;
 import it.gdhi.repository.ICountrySummaryRepository;
 import it.gdhi.service.CountryHealthDataService;
 import it.gdhi.service.MailerService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,15 +25,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
+import static it.gdhi.utils.LanguageCode.USER_LANGUAGE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -70,6 +71,35 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldGetCountryListInGivenUserLanguage() throws Exception {
+        Response response = given()
+                .contentType("application/json")
+                .header("USER_LANGUAGE","fr")
+                .when()
+                .get("http://localhost:" + port + "/countries");
+
+        String expectedJSON = expectedResponseJson("countries_in_french.json");
+        ArrayList expectedCountries = getMapper().readValue(expectedJSON, ArrayList.class);
+
+        ArrayList countryResponseList = getMapper().readValue(response.asString(), ArrayList.class);
+        List countriesWithIdAndName = mapToCountryIdAndName(countryResponseList);
+        String translatedCountriesJson = getMapper().writeValueAsString(countriesWithIdAndName);
+        ArrayList actualCountries = getMapper().readValue(translatedCountriesJson, ArrayList.class);
+
+        assertTrue(expectedCountries.containsAll(actualCountries));
+    }
+
+    @Test
+    public void shouldNotReturnErrorIfUserLanguageCodeNotFound() {
+        Response response = given()
+                .contentType("application/json")
+                .header(USER_LANGUAGE, "ls")
+                .get("http://localhost:" + port + "/countries");
+
+        assertEquals(response.statusCode(), 200);
+    }
+
+    @Test
     public void shouldGetHealthIndicatorForACountry() throws Exception {
         String countryId = INDIA_ID;
         String status = "PUBLISHED";
@@ -100,10 +130,49 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
 
         Response response = given()
                 .contentType("application/json")
+                .header(USER_LANGUAGE, "en")
                 .when()
                 .get("http://localhost:" + port + "/countries/IND/health_indicators");
 
         assertResponse(response.asString(), "health_indicators.json");
+    }
+
+    @Test
+    public void shouldGetHealthIndicatorForACountryInSpanish() throws Exception {
+        String countryId = INDIA_ID;
+        String status = "PUBLISHED";
+        String alpha2Code = "IN";
+
+        Integer categoryId1 = 1;
+        Integer categoryId2 = 2;
+        Integer categoryId3 = 3;
+        Integer indicatorId1_1 = 1;
+        Integer indicatorId1_2 = 2;
+        Integer indicatorId2_1 = 3;
+        Integer indicatorId2_2 = 4;
+        Integer indicatorId3_1 = 5;
+        Integer indicatorId3_2 = 6;
+
+        addCountrySummary(countryId, "India", status, alpha2Code, INDIA_UUID, "04-04-2018",new ArrayList<>());
+
+        List<HealthIndicatorDto> healthIndicatorDtos = asList(
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_1).status(status).score(1).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId1).indicatorId(indicatorId1_2).status(status).score(2).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_1).status(status).score(3).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId2).indicatorId(indicatorId2_2).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_1).status(status).score(null).supportingText("sp1").build(),
+                HealthIndicatorDto.builder().categoryId(categoryId3).indicatorId(indicatorId3_2).status(status).score(null).supportingText("sp1").build());
+
+        setupHealthIndicatorsForCountry(countryId, healthIndicatorDtos);
+        setUpCountryPhase(countryId, 2);
+
+        Response response = given()
+                .contentType("application/json")
+                .header(USER_LANGUAGE, "es")
+                .when()
+                .get("http://localhost:" + port + "/countries/IND/health_indicators");
+
+        assertResponse(response.asString(), "health_indicators_es.json");
     }
 
     @Test
@@ -447,4 +516,16 @@ public class CountryIntegrationTest extends BaseIntegrationTest {
                 .build();
         countrySummaryRepository.save(countrySummary);
     }
+
+    /* Country UUID is auto generated and different in all environments, hence comparing only id and name. */
+    private List mapToCountryIdAndName(ArrayList actualList) {
+        return (List) actualList.stream().map(c -> {
+            HashMap c1 = (HashMap) c;
+            Pair<Object, Object> pair = Pair.of(c1.get("id"), c1.get("name"));
+            return pair;
+        })
+        .sorted(Comparator.naturalOrder())
+        .collect(Collectors.toList());
+    }
+
 }
