@@ -2,7 +2,7 @@
   "countryHealthScores": [
     {
       "countryId": "IND",
-      "countryName": "India",
+      "countryName": "Inde",
       "countryAlpha2Code": "IN",
       "categories": [
         {
@@ -176,7 +176,7 @@
     },
     {
       "countryId": "GBR",
-      "countryName": "United Kingdom",
+      "countryName": "Royaume-Uni",
       "countryAlpha2Code": "GB",
       "categories": [
         {
