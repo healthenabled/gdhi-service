@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static it.gdhi.utils.GDHIStringUtil.isNonNullAndNonEmpty;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
@@ -72,9 +73,13 @@ public class CountrySummaryDto {
 
     }
 
-    public List<String> getResources(){
+    public List<String> getResources() {
         return Optional.ofNullable(resources)
                 .map(list -> list.stream().filter(item -> !isNull(item) && !item.isEmpty()).collect(toList()))
                 .orElse(null);
+    }
+
+    public void translateCountryName(String translatedCountryName) {
+        if (isNonNullAndNonEmpty(translatedCountryName)) this.countryName = translatedCountryName;
     }
 }

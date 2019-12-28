@@ -54,7 +54,7 @@ public class CountryService {
         return Optional.ofNullable(countrySummary).map(CountrySummaryDto::new).orElse(new CountrySummaryDto());
     }
 
-    public GdhiQuestionnaire getDetails(UUID countryUUID, boolean publishedOnly) {
+    public GdhiQuestionnaire getDetails(UUID countryUUID, LanguageCode languageCode, boolean publishedOnly) {
         String countryId = iCountryRepository.findByUUID(countryUUID).getId();
 
         GdhiQuestionnaire gdhiQuestionnaire = null;
@@ -72,6 +72,8 @@ public class CountryService {
 
             List<CountryHealthIndicator> sortedIndicators = getCountryHealthIndicators(countryId, countrySummary);
             gdhiQuestionnaire = constructGdhiQuestionnaire(countryId, countrySummary, sortedIndicators);
+            String translatedCountryName = translator.getCountryTranslationForLanguage(languageCode, gdhiQuestionnaire.getCountryId());
+            gdhiQuestionnaire.translateCountryName(translatedCountryName);
         }
 
         return gdhiQuestionnaire;
@@ -95,7 +97,8 @@ public class CountryService {
 
     private GdhiQuestionnaire constructGdhiQuestionnaire(String countryId, CountrySummary countrySummary,
                                                          List<CountryHealthIndicator> sortedIndicators) {
-        GdhiQuestionnaire gdhiQuestionnaire;CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
+        GdhiQuestionnaire gdhiQuestionnaire;
+        CountrySummaryDto countrySummaryDto = Optional.ofNullable(countrySummary)
                 .map(CountrySummaryDto::new)
                 .orElse(null);
         List<HealthIndicatorDto> healthIndicatorDtos = sortedIndicators.stream()

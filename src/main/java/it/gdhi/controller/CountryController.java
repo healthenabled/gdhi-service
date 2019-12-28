@@ -85,7 +85,7 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/saveCorrection", method = RequestMethod.POST)
-    public void saveCorrectionsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire){
+    public void saveCorrectionsFor(@RequestBody GdhiQuestionnaire gdhiQuestionnaire) {
         countryHealthDataService.saveCorrection(gdhiQuestionnaire);
     }
 
@@ -103,13 +103,15 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
-    public GdhiQuestionnaire getQuestionnaireForCountry(@PathVariable("uuid") UUID countryUIID) {
-        return countryService.getDetails(countryUIID,false);
+    public GdhiQuestionnaire getQuestionnaireForCountry(HttpServletRequest request, @PathVariable("uuid") UUID countryUIID) {
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        return countryService.getDetails(countryUIID, languageCode, false);
     }
 
     @RequestMapping(value = "/countries/viewPublish/{uuid}", method = RequestMethod.GET)
-    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(@PathVariable("uuid") UUID countryUIID) {
-        return countryService.getDetails(countryUIID,true);
+    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(HttpServletRequest request, @PathVariable("uuid") UUID countryUIID) {
+        LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
+        return countryService.getDetails(countryUIID, languageCode, true);
     }
 
     @RequestMapping(value = "/export_global_data", method = RequestMethod.GET)
@@ -121,7 +123,7 @@ public class CountryController {
 
     @RequestMapping(value = "/export_country_data/{id}", method = RequestMethod.GET)
     public void exportCountryDetails(HttpServletRequest request,
-                                HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
+                                     HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 
@@ -138,7 +140,7 @@ public class CountryController {
     }
 
     @RequestMapping("/countries/country_status_summaries")
-    public Map<String , List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
+    public Map<String, List<CountrySummaryStatusDto>> getAllCountryStatusSummaries() {
         return countryHealthDataService.getAllCountryStatusSummaries();
     }
 
@@ -153,9 +155,9 @@ public class CountryController {
         countryHealthDataService.calculatePhaseForAllCountries();
     }
 
-    @ResponseStatus(value=HttpStatus.NOT_ACCEPTABLE, reason="User language requested not found")
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "User language requested not found")
     @ExceptionHandler(IllegalArgumentException.class)
-    public void handleIOException(){
+    public void handleIOException() {
         log.error("User language requested not found");
     }
 }
