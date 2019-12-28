@@ -72,7 +72,8 @@ public class CountryService {
 
             List<CountryHealthIndicator> sortedIndicators = getCountryHealthIndicators(countryId, countrySummary);
             gdhiQuestionnaire = constructGdhiQuestionnaire(countryId, countrySummary, sortedIndicators);
-            String translatedCountryName = translator.getCountryTranslationForLanguage(languageCode, gdhiQuestionnaire.getCountryId());
+            String translatedCountryName =
+                    translator.getCountryTranslationForLanguage(languageCode, gdhiQuestionnaire.getCountryId());
             gdhiQuestionnaire.translateCountryName(translatedCountryName);
         }
 

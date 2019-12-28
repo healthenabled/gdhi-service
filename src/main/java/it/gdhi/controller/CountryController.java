@@ -103,13 +103,15 @@ public class CountryController {
     }
 
     @RequestMapping(value = "/countries/{uuid}", method = RequestMethod.GET)
-    public GdhiQuestionnaire getQuestionnaireForCountry(HttpServletRequest request, @PathVariable("uuid") UUID countryUIID) {
+    public GdhiQuestionnaire getQuestionnaireForCountry(HttpServletRequest request,
+                                                        @PathVariable("uuid") UUID countryUIID) {
         LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         return countryService.getDetails(countryUIID, languageCode, false);
     }
 
     @RequestMapping(value = "/countries/viewPublish/{uuid}", method = RequestMethod.GET)
-    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(HttpServletRequest request, @PathVariable("uuid") UUID countryUIID) {
+    public GdhiQuestionnaire getQuestionnaireForPublishedCountry(HttpServletRequest request,
+                                                                 @PathVariable("uuid") UUID countryUIID) {
         LanguageCode languageCode = LanguageCode.getValueFor(request.getHeader(USER_LANGUAGE));
         return countryService.getDetails(countryUIID, languageCode, true);
     }
@@ -123,7 +125,8 @@ public class CountryController {
 
     @RequestMapping(value = "/export_country_data/{id}", method = RequestMethod.GET)
     public void exportCountryDetails(HttpServletRequest request,
-                                     HttpServletResponse response, @PathVariable("id") String countryId) throws IOException {
+                                     HttpServletResponse response,
+                                     @PathVariable("id") String countryId) throws IOException {
         countryHealthIndicatorService.createHealthIndicatorInExcelFor(countryId, request, response);
     }
 
