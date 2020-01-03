@@ -37,4 +37,8 @@ public class GdhiQuestionnaire {
         return countrySummary.getContactEmail();
     }
 
+    public void translateCountryName(String translatedCountryName) {
+        this.countrySummary.translateCountryName(translatedCountryName);
+    }
+
 }

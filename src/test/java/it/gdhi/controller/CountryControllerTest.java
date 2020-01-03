@@ -121,6 +121,7 @@ public class CountryControllerTest {
         countryController.saveHealthIndicatorsFor(mock);
         verify(countryHealthDataService).save(mock, DRAFT.name());
     }
+
     @Test
     public void shouldPublishHealthIndicators() {
         GdhiQuestionnaire mock = mock(GdhiQuestionnaire.class);
@@ -203,10 +204,15 @@ public class CountryControllerTest {
     public void shouldGetQuestionnaireForPublishedCountry() {
         UUID countryUUID = UUID.randomUUID();
         GdhiQuestionnaire gdhiQuestionnaire = mock(GdhiQuestionnaire.class);
-        when(countryService.getDetails(countryUUID,true)).thenReturn(gdhiQuestionnaire);
-        countryController.getQuestionnaireForPublishedCountry(countryUUID);
-        verify(countryService).getDetails(countryUUID,true);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("USER_LANGUAGE", "en");
+        when(countryService.getDetails(countryUUID, LanguageCode.en, true)).thenReturn(gdhiQuestionnaire);
+
+        countryController.getQuestionnaireForPublishedCountry(request, countryUUID);
+
+        verify(countryService).getDetails(countryUUID, LanguageCode.en, true);
     }
+
 
     @Test
     public void shouldGetGlobalBenchmarkDetailsFor() {
